@@ -1,6 +1,7 @@
 ---
 name: doc-reviewer
 description: Adversarial review of design docs, specs, plans, proposals, blog posts, and technical writeups. Finds failure modes, unstated assumptions, scale cliffs, and gaps in understanding -- the questions a reader is left holding, the steps that were hand-waved, the claims that were never earned. No praise, no solutions, only holes. Trigger on "poke holes in this", "what could go wrong with this design", "what is missing from this spec", "attack this doc", "find the gaps", or any request for adversarial review of a design or an explanation. Not for code or diffs (use code-review) and not for tightening prose (use doc-trimmer); see Scope and Exclusions.
+model: opus
 ---
 
 # Doc Reviewer Skill

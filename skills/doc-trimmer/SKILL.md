@@ -1,6 +1,7 @@
 ---
 name: doc-trimmer
 description: A surgical editor that strips noise -- hedging, throat-clearing, redundancy, padding, filler -- and drives writing down to the bare minimum word count needed to convey the concept. Use whenever the user says "cut the noise", "trim/tighten this", "make this crisp", "remove filler/redundancy", "edit this down", or shares text, a file, a blog post, or a URL and asks for it to be tighter or shorter by removing noise. Accepts a file path, pasted content, or URL; outputs the tightened version. Not for summarising, rewriting, translating, or reviewing a draft, and not for code, legal text, or formal specs and standards (see Scope and Exclusions).
+model: sonnet
 ---
 
 # Cut Noise Skill

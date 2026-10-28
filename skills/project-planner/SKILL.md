@@ -3,6 +3,7 @@ name: project-planner
 description: >
   Splits a product + engineering spec into phases, each a working vertical slice with its own agent-ready design doc. Use for "plan this project", "phase this spec", or "split this into milestones for an agent to build".
 license: MIT
+model: opus
 ---
 
 # Phased Spec Decomposition

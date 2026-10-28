@@ -3,6 +3,7 @@ name: ui-developer
 description: >
   Builds frontend UI (pages, screens, components, dashboards, landing pages, docs sites), or restyles existing UI, from a design system's tokens and component specs, with Base UI for behavior and accessibility. Always needs a design system: defaults to Ember (a pinned version of the Ember folder of vipulchauhan24/my-design-system); the user can name another, such as one made by design-system-builder, when invoking. Optionally reads a phase document from the project-planner skill to know what to build. Use for "build this screen", "build this page", "implement this UI", "style this with my design system", "restyle this", "move this UI onto my design system". UI layer only: it does not build APIs, databases, auth or business logic. Not for creating or changing a design system or a color palette (use design-system-builder) and not for splitting a spec into phases (use project-planner).
 license: MIT
+model: sonnet
 ---
 
 # UI Developer

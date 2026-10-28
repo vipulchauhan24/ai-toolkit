@@ -3,6 +3,7 @@ name: design-system-builder
 description: >
   Builds a new design system from scratch from one of four inputs: a product brief, inspiration screenshots, a brand color palette, or a mix. Produces design tokens (color scales, typography, spacing, shape, elevation, motion), light and dark themes, component specs, and a contrast-verified output. Use when the user asks to "create a design system", "create a color palette", "define a spacing/typography scale", "set up theming/dark mode", "design tokens" or "style guide" for a new product. Not for changing the tokens of an existing codebase, and not for single-component or one-off page work (e.g. "build a landing page", "style this button").
 license: MIT
+model: sonnet
 ---
 
 # Design System Builder
