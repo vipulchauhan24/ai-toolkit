@@ -6,7 +6,7 @@ It finds holes. It does not praise, balance, or propose fixes. Each finding ends
 
 ## What Is in This Folder
 
-Paths are relative to the skill folder, `skills/doc-reviewer/`, inside the product-toolkit plugin.
+Paths are relative to the skill folder, `skills/doc-reviewer/`, inside the ai-toolkit plugin.
 
 | Path        | Purpose                                                                                       |
 | ----------- | --------------------------------------------------------------------------------------------- |
@@ -43,7 +43,7 @@ In Claude Code, any of these phrases triggers the skill:
 - `attack this doc`
 - `find the gaps`
 
-You can also call it directly with `/product-toolkit:doc-reviewer`.
+You can also call it directly with `/ai-toolkit:doc-reviewer`.
 
 ### Step 3: Read the Result
 
@@ -137,11 +137,11 @@ Review done.
 
 ## Installing
 
-The skill ships in the product-toolkit plugin. From the repository root:
+The skill ships in the ai-toolkit plugin. From the repository root:
 
 ```text
-claude plugin marketplace add vipulchauhan24/ai-skills
-claude plugin install product-toolkit@vipul-ai-skills
+claude plugin marketplace add vipulchauhan24/ai-toolkit
+claude plugin install ai-toolkit@product-development
 /reload-plugins
 ```
 

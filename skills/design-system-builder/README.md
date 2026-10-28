@@ -6,7 +6,7 @@ The skill is for new products. It does not change the tokens of an existing code
 
 ## What Is in This Folder
 
-Paths are relative to the skill folder, `skills/design-system-builder/`, inside the product-toolkit plugin.
+Paths are relative to the skill folder, `skills/design-system-builder/`, inside the ai-toolkit plugin.
 
 | Path                           | Purpose                                                                           |
 | ------------------------------ | --------------------------------------------------------------------------------- |
@@ -172,8 +172,8 @@ In palette mode, the skill never changes a brand color on its own. When a pairin
 In Claude Code, add the marketplace and install the plugin:
 
 ```text
-/plugin marketplace add vipulchauhan24/ai-skills
-/plugin install product-toolkit@vipul-ai-skills
+/plugin marketplace add vipulchauhan24/ai-toolkit
+/plugin install ai-toolkit@product-development
 ```
 
 ### Manually

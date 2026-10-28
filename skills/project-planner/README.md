@@ -124,11 +124,11 @@ Every later phase adds one capability on top of a working system. Each phase doc
 In Claude Code, add the marketplace and install the plugin:
 
 ```text
-/plugin marketplace add vipulchauhan24/ai-skills
-/plugin install product-toolkit@vipul-ai-skills
+/plugin marketplace add vipulchauhan24/ai-toolkit
+/plugin install ai-toolkit@product-development
 ```
 
-Invoke the skill with `/product-toolkit:project-planner`, or let Claude pick it up from a matching prompt.
+Invoke the skill with `/ai-toolkit:project-planner`, or let Claude pick it up from a matching prompt.
 
 ### Manually
 

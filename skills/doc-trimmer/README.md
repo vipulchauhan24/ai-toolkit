@@ -6,7 +6,7 @@ It cuts. It does not summarise, translate, or rewrite your argument.
 
 ## What Is in This Folder
 
-Paths are relative to the skill folder, `skills/doc-trimmer/`, inside the product-toolkit plugin.
+Paths are relative to the skill folder, `skills/doc-trimmer/`, inside the ai-toolkit plugin.
 
 | Path        | Purpose                                                                                                   |
 | ----------- | --------------------------------------------------------------------------------------------------------- |
@@ -44,7 +44,7 @@ In Claude Code, any of these phrases triggers the skill:
 - `remove filler`
 - `edit this down`
 
-You can also call it directly with `/product-toolkit:doc-trimmer`.
+You can also call it directly with `/ai-toolkit:doc-trimmer`.
 
 ### Step 3: Read the Result
 
@@ -185,11 +185,11 @@ Distributed systems are hard to reason about. When multiple nodes communicate ov
 
 ## Installing
 
-The skill ships in the product-toolkit plugin. From the repository root:
+The skill ships in the ai-toolkit plugin. From the repository root:
 
 ```text
-claude plugin marketplace add vipulchauhan24/ai-skills
-claude plugin install product-toolkit@vipul-ai-skills
+claude plugin marketplace add vipulchauhan24/ai-toolkit
+claude plugin install ai-toolkit@product-development
 /reload-plugins
 ```
 

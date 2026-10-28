@@ -87,11 +87,11 @@ By default the skill does not run a browser or take screenshots. Ask for a visua
 In Claude Code, add the marketplace and install the plugin:
 
 ```text
-/plugin marketplace add vipulchauhan24/ai-skills
-/plugin install product-toolkit@vipul-ai-skills
+/plugin marketplace add vipulchauhan24/ai-toolkit
+/plugin install ai-toolkit@product-development
 ```
 
-Invoke the skill with `/product-toolkit:ui-developer`, or let Claude pick it up from a matching prompt.
+Invoke the skill with `/ai-toolkit:ui-developer`, or let Claude pick it up from a matching prompt.
 
 ### Manually
 

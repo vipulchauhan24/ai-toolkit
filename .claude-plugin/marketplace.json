@@ -1,5 +1,5 @@
 {
-  "name": "vipul-ai-skills",
+  "name": "product-development",
   "owner": {
     "name": "Vipul Chauhan",
     "email": "vipul9556@gmail.com"
@@ -9,10 +9,10 @@
   },
   "plugins": [
     {
-      "name": "product-toolkit",
+      "name": "ai-toolkit",
       "source": "./",
       "description": "Skills for building new products. Includes a design system builder that turns a brief, screenshots, or a brand palette into design tokens, light and dark themes, component specs, and a WCAG contrast report, a project planner that splits a spec into phases for a coding agent, a doc trimmer that cuts hedging, filler, and repeated ideas from text, files, or URLs, a doc reviewer that attacks a design doc, spec, or writeup and reports only the holes, ranked by severity, and a UI developer that builds or restyles frontend UI from a design system's tokens with no custom CSS, using Base UI for behavior and accessibility.",
-      "version": "1.4.2",
+      "version": "1.4.3",
       "category": "workflow",
       "license": "MIT",
       "author": {

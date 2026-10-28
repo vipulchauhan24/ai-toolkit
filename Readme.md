@@ -1,4 +1,4 @@
-# AI Skills
+# AI Toolkit
 
 A collection of Claude Code skills by Vipul Chauhan.
 
@@ -14,58 +14,25 @@ A collection of Claude Code skills by Vipul Chauhan.
 
 ## Installing
 
-The design-system-builder, project-planner, doc-trimmer, doc-reviewer and ui-developer skills are published in the product-toolkit Claude Code plugin. Add the marketplace and install it:
+The design-system-builder, project-planner, doc-trimmer, doc-reviewer and ui-developer skills are published in the ai-toolkit Claude Code plugin. Add the marketplace and install it:
 
 ```text
-claude plugin marketplace add vipulchauhan24/ai-skills
-claude plugin install product-toolkit@vipul-ai-skills
-claude plugin update product-toolkit@vipul-ai-skills
+claude plugin marketplace add vipulchauhan24/ai-toolkit
+claude plugin install ai-toolkit@product-development
+claude plugin update ai-toolkit@product-development
 /reload-plugins
 ```
 
-Invoke the skills with `/product-toolkit:design-system-builder`, `/product-toolkit:project-planner`, `/product-toolkit:doc-trimmer`, `/product-toolkit:doc-reviewer` and `/product-toolkit:ui-developer`, or let Claude pick them up from a matching prompt.
+Invoke the skills with `/ai-toolkit:design-system-builder`, `/ai-toolkit:project-planner`, `/ai-toolkit:doc-trimmer`, `/ai-toolkit:doc-reviewer` and `/ai-toolkit:ui-developer`, or let Claude pick them up from a matching prompt.
 
 ## Using the skills with other providers
 
 Each skill is a folder with a `SKILL.md` (the open Agent Skills format) plus the files it references, so it is not tied to Claude. Always copy the whole folder, not just `SKILL.md`, because the skill reads sibling files by relative path (`references/`, `scripts/`) and shared files from the repository's top-level `rules/` and `templates/` folders, which sit two levels above the skill folder. project-planner and doc-trimmer need `rules/shared/`, ui-developer needs `rules/ui-design/`, and project-planner also needs `templates/`. Copy those too and keep the relative layout. The skills live in `skills/`.
 
 ```bash
-git clone https://github.com/vipulchauhan24/ai-skills.git
-cd ai-skills/skills
+git clone https://github.com/vipulchauhan24/ai-toolkit.git
+cd ai-toolkit/skills
 ```
-
-### Gemini CLI
-
-Install into your user skills (`~/.gemini/skills/`) or a single project (`.gemini/skills/`):
-
-```bash
-gemini skills install ./design-system-builder
-gemini skills install ./project-planner
-gemini skills install ./doc-trimmer
-gemini skills install ./doc-reviewer
-gemini skills install ./ui-developer
-
-# or, for one project only
-gemini skills install ./design-system-builder --scope workspace
-```
-
-`gemini skills install` copies only the skill folder, so project-planner and doc-trimmer cannot find `rules/shared/` (and project-planner `templates/`). Copy those folders to sit two levels above the installed skill folders, or attach the files by hand as described under chat apps below.
-
-Check they were found with `gemini skills list` (or `/skills list` inside a session), then ask for the task in plain words, such as "create a design system" or "plan this project". Gemini loads the skill when the prompt matches its description.
-
-### OpenAI Codex
-
-Copy the folders into a skills directory Codex scans. Use `~/.agents/skills/` for all projects, or `.agents/skills/` at the root of a repo to share them with that project:
-
-```bash
-mkdir -p ~/.agents/skills ~/.agents/rules ~/.agents/templates
-cp -r design-system-builder project-planner doc-trimmer doc-reviewer ui-developer ~/.agents/skills/
-cp -r ../rules/shared ~/.agents/rules/
-cp -r ../templates/. ~/.agents/templates/
-cp -r ../rules/ui-design ~/.agents/rules/
-```
-
-Restart Codex, then name the skill in your prompt or describe the task. Some Codex versions read `~/.codex/skills/` instead; if the skills do not show up, check the [Codex skills docs](https://developers.openai.com/codex/skills) for the current path.
 
 ### Other agents that support `SKILL.md`
 
@@ -73,7 +40,7 @@ Cursor, GitHub Copilot, opencode and similar tools load the same folder format f
 
 ### Chat apps and APIs without skill support
 
-ChatGPT, Gemini web, or a raw OpenAI or Gemini API call have no skills loader, so supply the files yourself:
+Chat apps and raw API calls have no skills loader, so supply the files yourself:
 
 1. Paste the contents of `SKILL.md` as the system prompt, custom instructions, or the first message.
 2. Attach the files the skill points to:
@@ -91,11 +58,11 @@ ChatGPT, Gemini web, or a raw OpenAI or Gemini API call have no skills loader, s
 - doc-reviewer fetches URLs with `curl` and reads files, so it needs an agent with shell and file access for those inputs. In a plain chat, paste the document text.
 - Screenshot mode needs a model that accepts image input.
 - ui-developer fetches the design system with `git` and runs `scripts/audit_ui.py` with Python 3, so it needs an agent with shell access. Without Python it falls back to manual searches.
-- The `/product-toolkit:...` commands are Claude Code only. Elsewhere, trigger the skills with a prompt.
+- The `/ai-toolkit:...` commands are Claude Code only. Elsewhere, trigger the skills with a prompt.
 
 ## Repository Layout
 
-The repository root is the `product-toolkit` plugin.
+The repository root is the `ai-toolkit` plugin.
 
 | Path                | Contents                                                                                                  |
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
