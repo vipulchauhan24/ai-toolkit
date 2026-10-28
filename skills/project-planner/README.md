@@ -6,19 +6,19 @@ The project planner skill turns one product and engineering spec into an ordered
 
 Paths are relative to the skill folder, `skills/project-planner/`. The skill also reads three files from the plugin root, two levels up.
 
-| Path                                     | Purpose                                                                   |
-| ---------------------------------------- | ------------------------------------------------------------------------- |
-| `SKILL.md`                               | The skill itself. Defines how a spec is split into phases.                |
-| `README.md`                              | This file.                                                                |
-| `../../rules/shared/project-rules.md`    | Your standing engineering rules. The planner applies them in every phase. |
-| `../../rules/shared/markdown-rules.md`   | Formatting rules for the Markdown the planner writes. Shared with doc-trimmer. |
-| `../../templates/spec-template.md`       | The format to use when you write a spec.                                  |
+| Path                                          | Purpose                                                                                                           |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `SKILL.md`                                    | The skill itself. Defines how a spec is split into phases.                                                        |
+| `README.md`                                   | This file.                                                                                                        |
+| `../../rules/shared/project-planner-rules.md` | The rules the planner follows when writing phase documents, including the working rules it embeds in every phase. |
+| `../../rules/shared/markdown-rules.md`        | Formatting rules for the Markdown the planner writes. Shared with doc-trimmer.                                    |
+| `../../templates/spec-template.md`            | The format to use when you write a spec.                                                                          |
 
 ## How the Skill Works
 
 1. You write a spec using `templates/spec-template.md` from the plugin root.
 2. You ask Claude to plan the project and give it the spec.
-3. The planner reads your codebase (if there is one) and the standing rules in `rules/shared/project-rules.md`.
+3. The planner reads your codebase (if there is one) and the phase-writing rules in `rules/shared/project-planner-rules.md`.
 4. The planner asks you about high-stakes decisions, such as the tech stack, shared data model, auth, and breaking changes.
 5. The planner writes an overview and one design document per phase.
 6. You give each phase document to a coding agent and review the PR it produces.
@@ -113,7 +113,7 @@ Every later phase adds one capability on top of a working system. Each phase doc
 
 ## Customizing the Skill
 
-- Edit `rules/shared/project-rules.md` (at the plugin root) to match your own conventions. Treat the current content as starter defaults.
+- Edit `rules/shared/project-planner-rules.md` (at the plugin root) to match your own engineering conventions. Treat the current content as starter defaults.
 - Edit `rules/shared/markdown-rules.md` to change how the output is formatted. Other skills in the plugin share this file.
 - Edit `SKILL.md` to change how phases are cut, sized, and documented.
 
@@ -137,4 +137,4 @@ Copy the `skills/project-planner/` folder, the `rules/shared/` folder and the `t
 - Project level: `.claude/skills/project-planner/`, `.claude/rules/shared/` and `.claude/templates/`.
 - User level: `~/.claude/skills/project-planner/`, `~/.claude/rules/shared/` and `~/.claude/templates/`.
 
-`SKILL.md` reads `../../rules/shared/project-rules.md` and `../../rules/shared/markdown-rules.md` by relative path, so `rules/` must sit two levels above the skill folder.
+`SKILL.md` reads `../../rules/shared/project-planner-rules.md` and `../../rules/shared/markdown-rules.md` by relative path, so `rules/` must sit two levels above the skill folder.

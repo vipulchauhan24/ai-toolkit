@@ -77,7 +77,7 @@ ChatGPT, Gemini web, or a raw OpenAI or Gemini API call have no skills loader, s
 
 1. Paste the contents of `SKILL.md` as the system prompt, custom instructions, or the first message.
 2. Attach the files the skill points to:
-   - project-planner: `rules/shared/project-rules.md`, `rules/shared/markdown-rules.md`, and `templates/spec-template.md`
+   - project-planner: `rules/shared/project-planner-rules.md`, `rules/shared/markdown-rules.md`, and `templates/spec-template.md`
    - doc-trimmer: `rules/shared/markdown-rules.md`
    - design-system-builder: `references/tokens.example.css`
    - doc-reviewer: none, `SKILL.md` is enough
@@ -101,7 +101,7 @@ The repository root is the `product-toolkit` plugin.
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
 | `.claude-plugin/`   | The marketplace manifest (`marketplace.json`) and the plugin manifest (`plugin.json`).                    |
 | `skills/`           | One folder per skill, each with a `SKILL.md` and a `README.md`.                                           |
-| `rules/shared/`     | Rules used by more than one skill: `markdown-rules.md` and `project-rules.md`.                            |
+| `rules/shared/`     | Rules shared across skills: `markdown-rules.md`, plus `project-planner-rules.md` for project-planner.       |
 | `rules/ui-design/`  | Guidance files for the ui-developer skill, with the license notice for the taste-skill material.           |
 | `templates/`        | Templates that skills point you to, such as `spec-template.md`.                                           |
 

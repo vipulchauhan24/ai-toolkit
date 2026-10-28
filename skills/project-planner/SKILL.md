@@ -23,7 +23,7 @@ For each phase, note **what already exists** that the phase can reuse -- an exis
 
 ## Standing Project Rules
 
-Before writing any phase document, read `../../rules/shared/project-rules.md`. It holds the user's standing engineering rules for every project: code style, error handling, testing, security baseline, migrations, git and PR habits, and how coding agents should behave. Apply them in every phase without restating them in full; reference a rule by name where a phase depends on it.
+Before writing any phase document, read `../../rules/shared/project-planner-rules.md`. It holds the rules you follow when writing phase documents: how to turn the user's engineering preferences (stack, errors, validation and security, tests, migrations, code conventions, git, docs) into concrete decisions inside each phase, plus a fixed block of working rules to embed at the top of every phase document. The implementing agent sees only the phase document, so write each applicable rule as a concrete value in the document; do not reference the rule by name.
 
 - **Precedence:** the existing codebase's conventions win over these rules, and an explicit rule in the source spec wins over them. Note any such difference at the top of the affected phase document.
 - **Exceptions:** if a phase must break a rule, name the rule and the reason in that phase's document. Never break one silently.
