@@ -6,11 +6,11 @@ How to use: replace every <placeholder> with a concrete answer. Delete a bullet 
 
 ## Overview
 
-<One or two sentences: what is being built, who it is for, and the value it delivers.>
+<One or two sentences: what is being built, who or what uses it, and the value it delivers.>
 
 ### Success criteria
 
-- Primary audience: <who the product must serve first>
+- Primary users or consumers: <the people, teams, or systems the project must serve first>
 - Observable outcome that makes launch a success: <a measurable result, with a number and a timeframe>
 - Non-goals: <what is explicitly out of scope>
 
@@ -18,71 +18,73 @@ How to use: replace every <placeholder> with a concrete answer. Delete a bullet 
 
 ### References and inspiration
 
-- Reference: <product, site, repo, or design to take inspiration from> (<link>)
-  - Taken from it: <the specific part to reuse, such as layout, flow, or behaviour> (<link or screenshot>)
-- When a reference conflicts with <design system / standard / constraint>, the winner is: <name>
+- Reference: <product, repo, document, or prior work to take inspiration from> (<link>)
+  - Taken from it: <the specific part to reuse, such as a flow, interface, behaviour, or architecture> (<link or screenshot>)
+- When a reference conflicts with <standard / existing system / constraint>, the winner is: <name>
 
-### Design system and UI
+### Scope and features
 
-- Design system: <name and link, or "none">
-  - How the project consumes it: <package / submodule / copied files / inspiration only>
-  - What it provides: <tokens / components / both>
-  - Version or commit to pin to: <tag or commit hash>
-- Themes: <list of themes, or "single theme">
-  - Default theme: <theme>
-  - First-time visitor sees: <rule, such as following the OS preference>
-  - Returning visitor sees: <rule, such as the saved choice>
-  - Where the choice persists: <localStorage / cookie / server / none>
-  - How a flash of the wrong theme on first load is avoided: <approach>
-- Responsive targets: <breakpoints or devices that must work>
+- Form of the deliverable: <such as a web app, mobile app, CLI, library, API, service, data pipeline, or a combination>
+- Core capabilities, in priority order: <each capability, with the must-haves marked>
+- Primary user or system actions: <what a user or calling system must be able to do, and the expected result of each>
+- Out of scope: <features not to build>
+- Edge cases and failure behaviour: <inputs or conditions that need defined handling, and what happens for each>
 
-### Tech stack and platform
+### Interfaces
 
-- Stack: <framework, language, rendering model (SSG / SSR / SPA), runtime>
-- Measurable performance bar before launch: <metric and target, such as a Lighthouse score, Core Web Vitals, or p95 latency>
-- Discoverability items required: <metadata / Open Graph / sitemap / canonical URLs / structured data, or "not applicable">
-- Constraints: <mandated services, versions, licences, budget, or hosting limits>
+Describe every surface the project exposes. Delete the ones that do not apply.
 
-### Content and data
+- User interface: <screens, pages, or views in order, or "none">
+  - Design system or visual standard: <name and link, version to pin, or "none">
+  - Themes, platforms, and screen sizes: <what must be supported>
+- Programmatic interface: <API, SDK, CLI commands, events, or file formats, with a link to the contract or "to be designed">
+  - Versioning and compatibility promise: <approach, or "Not required">
+- Integrations with other systems: <each system, the direction of data, and who owns it>
+- How users get help or report problems: <channel, or "Not required">
 
-- Where content or data comes from: <files in the repo / CMS / database / API / manual entry>
+### Technology and constraints
+
+- Stack: <languages, frameworks, runtime, and platforms, or "planner's choice">
+- Measurable quality bar before launch: <metric and target, such as latency, throughput, load time, memory, or test coverage>
+- Constraints: <mandated tools, services, versions, licences, budget, hardware, or deadlines>
+- Existing code or systems to build on: <repo or system and link, or "greenfield">
+
+### Data
+
+- Where data comes from: <files / database / external API / user input / manual entry>
   - Required fields or schema: <field names, and which are required>
-  - Behaviour when an entry violates the schema: <fail the build / skip / reject with an error>
-  - URL structure or API routes: <list each route pattern>
-  - In scope: <features to build, such as drafts, tags, search, images, pagination>
-  - Out of scope: <features not to build>
-- Volume at launch: <number of items>
-  - Does the real content exist today? <yes / no>
+  - Behaviour when input violates the schema: <fail / skip / reject with an error>
+- Where data is stored and for how long: <storage and retention>
+- Volume at launch and expected growth: <numbers>
+- Does the real data or content exist today? <yes / no>
   - If not, does launch wait for it? <yes / no>
-  - Placeholder content: <what is used instead, and how it is kept out of production indexes or user-facing views>
-- Placeholder data to replace later: <what, where it lives, and the format the manual edit targets>
-  - What stops placeholders from shipping: <marker / launch gate / noindex / feature flag>
-  - Owner and date for replacing them: <name and date, or "Not required">
-
-### Pages, screens, and features
-
-- Structure: <how the product is split, such as single page plus a separate section, or a list of screens>
-- Ordered list of sections or screens: <name each one in display order, or "match <reference>">
-- Primary user actions: <what a user must be able to do on each screen>
-- How a user contacts the owner or gets help: <email / form / socials / chat>
-  - Spam or abuse handling, if a form: <approach, or "not applicable">
-- Source of truth for each content block: <file path or link, and the shape to follow>
+  - Placeholder data: <what is used instead, and what stops it from shipping>
+  - Owner and date for replacing it: <name and date, or "Not required">
+- Migration from an existing system: <what moves, and how, or "Not required">
 
 ### Delivery and operations
 
-- Hosting and deploy: <platform and how a deploy is triggered>
-  - Branch that maps to production: <branch name>
-  - Checks that must pass before a push goes live: <build / lint / tests / link check / none>
-  - Preview deploys and rollback approach: <approach, or "Not required">
-- Domain, DNS, and canonical host: <domain, and www or apex>
+- How the project is shipped: <deploy target, package registry, app store, or distribution method>
+  - Branch or version that maps to production: <branch name or release process>
+  - Checks that must pass before a release: <build / lint / tests / review / none>
+  - Rollback approach: <approach, or "Not required">
 - Environments and secrets: <list of environments and where secrets are stored, or "none">
+- Monitoring and alerting: <what is watched, and who is notified, or "Not required">
+- Ownership after launch: <who maintains it, or "Not required">
 
 ## Cross-cutting
 
-- Accessibility standard: <such as WCAG 2.2 AA, keyboard navigation, contrast in every theme, and who is responsible for each>
-- Analytics: <tool and events, or "No">
-- Privacy and consent: <cookie consent, data retention, and compliance needs, or "No">
 - Security: <authentication, authorization, and data-handling requirements, or "Not applicable">
+- Privacy and compliance: <consent, retention, and regulatory needs, or "No">
+- Accessibility: <standard to meet, such as WCAG 2.2 AA, or "Not applicable">
+- Reliability: <uptime, recovery, or backup targets, or "Not required">
+- Observability: <logging, metrics, and tracing needs, or "Not required">
+- Analytics or usage tracking: <tool and events, or "No">
 - Internationalization: <languages and locales, or "English only">
-- Error and empty states: <404 page, offline state, or failure messages, with a link to a design or screenshot>
-- Browser and device support: <minimum versions or platforms>
+- Supported platforms and environments: <minimum OS, browser, device, or runtime versions>
+- Documentation: <what docs must ship, such as a README, API reference, or user guide>
+- Testing: <levels expected, such as unit, integration, and end-to-end, and who writes them>
+
+## Open questions
+
+- <Decision still to be made, the options, and who decides>
