@@ -68,6 +68,7 @@ The repository root is the `ai-toolkit` plugin.
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
 | `.claude-plugin/`   | The marketplace manifest (`marketplace.json`) and the plugin manifest (`plugin.json`).                    |
 | `skills/`           | One folder per skill, each with a `SKILL.md` and a `README.md`.                                           |
+| `agents/`           | Subagents that run the doc-reviewer and doc-trimmer skills in their own context.                          |
 | `rules/shared/`     | Rules shared across skills: `markdown-rules.md`, plus `project-planner-rules.md` for project-planner.       |
 | `rules/ui-design/`  | Guidance files for the ui-developer skill, with the license notice for the taste-skill material.           |
 | `templates/`        | Templates that skills point you to, such as `spec-template.md`.                                           |
