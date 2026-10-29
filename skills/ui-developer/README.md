@@ -1,6 +1,6 @@
 # UI Developer Skill
 
-The UI developer skill builds frontend UI from a design system. You point it at a design system (your own Ember by default), and it builds pages, screens and components with that system's tokens and component specs. Base UI supplies the behavior and accessibility. It can also restyle an existing project onto the design system.
+The UI developer skill builds frontend UI from a design system. You point it at a design system (your own Ember by default), and it builds pages, screens and components with that system's tokens and component specs. The project's component library supplies the behavior and accessibility. It can also restyle an existing project onto the design system.
 
 The skill builds the UI layer only. It does not build APIs, databases, auth or business logic. It does not create or change a design system (use design-system-builder for that), and it does not split a spec into phases (use project-planner for that).
 
@@ -12,6 +12,8 @@ Paths are relative to the skill folder, `skills/ui-developer/`. The skill also r
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `SKILL.md`                              | The skill itself. Defines the inputs, the rules, the build steps, the checks and the restyling flow.             |
 | `README.md`                             | This file.                                                                                                       |
+| `references/phase-document.md`          | Read only when you give a phase document: the checks to run first, how each phase section is used, and who wins on a conflict. |
+| `references/restyle.md`                 | Read only when you ask for a restyle: record the before, keep the stack, order of work, and what to prove. |
 | `scripts/audit_ui.py`                   | The audit the skill runs before delivering. Finds custom CSS, raw values, stock colors, arbitrary values, and classes missing from the built CSS. |
 | `../../rules/ui-design/app-screens.md`  | Guidance for dashboards, admin and settings views, lists, inboxes, forms and detail pages.                       |
 | `../../rules/ui-design/copy.md`         | Guidance for the words on landing pages and portfolios.                                                          |
@@ -21,8 +23,9 @@ Paths are relative to the skill folder, `skills/ui-developer/`. The skill also r
 ## What You Need
 
 - **A design system.** The skill never runs without one. The default is Ember, in the `Ember` folder of `https://github.com/vipulchauhan24/my-design-system`, pinned to commit `c3c40c78f8ee3b52791d623c53204ae7b52bda58` so every run reads the same version. To use another one, give a public repository URL or a local folder when you invoke the skill. Any design system made by design-system-builder works. To move the default to a newer Ember, change the commit in `SKILL.md` (§1).
-- **The design system's utilities.** The skill writes no custom CSS, so the project needs the design system's utility classes. For Ember that means Tailwind v4. If the project doesn't have it, the skill asks before doing anything.
-- **React**, if you use the default component library (Base UI). If you name another library, or the project already uses one, the skill uses that.
+- **A design system with a theme file.** The skill writes no custom CSS, so the design system must map its tokens to utility classes. A design system with only tokens and specs is a blocker: add a theme file with design-system-builder, or name another one.
+- **The design system's utilities.** The project needs those utility classes. For Ember that means Tailwind v4. If the project doesn't have it, the skill asks before doing anything.
+- **A component library** (optional). The skill uses the one the project already has, or the one you name. With none, it builds with native semantic HTML and asks before adding a library.
 - **Git** on your machine. The skill fetches the design system's repository to read it. A local folder needs no network.
 - **Python 3** (optional). It runs the audit script. Without it, the skill falls back to manual searches and says that class existence was not checked.
 
@@ -66,6 +69,16 @@ Ask it to restyle named screens or components. The skill writes down what the pr
 
 By default the skill does not run a browser or take screenshots. Ask for a visual check and it takes screenshots at 390px and desktop width, in light and dark. Otherwise, at the end it gives you a look-at list with the screens to open, the widths (390px and desktop), light and dark themes, keyboard navigation, and every state with a way to reach it. It says plainly that it did not look at the result.
 
+## Using it with frontend-react
+
+ui-developer decides how the UI looks. The frontend-react skill decides how the React code is written (components, hooks, state, effects, tests). The two don't call each other. To get both, name both in the prompt:
+
+```text
+Use ui-developer and frontend-react to build the billing settings screen with Ember.
+```
+
+If they disagree on appearance, the design system wins. If they disagree on code structure, the React rules win. See `skills/frontend-react/README.md`.
+
 ## What the Skill Does Not Do
 
 - It does not edit the design system, and it does not invent a token value. If the design system lacks a component, token or utility, the skill reports it as a gap.
@@ -77,7 +90,7 @@ By default the skill does not run a browser or take screenshots. Ask for a visua
 
 ## Customizing the Skill
 
-- Edit `SKILL.md` to change the rules, the default design system (and its pinned commit) or the default component library.
+- Edit `SKILL.md` to change the rules, the default design system (and its pinned commit) or the default component library. When the default design system is used, each run reports if Ember has changed since the pinned commit, so you know when to move the pin.
 - Edit the files in `rules/ui-design/` (at the plugin root) to change the guidance for each kind of work. Where they disagree with a design system, the design system wins.
 
 ## Installing the Skill
