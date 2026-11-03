@@ -1,0 +1,19 @@
+{
+  "seeded": {
+    "R1-any-type.ts": "`any` type",
+    "R2-ts-ignore.ts": "@ts-ignore",
+    "R3-class-component.tsx": "class component",
+    "R4-dangerous-html.tsx": "dangerouslySetInnerHTML without",
+    "R5-div-onclick.tsx": "onClick on a div/span",
+    "R6-index-key.tsx": "array index as key",
+    "R7-blank-no-rel.tsx": "target=\"_blank\" without rel",
+    "R8-effect-no-deps.tsx": "no dependency array",
+    "R9-dom-query.ts": "direct DOM query",
+    "R10-console-log.ts": "console.log",
+    "R11-client-secret-env.ts": "secret in a client-exposed variable",
+    "R12-length-and.tsx": "renders 0"
+  },
+  "xfail": {
+    "R2-ts-ignore.ts": "defect in check_react.py: the rule runs on comment-stripped text, so it never fires. Phase 2 fixes it."
+  }
+}

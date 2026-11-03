@@ -3,3 +3,4 @@ spec.md
 discovery.md
 
 __pycache__
+tests/runs/.cases/

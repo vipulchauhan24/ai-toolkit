@@ -1,0 +1,72 @@
+[
+  {
+    "id": "dsb-autonomous-builds-verified-system",
+    "tier": "slow",
+    "fixture": "empty",
+    "timeout": 1800,
+    "covers": [
+      "skills/design-system-builder"
+    ],
+    "prompt": "Use the ai-toolkit:design-system-builder skill to create a design system for a playful reading app for children aged 6 to 9. Do not ask questions: use the defaults and list them as assumptions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(ls:*),Bash(mkdir:*),Bash(wc:*),Bash(bash:*)",
+    "skills": [
+      "design-system-builder"
+    ],
+    "files": {
+      "*/tokens.css": {
+        "must": [
+          "--primitive-",
+          "data-theme=.dark.|prefers-color-scheme:\\s*dark"
+        ]
+      },
+      "*/components.md": {},
+      "*/README.md": {},
+      "*/preview.html": {},
+      "*/tokens.json": {}
+    },
+    "post": [
+      "for d in */; do python3 -I {repo}/skills/design-system-builder/scripts/check_contrast.py \"$d\" || exit 1; done"
+    ]
+  },
+  {
+    "id": "dsb-keeps-brand-palette",
+    "tier": "slow",
+    "fixture": "empty",
+    "timeout": 1800,
+    "covers": [
+      "skills/design-system-builder"
+    ],
+    "prompt": "Use the ai-toolkit:design-system-builder skill to create a design system for a banking dashboard. The brand color is #E63946 and must stay exactly as given. Do not ask questions: use the defaults and list them as assumptions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(ls:*),Bash(mkdir:*),Bash(wc:*),Bash(bash:*)",
+    "skills": [
+      "design-system-builder"
+    ],
+    "files": {
+      "*/tokens.css": {
+        "must": [
+          "(?i)#e63946"
+        ]
+      }
+    },
+    "post": [
+      "for d in */; do python3 -I {repo}/skills/design-system-builder/scripts/check_contrast.py \"$d\" || exit 1; done"
+    ]
+  },
+  {
+    "id": "dsb-does-not-invent-unreachable-reference",
+    "tier": "fast",
+    "fixture": "empty",
+    "covers": [
+      "skills/design-system-builder"
+    ],
+    "prompt": "Use the ai-toolkit:design-system-builder skill to make a design system that matches https://app.nonexistent.invalid/dashboard. I have no screenshots. Do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(ls:*),Bash(mkdir:*),Bash(wc:*)",
+    "must": [
+      "(?i)(cannot|can't|unable|could not|couldn't|not able)",
+      "(?i)screenshot"
+    ],
+    "no_files": [
+      "*/tokens.css"
+    ]
+  }
+]

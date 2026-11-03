@@ -1,0 +1,10 @@
+{
+  "seeded": {
+    "X1-hooks-in-page": "page or layout uses hooks",
+    "X2-error-no-client": "error file must start with 'use client'",
+    "X3-ssr-false.tsx": "ssr: false is only allowed inside a client file",
+    "X4-async-client.tsx": "client component cannot be async",
+    "X5-server-env-in-client.tsx": "env variable is not available in the browser"
+  },
+  "xfail": {}
+}

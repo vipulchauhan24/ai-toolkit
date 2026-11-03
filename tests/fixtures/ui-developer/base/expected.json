@@ -1,0 +1,11 @@
+{
+  "seeded": {
+    "U1-style-block.html": "<style> block",
+    "U2-hex-literal.tsx": "raw color value or primitive token",
+    "U3-arbitrary-value.tsx": "arbitrary value in 'p-\\[13px\\]'",
+    "U4-named-color.tsx": "stock color 'bg-red-500'",
+    "U5-primitive-token.tsx": "raw color value or primitive token",
+    "U6-inline-style.tsx": "inline style"
+  },
+  "xfail": {}
+}
