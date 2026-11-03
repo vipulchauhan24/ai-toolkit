@@ -61,6 +61,7 @@ Describe every surface the project exposes.
 
 - Engineering decisions already made: <architecture, data model, key libraries, or "None">
   - Mark each item `fixed` (do not change), `preferred` (change only with a stated reason), or `planner decides`. An unmarked item is treated as `planner decides`.
+  - Coding pattern: <mvc, mvvm, layered, or "planner decides">, marked fixed / preferred / planner decides
 - Stack: <languages, frameworks, runtime, and platforms, each marked fixed / preferred / planner decides>
 - Existing code or systems to build on: <repo or system and link, or "greenfield">
 - Expected load: <users, request rate, concurrency, and data size at launch and at 10x; or how it will be measured and the default to assume until then>

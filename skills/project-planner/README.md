@@ -4,7 +4,7 @@ The project planner skill turns one product and engineering spec into an ordered
 
 ## What Is in This Folder
 
-Paths are relative to the skill folder, `skills/project-planner/`. The skill also reads three files from the plugin root, two levels up.
+Paths are relative to the skill folder, `skills/project-planner/`. The skill also reads four files from the plugin root, two levels up.
 
 | Path                                          | Purpose                                                                                                           |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -12,6 +12,7 @@ Paths are relative to the skill folder, `skills/project-planner/`. The skill als
 | `README.md`                                   | This file.                                                                                                        |
 | `../../rules/shared/project-planner-rules.md` | The rules the planner follows when writing phase documents, including the working rules it embeds in every phase. |
 | `../../rules/shared/markdown-rules.md`        | Formatting rules for the Markdown the planner writes. Shared with doc-trimmer.                                    |
+| `../../rules/coding/architecture-patterns.md` | The coding patterns (mvc, mvvm, layered) and the default per framework. The planner pins one in Phase 1.          |
 | `../../templates/spec-template.md`            | The format to use when you write a spec.                                                                          |
 
 ## How the Skill Works

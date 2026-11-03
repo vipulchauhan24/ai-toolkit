@@ -32,9 +32,9 @@ Before writing any phase document, read `../../rules/shared/project-planner-rule
 
 ## Tech Stack Choices
 
-**Brownfield (existing codebase):** the stack is not a decision to make -- it's whatever Verify Before Writing found. Match the existing language, framework, database, and libraries. Introducing a new one requires a stated reason (the existing stack cannot do what this phase needs), never preference or unfamiliarity with what's there.
+**Brownfield (existing codebase):** the stack is not a decision to make -- it's whatever Verify Before Writing found. Match the existing language, framework, database, and libraries. Introducing a new one requires a stated reason (the existing stack cannot do what this phase needs), never preference or unfamiliarity with what's there. Record the codebase's own coding pattern in Phase 1, read as `../../rules/coding/architecture-patterns.md` describes, as a `Pattern: <mvc|mvvm|layered>` line followed by a `Reason:` line that cites the files showing it with `path:line`. Do not choose one from that file's table. If the spec names a different pattern, that is a high-stakes ambiguity: ask the user.
 
-**Greenfield (no codebase yet):** Phase 1's document must pin the full stack once -- language, framework, database, hosting/deploy target, and any non-trivial third-party library -- each with a one-line rationale. Every later phase inherits this as a given; never re-open the stack in a later phase's document.
+**Greenfield (no codebase yet):** Phase 1's document must pin the full stack once -- language, framework, database, hosting/deploy target, coding pattern, and any non-trivial third-party library -- each with a one-line rationale. Choose the coding pattern from `../../rules/coding/architecture-patterns.md`: use the spec's pattern if it is marked `fixed`, otherwise the default for the pinned framework. Write it as `Pattern: <mvc|mvvm|layered>` followed by `Reason: <one line>`. Every later phase inherits this as a given; never re-open the stack in a later phase's document.
 
 **Default to boring.** Prefer established, widely-used technology over novel tools unless the spec states a hard requirement only the novel choice satisfies -- name that requirement when it justifies the departure.
 
@@ -163,6 +163,7 @@ Before returning the result, verify for every phase document:
 - No "TBD," "later," or unresolved open question remains.
 - Every high-stakes ambiguity (stack, shared data model, auth posture, breaking changes) was resolved by asking the user, not by silent guess.
 - The tech stack is either inherited from the existing codebase or pinned explicitly in phase 1 with a rationale -- never implicit, never re-decided per phase.
+- The coding pattern is either inherited from the codebase (with a `path:line` citation) or pinned once in phase 1 as `Pattern:` and `Reason:` lines, and no later phase changes it.
 - Current-state claims are backed by `path:line`, not assumed from the spec.
 - Every data field and API shape has a concrete type, not just a name.
 - Acceptance criteria are testable by inspection or automated test, not by judgment call, and use real numbers wherever a number applies.
