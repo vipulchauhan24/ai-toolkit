@@ -4,20 +4,6 @@ The frontend-react skill writes React code, and Next.js code when the project us
 
 It does not choose colors, tokens, spacing or component looks. Use ui-developer for that (see "Using it with ui-developer" below). It does not build APIs, databases or auth, and it is not for Vue, Svelte, Angular or plain HTML.
 
-## What Is in This Folder
-
-Paths are relative to the skill folder, `skills/frontend-react/`. The skill also reads rules files from `rules/coding/` at the plugin root, two levels up.
-
-| Path                              | Purpose                                                                                                           |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `SKILL.md`                        | The skill itself. Defines the inputs, the build steps, the blockers, the checks and the report.                   |
-| `README.md`                       | This file.                                                                                                        |
-| `scripts/check_react.py`          | The check the skill runs before delivering. Finds `any`, class components, index keys, effects with no dependency array and other red flags. |
-| `../../rules/coding/react-rules.md` | The React rules: components, props and TypeScript, state, effects, data, forms, keys, performance, errors, tests, files. |
-| `../../rules/coding/nextjs-rules.md` | The Next.js rules, read only when the project depends on `next`: server and client components, data fetching, the server-client boundary, mutations, hydration, files. |
-| `../../rules/coding/references/react-performance-guidelines.md` | Worked performance patterns for React and Next.js (waterfalls, bundle size, Server Components, re-renders, rendering). Read when the task touches performance. Adapted from Vercel's React Best Practices. |
-| `../../rules/coding/architecture-patterns.md` | The coding patterns (mvc, mvvm, layered) and the default per framework. The skill builds to the pattern the phase document pins, else the codebase's own. |
-
 ## What You Need
 
 - A React or Next.js project. The skill reads `package.json` to find the React version, TypeScript, router, data and form libraries, and test runner, and follows what the project uses.
@@ -67,7 +53,7 @@ When both run, ui-developer decides appearance and frontend-react decides code s
 
 ## Customizing the Skill
 
-- Edit `rules/coding/react-rules.md` to change the rules.
+- Edit `skills/frontend-react/references/react-rules.md` to change the rules. `architecture-patterns.md` has an identical copy in project-planner: run `python3 scripts/check_shared_files.py` after editing it.
 - Edit `scripts/check_react.py` to change the red flags it detects.
 
 ## Installing the Skill
@@ -83,7 +69,7 @@ Invoke the skill with `/ai-toolkit:frontend-react`, or let Claude pick it up fro
 
 ### Manually
 
-Copy `skills/frontend-react/` and `rules/coding/` into a skills directory that Claude Code reads, and keep their relative layout. `SKILL.md` reads `../../rules/coding/` by relative path, so `rules/` must sit two levels above the skill folder.
+Copy the `skills/frontend-react/` folder to `.claude/skills/` in a project, or to `~/.claude/skills/` for all projects. It has no dependencies outside its own folder.
 
 ## License
 

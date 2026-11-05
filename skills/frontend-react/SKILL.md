@@ -3,6 +3,7 @@ name: frontend-react
 description: >
   Writes or changes React and Next.js code (components, hooks, state, effects, forms, data boundaries, performance, server and client components, tests) to a fixed set of rules, then runs the project's typecheck, lint, tests and build plus a React check script. Use for "build this in React", "build this in Next.js", "write this React component", "add a hook", "fix this React code", "review this React code against the rules", or when a phase document pins React or Next.js as the frontend. Covers how React code is written only: it does not choose colors, tokens, spacing or component looks (use ui-developer with a design system for that, and name both skills when you want both), and it does not build APIs, databases or auth. Not for Vue, Svelte, Angular or plain HTML.
 license: MIT
+compatibility: Needs a shell with Python 3 to run scripts/check_react.py and the project's own typecheck, lint, tests and build. For React and Next.js projects only.
 model: sonnet
 ---
 
@@ -30,7 +31,7 @@ If the task needs more than React code, say so in the report and stop at the typ
 ## 0. Preflight
 
 - **Python 3 and the check script are required.** Before anything else, run `python3 --version` and confirm `scripts/check_react.py` exists in this skill's folder. If either is missing, stop with an error: write a Blocked report (see §2) that names what is missing and how to fix it (install Python 3, or restore the script). Do not read the project, build anything, or fall back to searching files by hand.
-- Read `../../rules/coding/react-rules.md` and `../../rules/coding/architecture-patterns.md`, relative to this file. §1 says when to read the Next.js and performance files. If a rules file is missing, say so. Interactive: ask whether to continue with the project's conventions only. Non-interactive: continue and list the missing file in the report.
+- Read `references/react-rules.md` and `references/architecture-patterns.md` in this skill's folder. §1 says when to read the Next.js and performance files. If a rules file is missing, say so. Interactive: ask whether to continue with the project's conventions only. Non-interactive: continue and list the missing file in the report.
 
 ## 1. Read the project
 
@@ -41,7 +42,7 @@ Before writing code, note from `package.json` and the config files, and match th
 - TypeScript or JavaScript, bundler or framework, router, data library, form library, state library, test runner, lint config, path alias.
 - Where components, hooks and tests live, and how they are named.
 
-Then read the rules files that depend on what you found. If the project depends on `next`, read `../../rules/coding/nextjs-rules.md`. If the task adds data loading, lazy loading, long lists, heavy imports or a Next.js Server Component, or is a performance review, read `../../rules/coding/references/react-performance-guidelines.md`.
+Then read the rules files that depend on what you found. If the project depends on `next`, read `references/nextjs-rules.md`. If the task adds data loading, lazy loading, long lists, heavy imports or a Next.js Server Component, or is a performance review, read `references/react-performance-guidelines.md`.
 
 Supported: React in the browser, with or without Next.js (Vite, Remix, React Router, Gatsby, Astro islands: apply the React rules and the project's router conventions). Not supported: React Native and Expo.
 

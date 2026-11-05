@@ -2,24 +2,11 @@
 
 The project planner skill turns one product and engineering spec into an ordered set of phases. Each phase is a working, demoable slice with its own design document. You then hand the phase documents to a coding agent one at a time.
 
-## What Is in This Folder
-
-Paths are relative to the skill folder, `skills/project-planner/`. The skill also reads four files from the plugin root, two levels up.
-
-| Path                                          | Purpose                                                                                                           |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `SKILL.md`                                    | The skill itself. Defines how a spec is split into phases.                                                        |
-| `README.md`                                   | This file.                                                                                                        |
-| `../../rules/shared/project-planner-rules.md` | The rules the planner follows when writing phase documents, including the working rules it embeds in every phase. |
-| `../../rules/shared/markdown-rules.md`        | Formatting rules for the Markdown the planner writes. Shared with doc-trimmer.                                    |
-| `../../rules/coding/architecture-patterns.md` | The coding patterns (mvc, mvvm, layered) and the default per framework. The planner pins one in Phase 1.          |
-| `../../templates/spec-template.md`            | The format to use when you write a spec.                                                                          |
-
 ## How the Skill Works
 
-1. You write a spec using `templates/spec-template.md` from the plugin root.
+1. You write a spec using `assets/spec-template.md` from the skill folder (`skills/project-planner/`).
 2. You ask Claude to plan the project and give it the spec.
-3. The planner reads your codebase (if there is one) and the phase-writing rules in `rules/shared/project-planner-rules.md`.
+3. The planner reads your codebase (if there is one) and the phase-writing rules in `references/project-planner-rules.md`.
 4. The planner asks you about high-stakes decisions, such as the tech stack, shared data model, auth, and breaking changes.
 5. The planner writes an overview and one design document per phase.
 6. You give each phase document to a coding agent and review the PR it produces.
@@ -28,7 +15,7 @@ Paths are relative to the skill folder, `skills/project-planner/`. The skill als
 
 ### Step 1: Write the Spec
 
-Copy `templates/spec-template.md` (at the plugin root), replace its content with your own, and save it next to your project. A good spec states the goal, a measurable outcome, the requirements, and the non-goals.
+Copy `skills/project-planner/assets/spec-template.md`, replace its content with your own, and save it next to your project. A good spec states the goal, a measurable outcome, the requirements, and the non-goals.
 
 The more the spec says about the project type, users, stack constraints, and external services, the fewer questions the planner needs to ask.
 
@@ -114,8 +101,8 @@ Every later phase adds one capability on top of a working system. Each phase doc
 
 ## Customizing the Skill
 
-- Edit `rules/shared/project-planner-rules.md` (at the plugin root) to match your own engineering conventions. Treat the current content as starter defaults.
-- Edit `rules/shared/markdown-rules.md` to change how the output is formatted. Other skills in the plugin share this file.
+- Edit `skills/project-planner/references/project-planner-rules.md` to match your own engineering conventions. Treat the current content as starter defaults.
+- Edit `skills/project-planner/references/markdown-rules.md` to change how the output is formatted. doc-trimmer keeps an identical copy, and `architecture-patterns.md` has one in frontend-react: run `python3 scripts/check_shared_files.py` after editing and copy the change over.
 - Edit `SKILL.md` to change how phases are cut, sized, and documented.
 
 ## Installing the Skill
@@ -133,9 +120,4 @@ Invoke the skill with `/ai-toolkit:project-planner`, or let Claude pick it up fr
 
 ### Manually
 
-Copy the `skills/project-planner/` folder, the `rules/shared/` folder and the `templates/` folder into a skills directory that Claude Code reads, and keep their relative layout:
-
-- Project level: `.claude/skills/project-planner/`, `.claude/rules/shared/` and `.claude/templates/`.
-- User level: `~/.claude/skills/project-planner/`, `~/.claude/rules/shared/` and `~/.claude/templates/`.
-
-`SKILL.md` reads `../../rules/shared/project-planner-rules.md` and `../../rules/shared/markdown-rules.md` by relative path, so `rules/` must sit two levels above the skill folder.
+Copy the `skills/project-planner/` folder to `.claude/skills/` in a project, or to `~/.claude/skills/` for all projects. It has no dependencies outside its own folder.

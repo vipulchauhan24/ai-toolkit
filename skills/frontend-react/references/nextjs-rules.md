@@ -11,7 +11,7 @@ Rules for Next.js code, read by the frontend-react skill together with `react-ru
 
 **Pattern:** the project's pattern is `layered` unless the phase document or the codebase says otherwise (`architecture-patterns.md`). Pages, layouts, route handlers and Server Actions are handlers: a Server Component that reads data calls a service, never data access.
 
-For performance work (parallel fetching across Server Components, `React.cache()`, serialization at the server-client boundary, `next/dynamic`), also read section 3 and the bundle-size section of `references/react-performance-guidelines.md`.
+For performance work (parallel fetching across Server Components, `React.cache()`, serialization at the server-client boundary, `next/dynamic`), also read section 3 and the bundle-size section of `react-performance-guidelines.md` in this folder.
 
 ## Contents
 

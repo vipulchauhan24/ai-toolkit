@@ -28,7 +28,7 @@ The sequencing, sizing, and document-structure rules live in the planner's `SKIL
 ## Architecture Pattern
 
 - Phase 1 states the coding pattern once as a decision: `Pattern: <mvc|mvvm|layered>` followed by `Reason: <one line>`. Later phases inherit it and never reopen it.
-- Choose the pattern from `rules/coding/architecture-patterns.md`. A spec that marks a pattern `fixed` wins over the default for the framework.
+- Choose the pattern from `architecture-patterns.md` in this folder. A spec that marks a pattern `fixed` wins over the default for the framework.
 - A repository with more than one part (a UI and a service) pins one pattern per part: `Pattern (web): <pattern>`, `Pattern (api): <pattern>`, each with its own `Reason:`.
 - In a brownfield project, the pattern is the codebase's own. Write the same `Pattern:` and `Reason:` lines, and cite the files that show it by `path:line` in the `Reason:` line.
 

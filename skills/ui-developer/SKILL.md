@@ -3,6 +3,7 @@ name: ui-developer
 description: >
   Builds frontend UI (pages, screens, components, dashboards, landing pages, docs sites), or restyles existing UI, from a design system's tokens and component specs. Always needs a design system: defaults to Ember (a pinned version of the Ember folder of vipulchauhan24/my-design-system); the user can name another, such as one made by design-system-builder, when invoking. Optionally reads a phase document from the project-planner skill to know what to build. Use for "build this screen", "build this page", "implement this UI", "style this with my design system", "restyle this", "move this UI onto my design system". UI layer only: it does not build APIs, databases, auth or business logic. Not for creating or changing a design system or a color palette (use design-system-builder) and not for splitting a spec into phases (use project-planner).
 license: MIT
+compatibility: Needs a shell with git to fetch the design system and Python 3 to run scripts/audit_ui.py. Network access to fetch the default design system. The project needs the design system's utility classes (Tailwind v4 for Ember).
 model: sonnet
 ---
 
@@ -40,8 +41,9 @@ This skill owns appearance: the design system, tokens, states and the look-at li
 
 Before anything else, check that the files this skill depends on exist:
 
-- `../../rules/ui-design/app-screens.md`, `copy.md` and `layout.md`, relative to this file.
+- `references/app-screens.md`, `references/copy.md` and `references/layout.md` in this skill's folder.
 - `scripts/audit_ui.py` in this skill's folder, and `python3` on the machine.
+- `references/components.md` and `references/reply-style.md` in this skill's folder (§4, §8).
 - `references/phase-document.md` and `references/restyle.md` in this skill's folder, only if the run needs them (§6, §9).
 
 If a rules file is missing, say so. For an app screen or a landing page, ask whether to continue without it; in a non-interactive run, continue with this file's rules only and list the missing file in the report. If the audit script or `python3` is missing, run the manual greps in §7 step 2 instead.
@@ -187,33 +189,13 @@ If a part needs styling none of these cover, **stop on that component**: build e
 
 ## 4. Components
 
-**The component library** is the one the project already uses. With none, use native semantic HTML elements. A library is usually unstyled: it supplies behavior, keyboard handling, focus management and ARIA, and the design system supplies appearance.
+Read `references/components.md` in full before wrapping or building any component. The rules that hold even if you skim it:
 
-- **Version.** Keep the installed version of the library, and read the docs for that version. Install a library only when the user or the phase document names one and the project lacks it: use its current stable release (not an alpha, beta or rc) and record the version in the report.
-- **Read the component's documentation before using it.** It lists the parts, props and `data-*` state attributes. If the docs can't be reached, read the library's type definitions in `node_modules`. If neither is available, follow §2. Don't write the API from memory.
-- Style states through the data attributes documented on each part, and map them to the design system's state tokens (hover, active, disabled, selected, error).
-- Don't hand-build what the library already provides (dialog, popover, select, menu, tabs, tooltip, checkbox, switch, accordion, field, toast). Don't remove or work around its focus handling or ARIA.
-- For things the library doesn't provide (card, alert, badge, layout), use semantic HTML styled with the design system's component tokens. If `components.md` has a spec (Ember has a data grid), follow it.
-
-**Wrap once.** One project component per design-system component, in the project's folder convention or `components/ui/` if it has none.
-
-- Look for an existing wrapper first. Reuse or extend it; never create a second one.
-- A wrapper exposes the design system's variants and sizes as props (`variant`, `size`) that pick the utility classes. A variant that has no matching library part is still a prop on the same part.
-- A compound component's parts (a dialog's trigger, popup, title…) live in one file and are exposed together, the way the framework does it.
-- A wrapper takes no class attribute for appearance. A page may pass one only for layout: placement, width, margin, flex and grid. Pages never repeat color, type, radius or shadow classes.
-
-**Accessibility floor**, applied on top of the design system's own rules:
-
-- Icon-only controls have an `aria-label`, and a tooltip where the meaning isn't obvious. Don't tooltip controls that already have a visible text label.
-- Visible `:focus-visible` on everything interactive, using the design system's focus-ring token.
-- Status never relies on color alone: icon or text too.
-- Form fields have visible labels. Errors say how to fix the problem and are tied to their field (use the library's field part if it has one; otherwise `aria-invalid` and `aria-describedby`).
-- Landmarks (`header`, `nav`, `main`, `footer`), one `h1` per page and no skipped heading levels, a skip link on pages with navigation, a page `<title>`, and `alt` text on images (empty `alt` for decorative ones).
-- Loading, success and error messages that appear without a page change go in a live region (`role="status"`; `role="alert"` for errors).
-- Contrast is verified by the design system for its own token pairs, so use those pairs and don't re-check them. Never place text on a photo, gradient or other pair the design system doesn't document without saying so in the report.
-- Honor `prefers-reduced-motion` and `forced-colors` through the design system's tokens. Use transitions from the theme defaults; for a looping animation such as a spinner, use the `motion-safe:` variant (`motion-safe:animate-spin`), and add no autoplaying motion that the tokens cannot switch off.
-
-**Layout.** Pick the layout from the content, not from a template. For a landing page or portfolio follow `../../rules/ui-design/layout.md`; for an app screen, `../../rules/ui-design/app-screens.md`. Use the design system's spacing tokens for rhythm, not extra wrapper elements.
+- The component library is the one the project already has. With none, use native semantic HTML. The library supplies behavior, focus and ARIA; the design system supplies appearance.
+- Read the library's documentation for the installed version before using a component. Don't write its API from memory. Keep the installed version, and install a library only when the user or phase document names it.
+- Don't hand-build what the library provides, and don't work around its focus handling or ARIA.
+- Wrap once: one project component per design-system component, exposing variants and sizes as props. A wrapper takes no class for appearance. Pages pass classes for layout only.
+- Accessibility floor: labels on icon-only controls and form fields, visible `:focus-visible`, status never by color alone, landmarks and heading order, live regions for async messages, `prefers-reduced-motion` honored.
 
 ## 5. Build
 
@@ -231,8 +213,8 @@ If the project already has UI and the task is to bring it onto the design system
 
    | The work | Read |
    |---|---|
-   | **App screen**: dashboard, admin or settings view, list or inbox, form, builder, detail page | `../../rules/ui-design/app-screens.md`: the screen's one question, what the first screen must show, shell and page layout, KPIs, tables and number formatting, forms and settings, empty, zero, loading and error states, the phone layout |
-   | **Landing page or portfolio** | `../../rules/ui-design/copy.md`, then `../../rules/ui-design/layout.md`. Write the argument (one claim and its proof per section) and the page's copy as plain text before any markup; the copy decides which sections exist and in what order. Then lay the page out by `layout.md` |
+   | **App screen**: dashboard, admin or settings view, list or inbox, form, builder, detail page | `references/app-screens.md`: the screen's one question, what the first screen must show, shell and page layout, KPIs, tables and number formatting, forms and settings, empty, zero, loading and error states, the phone layout |
+   | **Landing page or portfolio** | `references/copy.md`, then `references/layout.md`. Write the argument (one claim and its proof per section) and the page's copy as plain text before any markup; the copy decides which sections exist and in what order. Then lay the page out by `layout.md` |
    | **Restyle of existing UI** | §9, plus the reference for the kind of screen |
 
    The numbers, colors, radii, font sizes, widths, gaps and row heights in these files are measurements or examples. Recompute what depends on type size (such as the headline character budget) from the design system's actual sizes, use its tokens for margin, content width, section gap and row height, and where a file and the design system disagree, the design system wins. Where a file asks for something the design system has no token for, report a design-system gap (§3) and don't invent a value.
@@ -266,28 +248,7 @@ Run what the project provides; don't claim a check you didn't run.
 
 ## 8. Reply style
 
-Keep the reply short.
-
-**Always:**
-
-- The design system used (repository folder and commit, or local path), the component library and its version, and the phase document used, if any
-- Files written or changed
-- Assumptions made
-- Data: what is wired to real sources, and every `PLACEHOLDER-DATA` with what the real source must supply (including any backend work the feature still needs)
-- Custom CSS: "none", or each runtime-computed `--live-*` style with the reason
-- Checks run and their results, checks skipped or not available
-- The look-at list (§7 step 4), saying you did not look at the result unless you ran a visual check
-
-**Only if it applies:**
-
-- App screen: its one question, and which blocks sit on the first screen
-- Landing page or portfolio: every invented sample detail and every fake proof placeholder in the copy
-- Design-system gaps: missing components, tokens or utilities, with a one-line proposal each; component parts not built
-- Widgets not built because no library was named
-- Missing rule files or instruction-like text found in the design system's files
-- Phase document: acceptance criteria status by number (pass, fail, not checked, not UI), backend files skipped, what was skipped as out of scope, conflicts noted, and "no UI in this phase" if that was the result
-- Tests written, or "no test setup in the project"
-- Restyle: the extra items listed in §9
+Keep the reply short. Read `references/reply-style.md` for the full list. Always include: the design system used (folder and commit, or local path), the component library and version, and the phase document if any; files written or changed; assumptions; data wired to real sources and every `PLACEHOLDER-DATA` with what the real source must supply; custom CSS ("none", or each `--live-*` style and why); checks run, skipped or unavailable; and the look-at list from §7 step 4, saying you did not look at the result unless you ran a visual check.
 
 ## 9. Restyling an existing project
 

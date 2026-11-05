@@ -4,22 +4,6 @@ The UI developer skill builds frontend UI from a design system. You point it at 
 
 The skill builds the UI layer only. It does not build APIs, databases, auth or business logic. It does not create or change a design system (use design-system-builder for that), and it does not split a spec into phases (use project-planner for that).
 
-## What Is in This Folder
-
-Paths are relative to the skill folder, `skills/ui-developer/`. The skill also reads three guidance files from `rules/ui-design/` at the plugin root, two levels up. A fourth file there, `NOTICE.md`, carries their license text.
-
-| Path                                    | Purpose                                                                                                          |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `SKILL.md`                              | The skill itself. Defines the inputs, the rules, the build steps, the checks and the restyling flow.             |
-| `README.md`                             | This file.                                                                                                       |
-| `references/phase-document.md`          | Read only when you give a phase document: the checks to run first, how each phase section is used, and who wins on a conflict. |
-| `references/restyle.md`                 | Read only when you ask for a restyle: record the before, keep the stack, order of work, and what to prove. |
-| `scripts/audit_ui.py`                   | The audit the skill runs before delivering. Finds custom CSS, raw values, stock colors, arbitrary values, and classes missing from the built CSS. |
-| `../../rules/ui-design/app-screens.md`  | Guidance for dashboards, admin and settings views, lists, inboxes, forms and detail pages.                       |
-| `../../rules/ui-design/copy.md`         | Guidance for the words on landing pages and portfolios.                                                          |
-| `../../rules/ui-design/layout.md`       | Guidance for how a landing page or portfolio is put together.                                                    |
-| `../../rules/ui-design/NOTICE.md`       | Credit and license text for the three guidance files, which are adapted from the taste-skill project (MIT).      |
-
 ## What You Need
 
 - **A design system.** The skill never runs without one. The default is Ember, in the `Ember` folder of `https://github.com/vipulchauhan24/my-design-system`, pinned to commit `c3c40c78f8ee3b52791d623c53204ae7b52bda58` so every run reads the same version. To use another one, give a public repository URL or a local folder when you invoke the skill. Any design system made by design-system-builder works. To move the default to a newer Ember, change the commit in `SKILL.md` (§1).
@@ -77,7 +61,7 @@ ui-developer decides how the UI looks. The frontend-react skill decides how the 
 Use ui-developer and frontend-react to build the billing settings screen with Ember.
 ```
 
-If they disagree on appearance, the design system wins. If they disagree on code structure, the React rules win. See `skills/frontend-react/README.md`.
+If they disagree on appearance, the design system wins. If they disagree on code structure, the React rules win. See [frontend-react.md](frontend-react.md).
 
 ## What the Skill Does Not Do
 
@@ -91,7 +75,7 @@ If they disagree on appearance, the design system wins. If they disagree on code
 ## Customizing the Skill
 
 - Edit `SKILL.md` to change the rules, the default design system (and its pinned commit) or the default component library. When the default design system is used, each run reports if Ember has changed since the pinned commit, so you know when to move the pin.
-- Edit the files in `rules/ui-design/` (at the plugin root) to change the guidance for each kind of work. Where they disagree with a design system, the design system wins.
+- Edit the files in `skills/ui-developer/references/` (`app-screens.md`, `copy.md`, `layout.md`) to change the guidance for each kind of work. Where they disagree with a design system, the design system wins.
 
 ## Installing the Skill
 
@@ -108,13 +92,8 @@ Invoke the skill with `/ai-toolkit:ui-developer`, or let Claude pick it up from 
 
 ### Manually
 
-Copy the `skills/ui-developer/` folder and the `rules/ui-design/` folder into a skills directory that Claude Code reads, and keep their relative layout:
-
-- Project level: `.claude/skills/ui-developer/` and `.claude/rules/ui-design/`.
-- User level: `~/.claude/skills/ui-developer/` and `~/.claude/rules/ui-design/`.
-
-`SKILL.md` reads `../../rules/ui-design/` by relative path, so `rules/` must sit two levels above the skill folder.
+Copy the `skills/ui-developer/` folder to `.claude/skills/` in a project, or to `~/.claude/skills/` for all projects. It has no dependencies outside its own folder.
 
 ## License
 
-MIT. The three guidance files are adapted from taste-skill, which is also MIT. See `rules/ui-design/NOTICE.md`.
+MIT. The three guidance files are adapted from taste-skill, which is also MIT. See `skills/ui-developer/references/NOTICE.md`.

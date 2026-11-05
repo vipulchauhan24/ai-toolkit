@@ -100,7 +100,7 @@ Rules for React code, read by the frontend-react skill. For a Next.js project th
 
 ## 8. Performance
 
-Worked examples for each rule below are in `references/react-performance-guidelines.md`, along with Next.js server patterns.
+Worked examples for each rule below are in `react-performance-guidelines.md` in this folder, along with Next.js server patterns.
 
 Work in this order, because the earlier items cost more than the later ones: waterfalls, bundle size, re-renders, then micro-optimizations.
 

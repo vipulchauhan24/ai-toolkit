@@ -1,8 +1,9 @@
 ---
 name: project-planner
 description: >
-  Splits a product + engineering spec into phases, each a working vertical slice with its own agent-ready design doc. Use for "plan this project", "phase this spec", or "split this into milestones for an agent to build".
+  Splits a product + engineering spec into phases, each a working vertical slice with its own agent-ready design doc, plus an overview with dependency order. Asks about high-stakes decisions (stack, data model, auth) before writing. Use for "plan this project", "phase this spec", "split this into milestones for an agent to build", "break this spec into phases", "turn this PRD into an implementation plan", or when the user shares a spec or PRD and wants it built in stages. Works for new projects and existing codebases. Not for reviewing or critiquing a spec (use doc-reviewer), not for tightening its wording (use doc-trimmer), and not for building the UI or code itself (use ui-developer or frontend-react).
 license: MIT
+compatibility: Reads a spec file and, for an existing project, its codebase. Writing phase files needs file access.
 model: opus
 ---
 
@@ -14,6 +15,8 @@ Take one product + engineering spec and turn it into an ordered sequence of phas
 
 ## Input
 
+If the user has no spec yet, point them to `assets/spec-template.md` in this skill's folder.
+
 Accept a PRD, an engineering design doc, a combined spec, or rough notes that mix product intent with technical detail. If the input only covers product intent, infer a reasonable engineering approach and mark it as an assumption. If it only covers engineering, infer the product framing (who benefits, what they can now do) for each phase.
 
 ## Verify Before Writing
@@ -24,7 +27,7 @@ For each phase, note **what already exists** that the phase can reuse -- an exis
 
 ## Standing Project Rules
 
-Before writing any phase document, read `../../rules/shared/project-planner-rules.md`. It holds the rules you follow when writing phase documents: how to turn the user's engineering preferences (stack, errors, validation and security, tests, migrations, code conventions, git, docs) into concrete decisions inside each phase, plus a fixed block of working rules to embed at the top of every phase document. The implementing agent sees only the phase document, so write each applicable rule as a concrete value in the document; do not reference the rule by name.
+Before writing any phase document, read `references/project-planner-rules.md`. It holds the rules you follow when writing phase documents: how to turn the user's engineering preferences (stack, errors, validation and security, tests, migrations, code conventions, git, docs) into concrete decisions inside each phase, plus a fixed block of working rules to embed at the top of every phase document. The implementing agent sees only the phase document, so write each applicable rule as a concrete value in the document; do not reference the rule by name.
 
 - **Precedence:** the existing codebase's conventions win over these rules, and an explicit rule in the source spec wins over them. Note any such difference at the top of the affected phase document.
 - **Exceptions:** if a phase must break a rule, name the rule and the reason in that phase's document. Never break one silently.
@@ -32,9 +35,9 @@ Before writing any phase document, read `../../rules/shared/project-planner-rule
 
 ## Tech Stack Choices
 
-**Brownfield (existing codebase):** the stack is not a decision to make -- it's whatever Verify Before Writing found. Match the existing language, framework, database, and libraries. Introducing a new one requires a stated reason (the existing stack cannot do what this phase needs), never preference or unfamiliarity with what's there. Record the codebase's own coding pattern in Phase 1, read as `../../rules/coding/architecture-patterns.md` describes, as a `Pattern: <mvc|mvvm|layered>` line followed by a `Reason:` line that cites the files showing it with `path:line`. Do not choose one from that file's table. If the spec names a different pattern, that is a high-stakes ambiguity: ask the user.
+**Brownfield (existing codebase):** the stack is not a decision to make -- it's whatever Verify Before Writing found. Match the existing language, framework, database, and libraries. Introducing a new one requires a stated reason (the existing stack cannot do what this phase needs), never preference or unfamiliarity with what's there. Record the codebase's own coding pattern in Phase 1, read as `references/architecture-patterns.md` describes, as a `Pattern: <mvc|mvvm|layered>` line followed by a `Reason:` line that cites the files showing it with `path:line`. Do not choose one from that file's table. If the spec names a different pattern, that is a high-stakes ambiguity: ask the user.
 
-**Greenfield (no codebase yet):** Phase 1's document must pin the full stack once -- language, framework, database, hosting/deploy target, coding pattern, and any non-trivial third-party library -- each with a one-line rationale. Choose the coding pattern from `../../rules/coding/architecture-patterns.md`: use the spec's pattern if it is marked `fixed`, otherwise the default for the pinned framework. Write it as `Pattern: <mvc|mvvm|layered>` followed by `Reason: <one line>`. Every later phase inherits this as a given; never re-open the stack in a later phase's document.
+**Greenfield (no codebase yet):** Phase 1's document must pin the full stack once -- language, framework, database, hosting/deploy target, coding pattern, and any non-trivial third-party library -- each with a one-line rationale. Choose the coding pattern from `references/architecture-patterns.md`: use the spec's pattern if it is marked `fixed`, otherwise the default for the pinned framework. Write it as `Pattern: <mvc|mvvm|layered>` followed by `Reason: <one line>`. Every later phase inherits this as a given; never re-open the stack in a later phase's document.
 
 **Default to boring.** Prefer established, widely-used technology over novel tools unless the spec states a hard requirement only the novel choice satisfies -- name that requirement when it justifies the departure.
 
@@ -154,7 +157,7 @@ When the user asks for files (or the input itself was a file path), write them n
 - If there is no source file (spec was pasted or described), ask the user where to write, or default to `./phases/` in the current working directory.
 - Always write an index file, `phases/README.md`, containing the Overview section (phase summaries, dependency diagram, parallelization note) with links to each `phase-N-<slug>.md`.
 
-Follow `../../rules/shared/markdown-rules.md` for all Markdown in the output.
+Follow `references/markdown-rules.md` for all Markdown in the output.
 
 ## Handoff Readiness Checklist
 

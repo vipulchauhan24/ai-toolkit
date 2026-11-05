@@ -4,19 +4,6 @@ The design system builder skill creates a new design system from scratch. You gi
 
 The skill is for new products. It does not change the tokens of an existing codebase, and it does not build single components or one-off pages such as a landing page.
 
-## What Is in This Folder
-
-Paths are relative to the skill folder, `skills/design-system-builder/`, inside the ai-toolkit plugin.
-
-| Path                           | Purpose                                                                           |
-| ------------------------------ | --------------------------------------------------------------------------------- |
-| `SKILL.md`                     | The skill itself. Defines the workflow, token rules, and deliverables.            |
-| `README.md`                    | This file.                                                                        |
-| `references/tokens.example.css` | A complete example of the three token layers, both themes, and accessibility queries. It shows structure only. It is not a palette to reuse. |
-| `scripts/check_contrast.py`    | Contrast engine. Takes a design system folder, resolves `var()` chains and tests color pairs in both themes. |
-| `scripts/check-contrast.sh`    | Contrast policy. Holds the pairs that must pass, runs the engine and writes `contrast-reports/<name>.txt`. |
-| `scripts/build_tokens_json.py` | Generates `tokens.json` (W3C DTCG) from a folder's `tokens.css`. |
-
 ## How the Skill Works
 
 1. The skill identifies your input mode (autonomous, screenshots, palette, or mixed).

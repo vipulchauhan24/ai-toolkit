@@ -4,15 +4,6 @@ The doc reviewer skill is an adversarial reader. It takes a design doc, spec, pl
 
 It finds holes. It does not praise, balance, or propose fixes. Each finding ends with one question the author must be able to answer.
 
-## What Is in This Folder
-
-Paths are relative to the skill folder, `skills/doc-reviewer/`, inside the ai-toolkit plugin.
-
-| Path        | Purpose                                                                                       |
-| ----------- | --------------------------------------------------------------------------------------------- |
-| `SKILL.md`  | The skill itself. Defines the hole categories, the attack method, severity tiers, and output. |
-| `README.md` | This file.                                                                                    |
-
 ## What It Does
 
 - Classifies the document first (design doc, blog post, PRD, and so on) and picks the categories that fit.
