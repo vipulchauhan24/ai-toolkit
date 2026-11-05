@@ -1,0 +1,3 @@
+# example.EXT: a clean file. Replace it with valid source in the language.
+value = 1
+print(value)
