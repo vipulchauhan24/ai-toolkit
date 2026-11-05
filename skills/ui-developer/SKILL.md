@@ -250,6 +250,10 @@ Run what the project provides; don't claim a check you didn't run.
 
 Keep the reply short. Read `references/reply-style.md` for the full list. Always include: the design system used (folder and commit, or local path), the component library and version, and the phase document if any; files written or changed; assumptions; data wired to real sources and every `PLACEHOLDER-DATA` with what the real source must supply; custom CSS ("none", or each `--live-*` style and why); checks run, skipped or unavailable; and the look-at list from §7 step 4, saying you did not look at the result unless you ran a visual check.
 
+## Examples
+
+See `references/examples.md` for typical runs, including a blocked one where it applies.
+
 ## 9. Restyling an existing project
 
 Use this when the project already has UI and the task is to bring it onto the design system ("restyle this", "move this to Ember", "make this match my design system"). Read `references/restyle.md` in full first. It changes how things look, not what they do.

@@ -17,3 +17,5 @@ This directory contains the Anthropic official skills guide, split into topic-ba
 | [07-patterns.md](07-patterns.md) | 5 reusable patterns: sequential workflow, multi-MCP, iterative refinement, context-aware, domain-specific | Choosing an architecture for your skill |
 | [08-troubleshooting.md](08-troubleshooting.md) | Upload errors, triggering issues, MCP failures, instruction compliance, context limits | Diagnosing and fixing skill problems |
 | [09-quick-reference.md](09-quick-reference.md) | Checklist, YAML frontmatter spec, example skill pointers | Quick lookup during development |
+
+Credits: https://github.com/corca-ai/claude-plugins

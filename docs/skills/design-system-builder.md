@@ -132,11 +132,11 @@ Other rules the skill follows:
 The skill runs the checks for you. You can rerun them after editing the tokens. Run these from the skill folder, or adjust the paths:
 
 ```bash
-./scripts/check-contrast.sh <theme-name>             # check and write contrast-reports/<theme-name>.txt
+./scripts/check_contrast.sh <theme-name>             # check and write contrast-reports/<theme-name>.txt
 python3 -I scripts/build_tokens_json.py <theme-name>  # regenerate tokens.json after editing tokens.css
 ```
 
-`check-contrast.sh` passes its list of pairs to `check_contrast.py`. Pairs whose tokens are not defined are skipped. The checker tests both themes. Text pairs need 4.5:1. Non-text UI such as borders and the focus ring needs 3:1. It exits with code 1 if any pair fails or any color cannot be parsed. It also warns about colors outside the sRGB gamut and errors on a `var()` that points to an undefined token.
+`check_contrast.sh` passes its list of pairs to `check_contrast.py`. Pairs whose tokens are not defined are skipped. The checker tests both themes. Text pairs need 4.5:1. Non-text UI such as borders and the focus ring needs 3:1. It exits with code 1 if any pair fails or any color cannot be parsed. It also warns about colors outside the sRGB gamut and errors on a `var()` that points to an undefined token.
 
 Two options help with custom work:
 

@@ -159,6 +159,10 @@ When the user asks for files (or the input itself was a file path), write them n
 
 Follow `references/markdown-rules.md` for all Markdown in the output.
 
+## Examples
+
+See `references/examples.md` for typical runs, including a blocked one where it applies.
+
 ## Handoff Readiness Checklist
 
 Before returning the result, verify for every phase document:

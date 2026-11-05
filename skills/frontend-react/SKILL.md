@@ -92,6 +92,10 @@ Run what the project provides. Don't claim a check you didn't run.
    Fix every FAIL. Don't explain one away, except a FAIL that only a project convention requires (see Precedence in `react-rules.md`): keep the convention and list the FAIL in the report. Put the REPORT lines in the report.
 6. Don't run end-to-end tests, migrations or anything that touches a real service unless asked. List what you skipped. If the project has no script for a check, write "none available".
 
+## Examples
+
+See `references/examples.md` for typical runs, including a blocked one where it applies.
+
 ## 4. Report
 
 Keep it short. If the caller names a report path, write the report there and reply with the path and a one-line status.

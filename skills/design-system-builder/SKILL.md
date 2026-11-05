@@ -117,7 +117,7 @@ Accessibility requirements that apply to every interactive component:
 
 1. Run the contrast policy script on the design system folder. Run it from the skill folder, or adjust the paths:
    ```
-   ./scripts/check-contrast.sh <theme-name>
+   ./scripts/check_contrast.sh <theme-name>
    ```
    It runs `scripts/check_contrast.py`, which resolves `var()` chains, checks both themes, and warns about out-of-gamut colors. The script holds the list of pairs that must pass (text on every surface it can sit on, brand and status text on their tints, on-color/fill, input error border, focus ring on every surface; text 4.5:1, non-text UI 3:1). Pairs whose tokens you did not define are skipped. It prints the result and writes it to `contrast-reports/<theme-name-lowercase>.txt` beside the design system folder. To check extra tokens, call `python3 -I scripts/check_contrast.py <theme-name> --pair FG BG MIN`. A known, documented exception can be passed with `--allow FG BG`; it is reported as KNOWN, not a failure.
 2. Fix every FAIL by adjusting the **derived** tokens or step choice. For Palette-mode brand colors, follow the failure rule in §3 instead of editing the brand value.
@@ -154,6 +154,10 @@ Format by platform:
 - **Native iOS/Android or multi-platform**: `tokens.json` is the main artifact, plus a short mapping to platform primitives (Color/Font assets, `MaterialTheme`) in the README. Use dp/pt, not rem. CSS-only pieces (media queries, `color-scheme`, `preview.html`, `tailwind-theme.css`) do not apply; keep `tokens.css` as the source `tokens.json` is generated from.
 
 Versioning notes (kept to a few lines in the README), starting at `0.1.0`: semantic versioning for the token set. Major: renaming or removing a token, or changing its meaning. Minor: adding tokens, components or variants. Patch: value tweaks that keep every contrast pair passing. Deprecate by keeping the old token as an alias with a comment for one minor release, then remove it in the next major. Name the brand colors that never change in a minor or patch release.
+
+## Examples
+
+See `references/examples.md` for typical runs, including a blocked one where it applies.
 
 ## 7. Reply style
 

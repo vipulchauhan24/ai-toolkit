@@ -11,8 +11,8 @@
     {
       "name": "ai-toolkit",
       "source": "./",
-      "description": "Skills for building new products. Includes a design system builder that turns a brief, screenshots, or a brand palette into design tokens, light and dark themes, component specs, and a WCAG contrast report, a project planner that splits a spec into phases for a coding agent, a doc trimmer that cuts hedging, filler, and repeated ideas from text, files, or URLs, a doc reviewer that attacks a design doc, spec, or writeup and reports only the holes, ranked by severity, a React and Next.js skill that writes frontend code to a fixed set of rules and checks it, and a UI developer that builds or restyles frontend UI from a design system's tokens with no custom CSS.",
-      "version": "1.4.4",
+      "description": "Skills for building new products: a design system builder, a project planner that splits a spec into phases for a coding agent, a doc trimmer, a doc reviewer, a React and Next.js code skill, a UI developer that builds from a design system's tokens, and a skill-runner subagent that runs named skills in the background and writes a report file.",
+      "version": "1.5.0",
       "category": "workflow",
       "license": "MIT",
       "author": {
@@ -24,6 +24,7 @@
         "design-tokens",
         "theming",
         "dark-mode",
+        "wcag",
         "accessibility",
         "planning",
         "spec",
