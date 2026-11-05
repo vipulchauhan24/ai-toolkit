@@ -102,7 +102,7 @@ Every later phase adds one capability on top of a working system. Each phase doc
 ## Customizing the Skill
 
 - Edit `skills/project-planner/references/project-planner-rules.md` to match your own engineering conventions. Treat the current content as starter defaults.
-- Edit `skills/project-planner/references/markdown-rules.md` to change how the output is formatted. doc-trimmer keeps an identical copy, and `architecture-patterns.md` has one in frontend-react: run `python3 scripts/check_shared_files.py` after editing and copy the change over.
+- `markdown-rules.md` and `architecture-patterns.md` are shared files. Edit `skills/project-planner/references/architecture-patterns.md` (its canonical copy) or `skills/doc-trimmer/references/markdown-rules.md` (its canonical copy), then run `python3 scripts/check_shared_files.py --sync`.
 - Edit `SKILL.md` to change how phases are cut, sized, and documented.
 
 ## Installing the Skill

@@ -53,7 +53,7 @@ When both run, ui-developer decides appearance and frontend-react decides code s
 
 ## Customizing the Skill
 
-- Edit `skills/frontend-react/references/react-rules.md` to change the rules. `architecture-patterns.md` has an identical copy in project-planner: run `python3 scripts/check_shared_files.py` after editing it.
+- Edit `skills/frontend-react/references/react-rules.md` to change the rules. `architecture-patterns.md` is shared: its canonical copy is in `skills/project-planner/references/`. Edit that one, then run `python3 scripts/check_shared_files.py --sync`.
 - Edit `scripts/check_react.py` to change the red flags it detects.
 
 ## Installing the Skill

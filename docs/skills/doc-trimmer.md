@@ -170,7 +170,7 @@ Distributed systems are hard to reason about. When multiple nodes communicate ov
 ## Customising
 
 - Edit `SKILL.md` to add or remove noise patterns, or to change the footer categories.
-- Edit `skills/doc-trimmer/references/markdown-rules.md` to change how the output is formatted. project-planner keeps an identical copy: run `python3 scripts/check_shared_files.py` after editing, and copy the change over.
+- Edit `skills/doc-trimmer/references/markdown-rules.md` to change how the output is formatted. This file is shared with project-planner. Edit it (it is the canonical copy), then run `python3 scripts/check_shared_files.py --sync`.
 
 ## Installing
 

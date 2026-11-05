@@ -1,0 +1,100 @@
+{
+  "_about": "Files copied into more than one skill so each skill folder stays self-contained. The first path in each list is the canonical copy: edit it, then run `python3 scripts/check_shared_files.py --sync`. A copy in a skill folder that does not exist yet is pending, not an error.",
+  "files": [
+    {
+      "name": "architecture-patterns.md",
+      "copies": [
+        "skills/project-planner/references/architecture-patterns.md",
+        "skills/frontend-react/references/architecture-patterns.md",
+        "skills/backend-node/references/architecture-patterns.md",
+        "skills/backend-python/references/architecture-patterns.md",
+        "skills/julia/references/architecture-patterns.md",
+        "skills/api-builder/references/architecture-patterns.md"
+      ]
+    },
+    {
+      "name": "markdown-rules.md",
+      "copies": [
+        "skills/doc-trimmer/references/markdown-rules.md",
+        "skills/project-planner/references/markdown-rules.md"
+      ]
+    },
+    {
+      "name": "nextjs-rules.md",
+      "copies": [
+        "skills/frontend-react/references/nextjs-rules.md",
+        "skills/api-builder/references/nextjs-rules.md"
+      ]
+    },
+    {
+      "name": "node-rules.md",
+      "copies": [
+        "skills/backend-node/references/node-rules.md",
+        "skills/api-builder/references/node-rules.md"
+      ]
+    },
+    {
+      "name": "express-rules.md",
+      "copies": [
+        "skills/backend-node/references/express-rules.md",
+        "skills/api-builder/references/express-rules.md"
+      ]
+    },
+    {
+      "name": "nestjs-rules.md",
+      "copies": [
+        "skills/backend-node/references/nestjs-rules.md",
+        "skills/api-builder/references/nestjs-rules.md"
+      ]
+    },
+    {
+      "name": "python-rules.md",
+      "copies": [
+        "skills/backend-python/references/python-rules.md",
+        "skills/api-builder/references/python-rules.md"
+      ]
+    },
+    {
+      "name": "django-rules.md",
+      "copies": [
+        "skills/backend-python/references/django-rules.md",
+        "skills/api-builder/references/django-rules.md"
+      ]
+    },
+    {
+      "name": "fastapi-rules.md",
+      "copies": [
+        "skills/backend-python/references/fastapi-rules.md",
+        "skills/api-builder/references/fastapi-rules.md"
+      ]
+    },
+    {
+      "name": "julia-rules.md",
+      "copies": [
+        "skills/julia/references/julia-rules.md",
+        "skills/api-builder/references/julia-rules.md"
+      ]
+    },
+    {
+      "name": "postgres-rules.md",
+      "copies": [
+        "skills/db-schema-builder/references/postgres-rules.md",
+        "skills/db-query-migration/references/postgres-rules.md"
+      ]
+    },
+    {
+      "name": "mysql-rules.md",
+      "copies": [
+        "skills/db-schema-builder/references/mysql-rules.md",
+        "skills/db-query-migration/references/mysql-rules.md"
+      ]
+    },
+    {
+      "name": "mongodb-rules.md",
+      "copies": [
+        "skills/db-schema-builder/references/mongodb-rules.md",
+        "skills/db-query-migration/references/mongodb-rules.md"
+      ]
+    }
+  ]
+}

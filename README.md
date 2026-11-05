@@ -73,9 +73,9 @@ The repository root is the `ai-toolkit` plugin.
 | `skills/`         | One self-contained folder per skill: `SKILL.md`, plus `references/`, `scripts/` and `assets/` where needed.   |
 | `agents/`         | `skill-runner`, a generic subagent that runs named skills in its own context and writes a report file.         |
 | `docs/skills/`    | One guide per skill for human readers (usage, examples, customizing). Skills do not read these.                |
-| `scripts/`        | Repository tooling. `check_shared_files.py` fails if a file copied into several skills has drifted apart.      |
+| `scripts/`        | Repository tooling. `shared_files.json` lists every file copied into several skills. `check_shared_files.py` fails if a copy has drifted, and `--sync` copies the canonical file over the others.      |
 
-Files used by more than one skill are copied into each skill folder: `markdown-rules.md` (doc-trimmer, project-planner) and `architecture-patterns.md` (frontend-react, project-planner). After editing one copy, copy it over the others and run `python3 scripts/check_shared_files.py`.
+Files used by more than one skill are copied into each skill folder, and `scripts/shared_files.json` lists them (for example `markdown-rules.md` and `architecture-patterns.md`). The first path in each entry is the canonical copy. Edit it, run `python3 scripts/check_shared_files.py --sync`, then run the script without `--sync` to confirm.
 
 ## License
 
