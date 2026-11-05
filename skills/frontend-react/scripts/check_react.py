@@ -33,7 +33,6 @@ BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
 
 CHECKS = [
     (re.compile(r"(:\s*any\b|\bas\s+any\b|<any>)"), "`any` type: use `unknown` and narrow it", {".ts", ".tsx"}),
-    (re.compile(r"@ts-ignore"), "`@ts-ignore`: use `@ts-expect-error` with a reason", {".ts", ".tsx", ".js", ".jsx"}),
     (re.compile(r"<(?:div|span)\b(?:[^>]|=>)*?\bonClick\s*="), "onClick on a div/span: use a <button> or <a>", EXTS),
     (re.compile(r"\bkey=\{[^}]*(?:Math\.random|randomUUID)"), "key generated at render time: use a stable id", EXTS),
     (re.compile(r"\b(?:document\.(?:querySelector|querySelectorAll|getElementById)|getElementsBy\w+)\("), "direct DOM query: use a ref", EXTS),
@@ -144,6 +143,10 @@ def check_file(path, nxt=False):
         if ext in exts:
             for m in rx.finditer(text):
                 fails.append((line_of(text, m.start()), msg))
+
+    # @ts-ignore only appears in comments, so search the raw text, not the comment-stripped text.
+    for m in re.finditer(r"@ts-ignore", raw):
+        fails.append((line_of(raw, m.start()), "`@ts-ignore`: use `@ts-expect-error` with a reason"))
 
     for m in re.finditer(r"<a\b(?:[^>]|=>)*?target=[\"']_blank[\"'](?:[^>]|=>)*>", text):
         if "noopener" not in m.group(0):

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "dsb-autonomous-brief",
+    "tier": "slow",
+    "fixture": "empty",
+    "covers": [
+      "skills/design-system-builder"
+    ],
+    "source": "design-system-builder.md: Functional / Autonomous brief",
+    "prompt": "Create a design system for a playful fintech app for students, web only. This is an autonomous run: apply defaults for anything missing and list them, treat the Direction Summary as confirmed, and build every file. Run the contrast check and the tokens.json export.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash",
+    "timeout": 1800,
+    "skills": [
+      "design-system-builder"
+    ],
+    "files": [
+      {
+        "glob": "**/tokens.css"
+      },
+      {
+        "glob": "**/tokens.json"
+      },
+      {
+        "glob": "**/tailwind-theme.css"
+      },
+      {
+        "glob": "**/components.md"
+      },
+      {
+        "glob": "**/README.md"
+      },
+      {
+        "glob": "**/preview.html"
+      },
+      {
+        "glob": "**/contrast-reports/*.txt"
+      }
+    ],
+    "post": [
+      "python3 -I {repo}/skills/design-system-builder/scripts/check_contrast.py \"$(dirname \"$(find . -name tokens.css | head -1)\")\""
+    ]
+  },
+  {
+    "id": "dsb-brand-color-kept",
+    "tier": "slow",
+    "fixture": "empty",
+    "covers": [
+      "skills/design-system-builder"
+    ],
+    "source": "design-system-builder.md: Functional / Brand color that fails contrast",
+    "prompt": "Create a design system for a bakery chain's web dashboard. The one brand color is #FFD60A (a bright yellow) and it must be kept exactly as given. Web only, light and dark themes. This is an autonomous run: apply defaults for anything missing and list them, treat the Direction Summary as confirmed, and build every file.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash",
+    "timeout": 1800,
+    "skills": [
+      "design-system-builder"
+    ],
+    "must": [
+      "(?i)ffd60a",
+      "(?i)contrast"
+    ],
+    "files": [
+      {
+        "glob": "**/tokens.css"
+      }
+    ]
+  },
+  {
+    "id": "dsb-unreadable-link",
+    "tier": "fast",
+    "fixture": "empty",
+    "covers": [
+      "skills/design-system-builder"
+    ],
+    "source": "design-system-builder.md: Functional / Unreadable link",
+    "prompt": "Create a design system from this Figma file: https://www.figma.com/design/AbC123xyz/Brand-Kit . You have no access to the internet or Figma in this run. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill",
+    "skills": [
+      "design-system-builder"
+    ],
+    "must": [
+      "(?i)(screenshot|exported colou?rs)",
+      "(?i)(can(no|')t|could not|unable|no access)"
+    ],
+    "no_files": [
+      "**/tokens.css"
+    ]
+  }
+]

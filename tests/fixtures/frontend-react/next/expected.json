@@ -1,0 +1,12 @@
+{
+  "_about": "Run with --next. Seeded file (path under seeded/) -> regex that its FAIL line must match.",
+  "clean_files": 2,
+  "seeded": {
+    "X1-hooks-in-page/page.tsx": "page or layout uses hooks",
+    "X2-error-no-client/error.tsx": "error file must start with 'use client'",
+    "X3-ssr-false.tsx": "ssr: false is only allowed",
+    "X4-async-client.tsx": "client component cannot be async",
+    "X5-server-env-in-client.tsx": "env variable is not available in the browser"
+  },
+  "xfail": {}
+}

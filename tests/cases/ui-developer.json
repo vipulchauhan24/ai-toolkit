@@ -1,0 +1,78 @@
+[
+  {
+    "id": "ui-no-design-system-blocked",
+    "tier": "fast",
+    "fixture": "ui-developer-projects/no-design-system",
+    "covers": [
+      "skills/ui-developer"
+    ],
+    "source": "ui-developer.md: Functional",
+    "prompt": "Build a billing settings screen with my design system in ./missing-ds (a local folder). Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit",
+    "skills": [
+      "ui-developer"
+    ],
+    "must": [
+      "(?i)blocked"
+    ],
+    "no_files": [
+      "**/*.css",
+      "src/**/Billing*"
+    ]
+  },
+  {
+    "id": "ui-token-only-blocked",
+    "tier": "slow",
+    "fixture": "ui-developer-projects/token-only",
+    "covers": [
+      "skills/ui-developer"
+    ],
+    "source": "ui-developer.md: Functional / Token-only design system",
+    "prompt": "Build a billing settings screen using the design system in ./design-system. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit",
+    "skills": [
+      "ui-developer"
+    ],
+    "must": [
+      "(?i)blocked",
+      "(?i)theme"
+    ],
+    "no_files": [
+      "src/**/*.css",
+      "src/**/Billing*"
+    ],
+    "unchanged": [
+      "design-system/tokens.css"
+    ]
+  },
+  {
+    "id": "ui-build-with-ember",
+    "tier": "network",
+    "fixture": "ui-developer-projects/no-design-system",
+    "covers": [
+      "skills/ui-developer"
+    ],
+    "source": "ui-developer.md: Functional / New screen",
+    "prompt": "Build a billing settings screen with the default design system (Ember). Work non-interactively: do not ask questions. Dependencies are not installed: skip install, typecheck and build and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(git:*),Bash(python3:*),Bash(mkdir:*),Bash(cp:*),Bash(ls:*),Bash(cat:*),Bash(find:*)",
+    "timeout": 1500,
+    "skills": [
+      "ui-developer"
+    ],
+    "reads": [
+      "audit_ui\\.py"
+    ],
+    "must": [
+      "Ember",
+      "Custom CSS: none"
+    ],
+    "files": [
+      {
+        "glob": "src/**/*.tsx"
+      }
+    ],
+    "post": [
+      "python3 -I {repo}/skills/ui-developer/scripts/audit_ui.py $(find src -type f -name '*.tsx')"
+    ]
+  }
+]

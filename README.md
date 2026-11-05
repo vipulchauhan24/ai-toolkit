@@ -74,8 +74,169 @@ The repository root is the `ai-toolkit` plugin.
 | `agents/`         | `skill-runner`, a generic subagent that runs named skills in its own context and writes a report file.         |
 | `docs/skills/`    | One guide per skill for human readers (usage, examples, customizing). Skills do not read these.                |
 | `scripts/`        | Repository tooling. `shared_files.json` lists every file copied into several skills. `check_shared_files.py` fails if a copy has drifted, and `--sync` copies the canonical file over the others.      |
+| `tests/`          | Fixtures, model-run cases (`cases/`), the test harness (`run.py`), per-skill test specs (`<skill>.md`) and `runs/` run logs. See [Testing Skills and Rules](#testing-skills-and-rules). |
 
 Files used by more than one skill are copied into each skill folder, and `scripts/shared_files.json` lists them (for example `markdown-rules.md` and `architecture-patterns.md`). The first path in each entry is the canonical copy. Edit it, run `python3 scripts/check_shared_files.py --sync`, then run the script without `--sync` to confirm.
+
+## Releasing
+
+Run these steps from the repository root before each version bump. The checks need Python 3.9 or later and run on Linux and macOS. Steps 1 to 4 and 6 need no network and no model. Every step prints nothing, `OK <version>` or `done`, unless the step says otherwise; any other line is a failure to fix.
+
+### Step 1: Version match
+
+Prints `OK <version>`. Run it first: a JSON error in a manifest stops here instead of in step 5.
+
+```bash
+python3 -I - <<'PY'
+import json
+a = json.load(open(".claude-plugin/plugin.json"))["version"]
+b = json.load(open(".claude-plugin/marketplace.json"))["plugins"][0]["version"]
+assert a == b, (a, b)
+print("OK", a)
+PY
+```
+
+### Step 2: SKILL.md length, skill folder shape and shared files
+
+Prints nothing. Every `SKILL.md` is under 500 lines and 5,000 words, no skill folder holds a `README.md`, and `scripts/check_shared_files.py` has no `MISSING` or `DIFFERS` line.
+
+```bash
+for f in skills/*/SKILL.md; do n=$(wc -l < "$f"); w=$(wc -w < "$f"); [ "$n" -lt 500 ] || echo "TOO LONG: $f $n lines"; [ "$w" -lt 5000 ] || echo "TOO MANY WORDS: $f $w"; done
+find skills -iname 'README*' | sed 's/^/README IN SKILL FOLDER: /'
+python3 -I scripts/check_shared_files.py | grep -E '^(MISSING|DIFFERS)'
+```
+
+### Step 3: Contents lists
+
+Prints only `done`. A rules file over 100 lines needs a `## Contents` list that matches its `##` headings.
+
+```bash
+python3 -I - <<'PY'
+import glob, re
+RULES = r"(react|nextjs|node|express|nestjs|python|django|fastapi|julia|api|postgres|mysql|mongodb)-rules\.md$|architecture-patterns\.md$|react-performance-guidelines\.md$"
+for f in sorted(g for g in glob.glob("skills/*/references/*.md") if re.search(RULES, g)):
+    t = open(f).read().split("\n")
+    if len(t) <= 100:
+        continue
+    if "## Contents" not in t:
+        print("NO CONTENTS", f)
+        continue
+    heads = [re.sub(r"^\d+\.\s*", "", l[3:]).strip() for l in t if l.startswith("## ") and l != "## Contents"]
+    items = []
+    for l in t[t.index("## Contents") + 1:]:
+        if not l.strip():
+            if items:
+                break
+            continue
+        m = re.match(r"\d+\.\s*(.*)", l)
+        if not m:
+            break
+        items.append(m.group(1).strip())
+    if items != heads:
+        print("MISMATCH", f)
+print("done")
+PY
+```
+
+### Step 4: Fixtures
+
+The last line must read `fixtures status=0`. Every skill that has fixtures under `tests/fixtures/<skill>/<flag-set>/` is covered, so later skills need no change here. Keep one check script (`check_*.py` or `audit_*.py`) per skill.
+
+```bash
+status=0
+for clean in tests/fixtures/*/*/clean; do
+  [ -d "$clean" ] || continue
+  set_dir=$(dirname "$clean"); fl=$(basename "$set_dir"); skill=$(basename "$(dirname "$set_dir")")
+  script=$(ls skills/$skill/scripts/check_*.py skills/$skill/scripts/audit_*.py 2>/dev/null)
+  flag=""; [ "$fl" != base ] && flag="--$fl"
+  python3 -I "$script" $flag $(find "$clean" -type f | sort) > /dev/null || { echo "CLEAN FAILS: $skill $fl"; status=1; }
+  for f in $(find "$set_dir/seeded" -type f | sort); do
+    python3 -I "$script" $flag "$f" | grep -q '^FAIL' || { echo "NOT FAILING: $f"; status=1; }
+  done
+done
+echo "fixtures status=$status"
+```
+
+### Step 5: Local install
+
+from a clean profile (a temporary `HOME`, so your real plugins are untouched). It must exit 0, and `claude plugin list` must show `ai-toolkit` at the version from step 1. Needs the `claude` CLI. If a `claude plugin` subcommand does not exist in your version, stop and report it.
+
+```bash
+tmp=$(mktemp -d); HOME="$tmp" claude plugin marketplace add "$(pwd)" && HOME="$tmp" claude plugin install ai-toolkit@product-development && HOME="$tmp" claude plugin list
+```
+
+### Step 6: Static and script suites
+
+(offline, a few seconds, no model). Each prints `RESULT  PASS` and no line that starts with `FAIL` or `XPASS`. `WARN` and `XFAIL` lines are listed in the release notes and do not block.
+
+```bash
+python3 -I tests/run.py static && python3 -I tests/run.py scripts
+```
+
+### Step 7: Model-run cases
+
+Needs the `claude` CLI, uses tokens and takes several minutes. It prints `RESULT  PASS` and writes `tests/runs/model-cases-<version>.md`. Run the `network` tier as well when Ember or `ui-developer` changed. A failing case is rerun once automatically; a second failure means the skill text is unclear, so fix the skill, not the case.
+
+```bash
+python3 tests/run.py cases --tier slow
+python3 tests/run.py cases --tier network
+```
+
+### Step 8: Merge, tag, push (by hand)
+
+Merge the release PR, then:
+
+```bash
+git tag -a v<version> -m "ai-toolkit <version>"
+git push origin v<version>
+```
+
+Save the output of steps 1 to 5 in `tests/runs/release-process-<version>.md` for the release notes.
+
+## Versioning
+
+The plugin follows semantic versioning (`MAJOR.MINOR.PATCH`). `plugin.json` and `marketplace.json` always carry the same version.
+
+- **Major:** a breaking change. Breaking means a skill rename or removal, a rules file path move, or a check-script flag change.
+- **Minor:** a new skill, rules file or check script, or a new behavior that breaks nothing.
+- **Patch:** a fix or a wording change.
+
+Each release is a git tag `vX.Y.Z`. To roll back, revert the release PR and ship the next patch version. Report problems at <https://github.com/vipulchauhan24/ai-toolkit/issues>.
+
+## Getting Help
+
+Open a GitHub issue at <https://github.com/vipulchauhan24/ai-toolkit/issues>. Include the skill name, the plugin version (`claude plugin list`), the prompt you gave and what you expected.
+
+## Testing the Check Scripts
+
+Each skill with a check script has fixtures under `tests/fixtures/<skill>/<flag-set>/`:
+
+```text
+tests/fixtures/frontend-react/base/
+  clean/        files the script must pass
+  seeded/       one file per FAIL rule, each holding that one violation
+  expected.json seeded file -> regex its FAIL line must match, the clean file count, and xfail
+```
+
+`<flag-set>` is `base` for a plain run, or the name of a flag (`next` runs the script with `--next`). Run `python3 -I tests/run.py scripts`. A clean fixture must exit 0. A seeded fixture must exit 1 with a `FAIL` line that matches its entry in `expected.json`, and with no other `FAIL` line. A rule that is known not to fire goes in `xfail` with a reason and prints `XFAIL`; once it fires the run prints `XPASS` and fails until the entry is removed.
+
+To add a rule: add a seeded file, add its pattern to `expected.json`, and run the command. A new script under `skills/*/scripts/` needs an entry in `SCRIPT_COVERAGE` in `tests/run.py` or the static layer fails with `script has a test`. Keep one check script per skill.
+
+## Testing Skills and Rules
+
+Three layers, all driven by `tests/run.py`:
+
+```bash
+python3 -I tests/run.py static
+python3 -I tests/run.py scripts
+python3 tests/run.py cases --tier slow
+```
+
+- `static` checks manifests, front matter, referenced paths, folder shape, contents lists, shared files and that every skill, agent and rules file is covered by a case. Offline, no model.
+- `scripts` runs the check scripts against the fixtures (see above). Offline, no model.
+- `cases` runs skills and agents through `claude -p` with the plugin loaded from this checkout, then asserts on the output and the files written. **Only this layer needs the `claude` CLI and costs tokens.** Use `cases --list` to list the cases, `--tier fast|slow|network` to pick a tier and `--case <id>` to run one. Raw transcripts go to `tests/runs/.cases/`, which git ignores.
+
+After changing a skill or a rules file, run `static`, then the cases that list that file in `covers`. To add a case, write it in `tests/cases/<skill>.json`, derived from a section of `tests/<skill>.md` named in its `source` key. The format is in [tests/README.md](tests/README.md).
 
 ## License
 
