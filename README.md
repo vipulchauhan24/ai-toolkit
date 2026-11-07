@@ -15,10 +15,12 @@ A collection of Claude Code skills by Vipul Chauhan.
 | [backend-node](docs/skills/backend-node.md) | Ask Claude to "build this in Node.js", "write the service in Express" or "write the NestJS module". It writes TypeScript backend code to a fixed set of rules (types, errors, concurrency, configuration, services, entity classes from `schema.md`, boundaries, logging, security, tests), detects Express or NestJS from `package.json`, matches the project's own conventions first, and runs the typecheck, lint, tests, build and a Node check script. It stops with a Blocked report for any other framework or plain JavaScript. It writes no route handlers, controllers, queries, migrations or auth: it reports each as the typed boundary. |
 | [backend-python](docs/skills/backend-python.md) | Ask Claude to "build this in Django", "write the FastAPI service" or "write the Python models". It writes Python backend code to a fixed set of rules (types, errors, concurrency, configuration, model classes from `schema.md`, services, boundaries, logging, security, tests), reads the Django or FastAPI rules only when the project depends on that framework, and runs the project's checks and a Python check script. It stops with a Blocked report for any other framework. It writes no views or route handlers, queries, migrations or auth: it reports each as the typed boundary. |
 | [julia](docs/skills/julia.md) | Ask Claude to "write this in Julia", "model this as an LP with JuMP" or "analyse this data with DataFrames.jl". It writes Julia code to a fixed set of rules covering Oxygen service structure, DataFrames.jl, JuMP.jl with HiGHS.jl (LP and QP), model training with MLJ.jl and data analysis, reads `Project.toml` for the Julia version and dependencies, and runs `Pkg.test()` and a Julia check script. It writes no Oxygen route handlers, database access or auth: it reports each as the typed boundary. |
+| [spec-writer](docs/skills/spec-writer.md) | Ask Claude to "write a spec for this brief" or "fill the gaps in this spec" and give it pasted text or a file path. It lists every line of the project-planner spec template that your input does not answer, asks about all of them in one batch, never fills a gap with a guess, and writes the result to a new `spec.md` (your file is never changed). Gaps you leave open become `Undecided` with an open question, and a check script confirms nothing is missing. It does not choose your stack or plan the build. |
+| [orchestrator](docs/skills/orchestrator.md) | Ask Claude to "build this project from the spec" or "carry on with the next phase" (Claude Code only). It gets the spec written and approved, gets the project split into phases, then runs each phase through the right skills in its own git worktree, in dependency order, through the `skill-runner` agent. A small engine script (`scripts/engine.py`) keeps the route and the ledger, so no step is skipped and nothing starts early. You approve the spec and the route, and you merge every pull request. Phases only you can do are parked. It writes no code itself. |
 
 ## Installing
 
-The design-system-builder, project-planner, doc-trimmer, doc-reviewer, ui-developer, frontend-react, backend-node, backend-python and julia skills are published in the ai-toolkit Claude Code plugin. Add the marketplace and install it:
+The design-system-builder, project-planner, spec-writer, orchestrator, doc-trimmer, doc-reviewer, ui-developer, frontend-react, backend-node, backend-python and julia skills are published in the ai-toolkit Claude Code plugin. Add the marketplace and install it:
 
 ```text
 claude plugin marketplace add vipulchauhan24/ai-toolkit
@@ -27,7 +29,7 @@ claude plugin update ai-toolkit@product-development
 /reload-plugins
 ```
 
-Invoke the skills with `/ai-toolkit:design-system-builder`, `/ai-toolkit:project-planner`, `/ai-toolkit:doc-trimmer`, `/ai-toolkit:doc-reviewer`, `/ai-toolkit:ui-developer`, `/ai-toolkit:frontend-react`, `/ai-toolkit:backend-node`, `/ai-toolkit:backend-python` and `/ai-toolkit:julia`, or let Claude pick them up from a matching prompt.
+Invoke the skills with `/ai-toolkit:design-system-builder`, `/ai-toolkit:project-planner`, `/ai-toolkit:doc-trimmer`, `/ai-toolkit:doc-reviewer`, `/ai-toolkit:ui-developer`, `/ai-toolkit:frontend-react`, `/ai-toolkit:backend-node`, `/ai-toolkit:backend-python`, `/ai-toolkit:julia`, `/ai-toolkit:spec-writer` and `/ai-toolkit:orchestrator`, or let Claude pick them up from a matching prompt.
 
 The language skills (backend-node, backend-python, julia) stop at the API and database boundaries until release 1.7.0; they report each boundary and name the skill that owns it.
 
@@ -60,6 +62,8 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
    - backend-node: the whole `skills/backend-node/` folder (`references/node-rules.md`, `express-rules.md`, `nestjs-rules.md`, `architecture-patterns.md`, `examples.md` and `scripts/check_node.py`)
    - backend-python: the whole `skills/backend-python/` folder (`references/python-rules.md`, `django-rules.md`, `fastapi-rules.md`, `architecture-patterns.md`, `examples.md` and `scripts/check_python.py`)
    - julia: the whole `skills/julia/` folder (`references/julia-rules.md`, `architecture-patterns.md`, `examples.md` and `scripts/check_julia.py`)
+   - spec-writer: the whole `skills/spec-writer/` folder (`assets/spec-template.md`, `references/markdown-rules.md` and `scripts/check_spec.py`)
+   - orchestrator: Claude Code only, see below
 3. Send your request (a spec to plan, a brief, screenshots or palette to build from, text to trim, or a document to review).
 
 ### What to expect outside Claude Code
@@ -71,6 +75,8 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
 - frontend-react runs the project's own typecheck, lint, tests and build and `scripts/check_react.py` with Python 3, so it needs an agent with shell access. Python 3 is required: without it the skill stops with an error.
 - backend-node, backend-python and julia run the project's own checks and their `scripts/check_*.py` with Python 3, so they need an agent with shell access. Python 3 is required: without it the skill stops with a Blocked report. They stop at the API and database boundaries until release 1.7.0.
 - ui-developer fetches the design system with `git` and runs `scripts/audit_ui.py` with Python 3, so it needs an agent with shell access. Without Python it falls back to manual searches.
+- spec-writer runs `scripts/check_spec.py` with Python 3, so it needs an agent with shell access. Without Python it stops with a Blocked report.
+- The orchestrator works in Claude Code only. It needs the Agent and Skill tools, git worktrees, the `skill-runner` agent and Python 3.9 or later for `scripts/engine.py`.
 - The `/ai-toolkit:...` commands are Claude Code only. Elsewhere, trigger the skills with a prompt.
 
 ## Repository Layout
@@ -80,7 +86,7 @@ The repository root is the `ai-toolkit` plugin.
 | Path              | Contents                                                                                                       |
 | ----------------- | -------------------------------------------------------------------------------------------------------------- |
 | `.claude-plugin/` | The marketplace manifest (`marketplace.json`) and the plugin manifest (`plugin.json`).                         |
-| `skills/`         | One self-contained folder per skill (design-system-builder, project-planner, doc-trimmer, doc-reviewer, ui-developer, frontend-react, backend-node, backend-python, julia): `SKILL.md`, plus `references/`, `scripts/` and `assets/` where needed.   |
+| `skills/`         | One self-contained folder per skill (design-system-builder, project-planner, spec-writer, orchestrator, doc-trimmer, doc-reviewer, ui-developer, frontend-react, backend-node, backend-python, julia): `SKILL.md`, plus `references/`, `scripts/` and `assets/` where needed.   |
 | `templates/`      | `language-skill-template/`, a copy-and-fill starting point for a new language skill, with a checklist. It is not a skill and the plugin does not load it. |
 | `agents/`         | `skill-runner`, a generic subagent that runs named skills in its own context and writes a report file.         |
 | `docs/skills/`    | One guide per skill for human readers (usage, examples, customizing). Skills do not read these.                |

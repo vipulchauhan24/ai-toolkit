@@ -16,7 +16,8 @@
       "name": "markdown-rules.md",
       "copies": [
         "skills/doc-trimmer/references/markdown-rules.md",
-        "skills/project-planner/references/markdown-rules.md"
+        "skills/project-planner/references/markdown-rules.md",
+        "skills/spec-writer/references/markdown-rules.md"
       ]
     },
     {
@@ -94,6 +95,13 @@
       "copies": [
         "skills/db-schema-builder/references/mongodb-rules.md",
         "skills/db-query-migration/references/mongodb-rules.md"
+      ]
+    },
+    {
+      "name": "spec-template.md",
+      "copies": [
+        "skills/project-planner/assets/spec-template.md",
+        "skills/spec-writer/assets/spec-template.md"
       ]
     }
   ]

@@ -80,6 +80,8 @@ SCRIPT_COVERAGE = {
     "skills/backend-node/scripts/check_node.py": "tests/fixtures/backend-node",
     "skills/backend-python/scripts/check_python.py": "tests/fixtures/backend-python",
     "skills/julia/scripts/check_julia.py": "tests/fixtures/julia",
+    "skills/orchestrator/scripts/engine.py": "tests/fixtures/orchestrator",
+    "skills/spec-writer/scripts/check_spec.py": "tests/fixtures/spec-writer",
 }
 REQUIRED_FIXTURES = [
     "doc-trimmer",
@@ -91,6 +93,10 @@ REQUIRED_FIXTURES = [
     "frontend-react-projects",
     "ui-developer-projects",
     "skill-runner",
+    "orchestrator",
+    "orchestrator-projects",
+    "spec-writer",
+    "spec-writer-projects",
     "empty",
 ]
 CASE_KEYS = {
@@ -551,7 +557,189 @@ def cmd_scripts(_args):
     rc, out = run_py(dsb / "build_tokens_json.py", [])
     r.check("usage error: build_tokens_json.py with no argument prints usage", rc != 0 and "usage" in out, "exit %d" % rc)
 
+    engine_tests(r)
+
     return r.finish()
+
+
+# Route files that the orchestrator engine must refuse, and the FAIL line each must print.
+ENGINE_BAD_ROUTES = {
+    "bad-cycle": r"dependency cycle among",
+    "bad-missing-dependency": r"p4: depends on p9, which is not a phase",
+    "bad-file-clash": r"p4 and p6 can run together but both change skills/node/SKILL\.md",
+    "bad-duplicate-id": r"duplicate phase id p4",
+    "bad-no-skills": r"p4: skills must be a non-empty list",
+    "bad-parked-no-reason": r"p8: a parked phase needs a park_reason",
+    "bad-self-dependency": r"p3: depends on itself",
+    "bad-isolation": r"p1: isolation must be",
+    "bad-worker-cap": r"max_parallel must be",
+    "bad-pattern-file": r"p4: files must be paths or directories ending in /, not patterns",
+    "bad-prefix-clash": r"p4 and p5 can run together but both change skills/py/SKILL\.md",
+    "bad-main-session-not-parked": r"p4: main_session_skill only belongs on a parked phase",
+}
+
+
+def engine_tests(r):
+    """Orchestrator engine: route validation, then a whole project run in a temporary copy."""
+    engine = ROOT / "skills" / "orchestrator" / "scripts" / "engine.py"
+    fx = FIXTURES / "orchestrator"
+    if not r.check("engine fixtures exist", fx.is_dir() and engine.is_file(), "tests/fixtures/orchestrator or engine.py is missing"):
+        return
+
+    def eng(work, *args):
+        rc, out = run_py(engine, list(args) + ["--root", work, "--dir", Path(work) / ".orchestrator"])
+        return rc, out
+
+    def as_json(out):
+        try:
+            return json.loads(out)
+        except ValueError:
+            return {}
+
+    tmp = Path(tempfile.mkdtemp(prefix="engine-"))
+    try:
+        # Route validation, one rule at a time
+        for name in sorted(ENGINE_BAD_ROUTES):
+            d = tmp / name
+            (d / ".orchestrator").mkdir(parents=True)
+            shutil.copy(fx / "routes" / (name + ".json"), d / ".orchestrator" / "route.json")
+            rc, out = eng(d, "validate", "--no-docs")
+            fails = [ln for ln in out.splitlines() if ln.startswith("FAIL")]
+            hit = [ln for ln in fails if re.search(ENGINE_BAD_ROUTES[name], ln)]
+            r.check("engine validate refuses %s" % name, rc == 1 and bool(hit) and len(fails) == len(hit),
+                    "exit %d: %s" % (rc, re.sub(r"\s+", " ", out)[:200]))
+        d = tmp / "good-route"
+        (d / ".orchestrator").mkdir(parents=True)
+        shutil.copy(fx / "routes" / "good-route.json", d / ".orchestrator" / "route.json")
+        rc, out = eng(d, "validate", "--no-docs")
+        r.check("engine validate accepts good-route", rc == 0 and "RESULT  PASS" in out, out.strip()[-200:])
+
+        # A whole project
+        w = tmp / "project"
+        shutil.copytree(fx / "project", w)
+        (w / ".orchestrator").mkdir()
+        shutil.move(str(w / "route.json"), str(w / ".orchestrator" / "route.json"))
+        rep = lambda name: str(fx / "reports" / name)
+
+        def step(label, ok, detail=""):
+            return r.check("engine lifecycle: " + label, ok, detail)
+
+        rc, out = eng(w, "validate")
+        if not step("validate passes with the phase documents present", rc == 0, out.strip()[-200:]):
+            return
+        rc, out = eng(w, "next")
+        step("next before init is refused", rc == 1 and "init" in out)
+        rc, out = eng(w, "init")
+        step("init creates the ledger", rc == 0, out.strip()[-200:])
+        rc, out = eng(w, "init")
+        step("init a second time is refused", rc == 1)
+        rc, out = eng(w, "next")
+        step("next before Gate A is refused", rc == 1 and "Gate A" in out, out.strip()[-200:])
+        eng(w, "approve", "gate-a")
+        rc, out = eng(w, "next")
+        step("next before Gate B is refused", rc == 1 and "Gate B" in out, out.strip()[-200:])
+        rc, out = eng(w, "approve", "gate-b")
+        step("Gate B is recorded", rc == 0, out.strip()[-200:])
+        rc, out = eng(w, "next")
+        data = as_json(out)
+        step("next releases only p1", rc == 0 and [x["id"] for x in data.get("ready", [])] == ["p1"], out[:300])
+        rc, out = eng(w, "start", "p2")
+        step("start p2 is refused while p1 is unmerged", rc == 1 and "waiting for p1" in out, out.strip()[-200:])
+        rc, out = eng(w, "start", "p1")
+        started = as_json(out).get("started", [{}])[0]
+        step("start p1 returns a runner call with an absolute run directory",
+             rc == 0 and started.get("agent") == "ai-toolkit:skill-runner" and Path(started.get("run_dir", "x")).is_absolute()
+             and started.get("run_dir", "").endswith("p1-1") and len(started.get("inputs", [])) == 2, out[:300])
+        rc, out = eng(w, "record", "p1", rep("blocked"))
+        step("a blocked report fails the phase", rc == 1 and "blocked" in out, out.strip()[-200:])
+        rc, out = eng(w, "next")
+        halted = {x["id"] for x in as_json(out).get("halted", [])}
+        step("failing p1 halts everything behind it", halted == {"p2", "p3", "p4", "p5", "p6", "p7", "p8"}, out[:300])
+        eng(w, "retry", "p1")
+        rc, out = eng(w, "start", "p1")
+        step("a retry gets a new run directory", rc == 0 and as_json(out)["started"][0]["run_dir"].endswith("p1-2"), out[:300])
+        for bad, why in (("no-evidence", "evidence"), ("running", "running"), ("empty", "does not exist")):
+            eng(w, "retry", "p1")
+            eng(w, "start", "p1")
+            rc, out = eng(w, "record", "p1", rep(bad))
+            step("a report that is '%s' fails the phase" % bad, rc == 1 and why in out, out.strip()[-200:])
+        eng(w, "retry", "p1")
+        eng(w, "start", "p1")
+        rc, out = eng(w, "record", "p1", rep("done"), "--tokens", "1234")
+        step("a report with status and evidence builds the phase", rc == 0, out.strip()[-200:])
+        rc, out = eng(w, "pr", "p1", "https://example.com/pull/1")
+        step("the pull request of a built phase is recorded", rc == 0, out.strip()[-200:])
+        rc, out = eng(w, "pr", "p2", "https://example.com/pull/2")
+        step("a pull request for a phase that is not built is refused", rc == 1, out.strip()[-200:])
+        rc, out = eng(w, "next")
+        held = {x["id"]: x["why"] for x in as_json(out).get("held", [])}
+        step("a built phase does not release p2 until it is merged", held.get("p2") == "waiting for p1", out[:300])
+        rc, out = eng(w, "merge", "p1")
+        step("merge p1", rc == 0, out.strip()[-200:])
+        rc, out = eng(w, "merge", "p2")
+        step("merge of a pending phase is refused", rc == 1)
+        eng(w, "start", "p2")
+        eng(w, "record", "p2", rep("done"))
+        eng(w, "merge", "p2")
+        rc, out = eng(w, "start", "p3")
+        eng(w, "retry", "p3")
+        rc, out = eng(w, "record", "p3", rep("done"))
+        step("record of a phase that is not running is refused", rc == 1 and "not running" in out, out.strip()[-200:])
+        eng(w, "start", "p3")
+        rc, out = eng(w, "record", "p3", rep("done"))
+        step("a two-skill phase with a one-skill report fails", rc == 1 and "skill(s)" in out, out.strip()[-200:])
+        eng(w, "retry", "p3")
+        eng(w, "start", "p3")
+        rc, out = eng(w, "record", "p3", rep("done-two"))
+        step("a two-skill report builds a two-skill phase", rc == 0, out.strip()[-200:])
+        eng(w, "merge", "p3")
+        rc, out = eng(w, "next")
+        data = as_json(out)
+        ready = [x["id"] for x in data.get("ready", [])]
+        held = {x["id"]: x["why"] for x in data.get("held", [])}
+        step("the worker cap of 2 releases p4 and p5 and holds p6", ready == ["p4", "p5"] and "worker cap" in held.get("p6", ""), out[:400])
+        rc, out = eng(w, "start", "p4", "p5", "p6")
+        step("start refuses a third phase over the cap and starts nothing", rc == 1 and "p6 may not start" in out, out.strip()[-200:])
+        rc, out = eng(w, "status")
+        step("a refused start leaves p4 pending", [ln.split()[1] for ln in out.splitlines() if ln.startswith("p4 ")] == ["pending"], out[:300])
+        eng(w, "start", "p4", "p5")
+        # tampering with the route after Gate B stops everything
+        route_file = w / ".orchestrator" / "route.json"
+        text = read(route_file)
+        route_file.write_text(text.replace('"max_parallel": 2', '"max_parallel": 3'))
+        rc, out = eng(w, "next")
+        step("a route changed after Gate B is refused", rc == 1 and "route changed" in out, out.strip()[-200:])
+        route_file.write_text(text)
+        eng(w, "record", "p4", rep("done"))
+        eng(w, "merge", "p4")
+        rc, out = eng(w, "next")
+        ready = [x["id"] for x in as_json(out).get("ready", [])]
+        step("p6 is released once a worker is free", ready == ["p6"], out[:300])
+        eng(w, "start", "p6")
+        eng(w, "record", "p5", rep("done"))
+        eng(w, "record", "p6", rep("done"))
+        eng(w, "merge", "p5")
+        eng(w, "merge", "p6")
+        rc, out = eng(w, "next")
+        step("p7 is released after p4, p5 and p6 merge", [x["id"] for x in as_json(out).get("ready", [])] == ["p7"], out[:300])
+        eng(w, "start", "p7")
+        eng(w, "record", "p7", rep("done"))
+        eng(w, "merge", "p7")
+        rc, out = eng(w, "next")
+        data = as_json(out)
+        step("the parked phase is listed for the user, not released to a helper",
+             [x["id"] for x in data.get("parked", [])] == ["p8"] and not data.get("ready") and not data.get("done"), out[:300])
+        step("a parked entry carries main_session_skill", all("main_session_skill" in x for x in data.get("parked", [])), out[:300])
+        rc, out = eng(w, "start", "p8")
+        step("start refuses a parked phase", rc == 1 and "parked for you" in out, out.strip()[-200:])
+        rc, out = eng(w, "merge", "p8")
+        step("the user's finished step marks the parked phase merged", rc == 0, out.strip()[-200:])
+        rc, out = eng(w, "next")
+        step("next reports done when every phase is merged", as_json(out).get("done") is True, out[:200])
+        events = json.loads(read(w / ".orchestrator" / "state.json")).get("events", [])
+        step("the ledger logged every command", len(events) > 30, "%d events" % len(events))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 # ---------------------------------------------------------------- cases

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "project": "team-links",
+  "spec": "spec.approved.md",
+  "max_parallel": 3,
+  "phases": [
+    {
+      "id": "p1",
+      "title": "Walking skeleton",
+      "doc": "phases/phase-1-skeleton.md",
+      "depends_on": [],
+      "files": [
+        "web/src/App.tsx",
+        "web/src/api.ts",
+        "server/src/linkService.ts",
+        "server/src/db.ts",
+        "package.json"
+      ],
+      "skills": [
+        "ai-toolkit:backend-node",
+        "ai-toolkit:frontend-react"
+      ],
+      "model": "sonnet",
+      "isolation": "required"
+    },
+    {
+      "id": "p2",
+      "title": "Short codes and redirect",
+      "doc": "phases/phase-2-redirect.md",
+      "depends_on": [
+        "p1"
+      ],
+      "files": [
+        "server/src/linkService.ts",
+        "server/src/redirect.ts",
+        "web/src/App.tsx"
+      ],
+      "skills": [
+        "ai-toolkit:backend-node",
+        "ai-toolkit:frontend-react"
+      ],
+      "model": "sonnet",
+      "isolation": "required"
+    },
+    {
+      "id": "p3",
+      "title": "Deployment",
+      "doc": "phases/phase-3-deploy.md",
+      "depends_on": [
+        "p2"
+      ],
+      "files": [
+        "Dockerfile",
+        ".github/workflows/deploy.yml"
+      ],
+      "parked": true,
+      "park_reason": "Buy the domain links.example.com, point its A record at the VPS, and add the repository secret DEPLOY_KEY. Done when `dig +short links.example.com` prints the VPS address."
+    }
+  ]
+}

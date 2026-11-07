@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "project": "team-links",
+  "gates": {
+    "a": {
+      "hash": "af6a60f1b4e4ebc64933ad64fe1aed40b65ed0b4577f03eeea4da3a336fe5a04",
+      "at": "2026-11-07T10:00:00Z",
+      "file": "spec.approved.md"
+    },
+    "b": {
+      "hash": "f35743af332d45abd7a43b080c76437400e85d4b49de358bbc3dd4204bf0ef47",
+      "at": "2026-11-07T10:00:00Z"
+    }
+  },
+  "phases": {
+    "p1": {
+      "status": "merged",
+      "attempts": 1,
+      "run_dir": null,
+      "started": "2026-11-07T10:00:00Z",
+      "ended": "2026-11-07T10:00:00Z",
+      "note": "",
+      "tokens": null
+    },
+    "p2": {
+      "status": "merged",
+      "attempts": 1,
+      "run_dir": null,
+      "started": "2026-11-07T10:00:00Z",
+      "ended": "2026-11-07T10:00:00Z",
+      "note": "",
+      "tokens": null
+    },
+    "p3": {
+      "status": "pending",
+      "attempts": 0,
+      "run_dir": null,
+      "started": null,
+      "ended": null,
+      "note": "",
+      "tokens": null
+    }
+  },
+  "events": []
+}
