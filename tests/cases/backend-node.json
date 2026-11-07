@@ -1,0 +1,119 @@
+[
+  {
+    "id": "node-fastify-blocked",
+    "tier": "fast",
+    "fixture": "backend-node-projects/fastify",
+    "covers": [
+      "skills/backend-node"
+    ],
+    "source": "backend-node.md: Functional / Fastify project",
+    "prompt": "Build the OrderService described in phase-1.md in Node. Work non-interactively: do not ask questions. Dependencies are not installed, so skip the typecheck, lint, tests and build and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "backend-node"
+    ],
+    "must": [
+      "Blocked",
+      "fastify"
+    ],
+    "no_files": [
+      "src/services/**"
+    ]
+  },
+  {
+    "id": "node-no-tsconfig-blocked",
+    "tier": "fast",
+    "fixture": "backend-node-projects/no-tsconfig",
+    "covers": [
+      "skills/backend-node"
+    ],
+    "source": "backend-node.md: Functional / No tsconfig",
+    "prompt": "Build the OrderService described in phase-document.md in Node with Express. Work non-interactively: do not ask questions. Dependencies are not installed, so skip the typecheck, lint, tests and build and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "backend-node"
+    ],
+    "must": [
+      "Blocked",
+      "tsconfig"
+    ],
+    "no_files": [
+      "src/**"
+    ]
+  },
+  {
+    "id": "node-express-service-boundaries",
+    "tier": "slow",
+    "fixture": "backend-node-projects/express-ts",
+    "covers": [
+      "skills/backend-node",
+      "skills/backend-node/references/node-rules.md",
+      "skills/backend-node/references/architecture-patterns.md",
+      "skills/backend-node/references/express-rules.md",
+      "skills/backend-node/references/examples.md"
+    ],
+    "source": "backend-node.md: Functional / Boundaries",
+    "prompt": "Write the Order and OrderItem entity classes and an OrderService with create(input) that returns an Order and uses an injected OrderRepository interface, with a vitest test using an in-memory fake, as phase-document.md describes. Also add the POST /orders handler. Put the report in the final reply. Work non-interactively: do not ask questions. Dependencies are not installed, so skip the typecheck, lint, tests and build and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "backend-node"
+    ],
+    "reads": [
+      "express-rules\\.md",
+      "check_node\\.py"
+    ],
+    "must": [
+      "Boundaries",
+      "api-builder",
+      "db-query-migration"
+    ],
+    "files": [
+      {
+        "glob": "src/services/orderService.ts",
+        "exists": true
+      },
+      {
+        "glob": "src/models/order.ts",
+        "exists": true,
+        "must": [
+          "readonly"
+        ]
+      }
+    ],
+    "post": [
+      "python3 -I {repo}/skills/backend-node/scripts/check_node.py --express src/models/*.ts src/services/*.ts"
+    ]
+  },
+  {
+    "id": "node-nest-detected",
+    "tier": "slow",
+    "fixture": "backend-node-projects/nest-ts",
+    "covers": [
+      "skills/backend-node",
+      "skills/backend-node/references/node-rules.md",
+      "skills/backend-node/references/nestjs-rules.md",
+      "skills/backend-node/references/architecture-patterns.md"
+    ],
+    "source": "backend-node.md: Functional / New service",
+    "prompt": "Build the Order entity and OrderService described in phase-1.md. Work non-interactively: do not ask questions. Dependencies are not installed, so skip the typecheck, lint, tests and build and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "backend-node"
+    ],
+    "reads": [
+      "nestjs-rules\\.md",
+      "check_node\\.py"
+    ],
+    "must": [
+      "(?i)\\b(done|partial)\\b"
+    ],
+    "files": [
+      {
+        "glob": "src/order/order.service.ts"
+      }
+    ],
+    "post": [
+      "python3 -I {repo}/skills/backend-node/scripts/check_node.py --nest src/order/*.ts"
+    ]
+  }
+]

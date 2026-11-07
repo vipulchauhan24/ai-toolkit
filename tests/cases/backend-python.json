@@ -1,0 +1,106 @@
+[
+  {
+    "id": "python-flask-blocked",
+    "tier": "fast",
+    "fixture": "backend-python-projects/flask",
+    "covers": [
+      "skills/backend-python"
+    ],
+    "source": "backend-python.md: Functional / Unsupported framework",
+    "prompt": "Write an order service for this Python project. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit",
+    "skills": [
+      "backend-python"
+    ],
+    "must": [
+      "(?i)blocked",
+      "(?i)flask"
+    ],
+    "no_files": [
+      "**/*service*.py",
+      "**/services/**"
+    ]
+  },
+  {
+    "id": "python-django-models-boundaries",
+    "tier": "slow",
+    "fixture": "backend-python-projects/django",
+    "covers": [
+      "skills/backend-python",
+      "skills/backend-python/references/python-rules.md",
+      "skills/backend-python/references/django-rules.md",
+      "skills/backend-python/references/architecture-patterns.md"
+    ],
+    "source": "backend-python.md: Functional / New model layer",
+    "prompt": "Using phase-document.md, write the Order and OrderItem Django models in orders/models.py and a test in orders/tests.py that creates an order with two items. Work non-interactively: do not ask questions. Django is not installed, so skip python manage.py check and python manage.py test and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "backend-python"
+    ],
+    "reads": [
+      "python-rules\\.md",
+      "django-rules\\.md",
+      "check_python\\.py"
+    ],
+    "must": [
+      "(?i)api-builder",
+      "(?i)db-query-migration",
+      "(?i)boundar"
+    ],
+    "files": [
+      {
+        "glob": "orders/models.py",
+        "must": [
+          "on_delete",
+          "db_table",
+          "TextChoices"
+        ]
+      },
+      {
+        "glob": "orders/tests.py"
+      }
+    ],
+    "no_files": [
+      "orders/views.py",
+      "orders/urls.py",
+      "orders/migrations/*.py"
+    ]
+  },
+  {
+    "id": "python-fastapi-handler-boundary",
+    "tier": "slow",
+    "fixture": "backend-python-projects/fastapi",
+    "covers": [
+      "skills/backend-python",
+      "skills/backend-python/references/python-rules.md",
+      "skills/backend-python/references/fastapi-rules.md",
+      "skills/backend-python/references/architecture-patterns.md"
+    ],
+    "source": "backend-python.md: Functional / Views are a boundary",
+    "prompt": "Build phase 1 from phase-document.md. Work non-interactively: do not ask questions. Dependencies are not installed, so skip the typecheck, lint, tests and build and list them as not run.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "backend-python"
+    ],
+    "reads": [
+      "fastapi-rules\\.md",
+      "check_python\\.py"
+    ],
+    "must": [
+      "(?i)api-builder",
+      "(?i)boundar"
+    ],
+    "files": [
+      {
+        "glob": "app/services/order_service.py"
+      },
+      {
+        "glob": "app/**/*.py",
+        "each": true,
+        "must_not": [
+          "@(app|router)\\.(get|post|put|patch|delete)"
+        ]
+      }
+    ]
+  }
+]

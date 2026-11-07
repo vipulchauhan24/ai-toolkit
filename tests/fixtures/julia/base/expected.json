@@ -1,0 +1,16 @@
+{
+  "_about": "Seeded file -> regex that its FAIL line must match. xfail: seeded file -> reason, for a rule that is known not to fire yet (must stay empty).",
+  "clean_files": 2,
+  "seeded": {
+    "J1-eval.jl": "dynamic code execution",
+    "J2-pkg-add/src/pkg.jl": "package management in source",
+    "J3-show.jl": "@show left in",
+    "J4-empty-catch.jl": "empty catch",
+    "J5-any-annotation.jl": "::Any annotation",
+    "J6-route-macro.jl": "Oxygen route handler",
+    "J7-database.jl": "database access",
+    "J8-hardcoded-secret.jl": "hard-coded secret",
+    "J9-absolute-path.jl": "absolute user path"
+  },
+  "xfail": {}
+}

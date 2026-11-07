@@ -77,6 +77,9 @@ SCRIPT_COVERAGE = {
     "skills/design-system-builder/scripts/check_contrast.py": "tests/fixtures/design-system-builder",
     "skills/design-system-builder/scripts/check_contrast.sh": "tests/fixtures/design-system-builder",
     "skills/design-system-builder/scripts/build_tokens_json.py": "tests/fixtures/design-system-builder",
+    "skills/backend-node/scripts/check_node.py": "tests/fixtures/backend-node",
+    "skills/backend-python/scripts/check_python.py": "tests/fixtures/backend-python",
+    "skills/julia/scripts/check_julia.py": "tests/fixtures/julia",
 }
 REQUIRED_FIXTURES = [
     "doc-trimmer",

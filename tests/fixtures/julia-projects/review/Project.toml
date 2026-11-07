@@ -1,0 +1,6 @@
+name = "Review"
+uuid = "6b1d2e0a-3c47-4f58-8e19-0a7c5d9b2f33"
+version = "0.1.0"
+
+[compat]
+julia = "1.10"

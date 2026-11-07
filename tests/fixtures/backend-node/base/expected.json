@@ -1,0 +1,14 @@
+{
+  "_about": "Seeded file -> regex that its FAIL line must match. xfail: seeded file -> reason, for a rule that is known not to fire yet (must stay empty).",
+  "clean_files": 2,
+  "seeded": {
+    "N1-any-type.ts": "any type",
+    "N2-ts-ignore.ts": "@ts-ignore",
+    "N3-console-log.ts": "console\\.log left in",
+    "N4-eval.ts": "dynamic code execution",
+    "N5-require.ts": "require in TypeScript",
+    "N6-hardcoded-secret.ts": "hard-coded secret",
+    "N7-sql-in-service.ts": "SQL in service code"
+  },
+  "xfail": {}
+}

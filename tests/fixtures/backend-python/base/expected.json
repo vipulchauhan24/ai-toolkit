@@ -1,0 +1,17 @@
+{
+  "_about": "Seeded file (path under seeded/) -> regex that its FAIL line must match. xfail must stay empty.",
+  "clean_files": 2,
+  "seeded": {
+    "P1-bare-except.py": "bare except",
+    "P2-swallowed.py": "swallowed exception",
+    "P3-print.py": "print left in",
+    "P4-mutable-default.py": "mutable default argument",
+    "P5-eval.py": "dynamic code execution",
+    "P6-star-import.py": "star import",
+    "P7-hardcoded-secret.py": "hard-coded secret",
+    "P8-sql-in-code.py": "SQL in service code",
+    "P9-type-ignore.py": "type: ignore without a code",
+    "P10-no-return-annotation.py": "public function without a return annotation"
+  },
+  "xfail": {}
+}
