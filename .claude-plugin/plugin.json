@@ -1,7 +1,7 @@
 {
   "name": "ai-toolkit",
-  "version": "1.5.0",
-  "description": "Skills for building new products: a design system builder, a project planner that splits a spec into phases for a coding agent, a doc trimmer, a doc reviewer, a React and Next.js code skill, a UI developer that builds from a design system's tokens, and a skill-runner subagent that runs named skills in the background and writes a report file.",
+  "version": "1.6.0",
+  "description": "Skills for building new products: a design system builder, a project planner that splits a spec into phases for a coding agent, a doc trimmer, a doc reviewer, a React and Next.js code skill, a Node.js skill, a Python skill (Django and FastAPI) and a Julia skill that write backend code to fixed rules and check it, stopping at the API and database boundaries, a UI developer that builds from a design system's tokens, and a skill-runner subagent that runs named skills in the background and writes a report file.",
   "author": {
     "name": "Vipul Chauhan",
     "email": "vipul9556@gmail.com"
@@ -23,7 +23,13 @@
     "trimming",
     "review",
     "ui",
-    "frontend"
+    "frontend",
+    "backend",
+    "nodejs",
+    "python",
+    "django",
+    "fastapi",
+    "julia"
   ],
   "skills": [
     "./skills/"

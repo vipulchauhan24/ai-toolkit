@@ -12,10 +12,13 @@ A collection of Claude Code skills by Vipul Chauhan.
 | [ui-developer](docs/skills/ui-developer.md) | Ask Claude to "build this screen" or "restyle this". It builds the UI, or restyles existing UI, from a design system (Ember by default, or one you name) using only its tokens and utilities. It writes no custom CSS, builds the UI layer only (no APIs, databases or auth), runs an audit for raw values and unknown classes, and hands you a look-at list for each state. |
 | [doc-reviewer](docs/skills/doc-reviewer.md) | Ask Claude to "poke holes in this" or "what could go wrong with this design" and give it pasted text, a file path, or a URL. It attacks the document and reports only holes: failure modes, unstated assumptions, skipped steps and unanswered questions, ranked `fatal`, `serious` or `sleeper`. Each finding quotes the text and ends with a question for the author. It gives no praise and no fixes, and it does not review code. |
 | [frontend-react](docs/skills/frontend-react.md) | Ask Claude to "build this in React", "build this in Next.js" or "write this React component". It writes React and Next.js code to a fixed set of rules (components, hooks, state, effects, forms, performance, a typed data boundary, server and client components, tests), matches the project's own conventions first, and runs the typecheck, lint, tests, build and a React check script. It does not choose colors or component looks: name ui-developer too for that. It builds no APIs, databases or auth. |
+| [backend-node](docs/skills/backend-node.md) | Ask Claude to "build this in Node.js", "write the service in Express" or "write the NestJS module". It writes TypeScript backend code to a fixed set of rules (types, errors, concurrency, configuration, services, entity classes from `schema.md`, boundaries, logging, security, tests), detects Express or NestJS from `package.json`, matches the project's own conventions first, and runs the typecheck, lint, tests, build and a Node check script. It stops with a Blocked report for any other framework or plain JavaScript. It writes no route handlers, controllers, queries, migrations or auth: it reports each as the typed boundary. |
+| [backend-python](docs/skills/backend-python.md) | Ask Claude to "build this in Django", "write the FastAPI service" or "write the Python models". It writes Python backend code to a fixed set of rules (types, errors, concurrency, configuration, model classes from `schema.md`, services, boundaries, logging, security, tests), reads the Django or FastAPI rules only when the project depends on that framework, and runs the project's checks and a Python check script. It stops with a Blocked report for any other framework. It writes no views or route handlers, queries, migrations or auth: it reports each as the typed boundary. |
+| [julia](docs/skills/julia.md) | Ask Claude to "write this in Julia", "model this as an LP with JuMP" or "analyse this data with DataFrames.jl". It writes Julia code to a fixed set of rules covering Oxygen service structure, DataFrames.jl, JuMP.jl with HiGHS.jl (LP and QP), model training with MLJ.jl and data analysis, reads `Project.toml` for the Julia version and dependencies, and runs `Pkg.test()` and a Julia check script. It writes no Oxygen route handlers, database access or auth: it reports each as the typed boundary. |
 
 ## Installing
 
-The design-system-builder, project-planner, doc-trimmer, doc-reviewer, ui-developer and frontend-react skills are published in the ai-toolkit Claude Code plugin. Add the marketplace and install it:
+The design-system-builder, project-planner, doc-trimmer, doc-reviewer, ui-developer, frontend-react, backend-node, backend-python and julia skills are published in the ai-toolkit Claude Code plugin. Add the marketplace and install it:
 
 ```text
 claude plugin marketplace add vipulchauhan24/ai-toolkit
@@ -24,7 +27,9 @@ claude plugin update ai-toolkit@product-development
 /reload-plugins
 ```
 
-Invoke the skills with `/ai-toolkit:design-system-builder`, `/ai-toolkit:project-planner`, `/ai-toolkit:doc-trimmer`, `/ai-toolkit:doc-reviewer`, `/ai-toolkit:ui-developer` and `/ai-toolkit:frontend-react`, or let Claude pick them up from a matching prompt.
+Invoke the skills with `/ai-toolkit:design-system-builder`, `/ai-toolkit:project-planner`, `/ai-toolkit:doc-trimmer`, `/ai-toolkit:doc-reviewer`, `/ai-toolkit:ui-developer`, `/ai-toolkit:frontend-react`, `/ai-toolkit:backend-node`, `/ai-toolkit:backend-python` and `/ai-toolkit:julia`, or let Claude pick them up from a matching prompt.
+
+The language skills (backend-node, backend-python, julia) stop at the API and database boundaries until release 1.7.0; they report each boundary and name the skill that owns it.
 
 ## Using the skills with other providers
 
@@ -50,7 +55,11 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
    - design-system-builder: `references/tokens.example.css`
    - doc-reviewer: none, `SKILL.md` is enough
    - ui-developer: `references/app-screens.md`, `copy.md` and `layout.md`, `scripts/audit_ui.py`, and `references/phase-document.md` and `references/restyle.md` when needed
+   - project-planner also pins the coding pattern (`Pattern:` line) in Phase 1; the language skills read it from the phase document, else from the codebase.
    - frontend-react: `references/react-rules.md`, `references/architecture-patterns.md`, `references/nextjs-rules.md` (Next.js only), `references/react-performance-guidelines.md` (performance work only) and `scripts/check_react.py`
+   - backend-node: the whole `skills/backend-node/` folder (`references/node-rules.md`, `express-rules.md`, `nestjs-rules.md`, `architecture-patterns.md`, `examples.md` and `scripts/check_node.py`)
+   - backend-python: the whole `skills/backend-python/` folder (`references/python-rules.md`, `django-rules.md`, `fastapi-rules.md`, `architecture-patterns.md`, `examples.md` and `scripts/check_python.py`)
+   - julia: the whole `skills/julia/` folder (`references/julia-rules.md`, `architecture-patterns.md`, `examples.md` and `scripts/check_julia.py`)
 3. Send your request (a spec to plan, a brief, screenshots or palette to build from, text to trim, or a document to review).
 
 ### What to expect outside Claude Code
@@ -60,6 +69,7 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
 - doc-reviewer fetches URLs with `curl` and reads files, so it needs an agent with shell and file access for those inputs. In a plain chat, paste the document text.
 - Screenshot mode needs a model that accepts image input.
 - frontend-react runs the project's own typecheck, lint, tests and build and `scripts/check_react.py` with Python 3, so it needs an agent with shell access. Python 3 is required: without it the skill stops with an error.
+- backend-node, backend-python and julia run the project's own checks and their `scripts/check_*.py` with Python 3, so they need an agent with shell access. Python 3 is required: without it the skill stops with a Blocked report. They stop at the API and database boundaries until release 1.7.0.
 - ui-developer fetches the design system with `git` and runs `scripts/audit_ui.py` with Python 3, so it needs an agent with shell access. Without Python it falls back to manual searches.
 - The `/ai-toolkit:...` commands are Claude Code only. Elsewhere, trigger the skills with a prompt.
 
@@ -70,7 +80,8 @@ The repository root is the `ai-toolkit` plugin.
 | Path              | Contents                                                                                                       |
 | ----------------- | -------------------------------------------------------------------------------------------------------------- |
 | `.claude-plugin/` | The marketplace manifest (`marketplace.json`) and the plugin manifest (`plugin.json`).                         |
-| `skills/`         | One self-contained folder per skill: `SKILL.md`, plus `references/`, `scripts/` and `assets/` where needed.   |
+| `skills/`         | One self-contained folder per skill (design-system-builder, project-planner, doc-trimmer, doc-reviewer, ui-developer, frontend-react, backend-node, backend-python, julia): `SKILL.md`, plus `references/`, `scripts/` and `assets/` where needed.   |
+| `templates/`      | `language-skill-template/`, a copy-and-fill starting point for a new language skill, with a checklist. It is not a skill and the plugin does not load it. |
 | `agents/`         | `skill-runner`, a generic subagent that runs named skills in its own context and writes a report file.         |
 | `docs/skills/`    | One guide per skill for human readers (usage, examples, customizing). Skills do not read these.                |
 | `scripts/`        | Repository tooling. `shared_files.json` lists every file copied into several skills. `check_shared_files.py` fails if a copy has drifted, and `--sync` copies the canonical file over the others.      |
