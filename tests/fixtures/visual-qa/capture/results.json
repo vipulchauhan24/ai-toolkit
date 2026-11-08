@@ -1,0 +1,392 @@
+{
+  "run": {
+    "url": "http://127.0.0.1:8931/",
+    "started": "2026-11-08T07:37:09Z",
+    "ended": "2026-11-08T07:38:43Z",
+    "cli_version": "0.1.23",
+    "viewports": [
+      "390x844",
+      "1440x900"
+    ],
+    "themes": [
+      "light"
+    ],
+    "headed": true,
+    "local": true,
+    "interactions": true,
+    "reduced_motion": true
+  },
+  "routes": [
+    "/",
+    "/about.html"
+  ],
+  "skipped_routes": [],
+  "shots": [
+    {
+      "id": "home-390-light",
+      "route": "/",
+      "viewport": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "title": "Seeded site",
+      "page_height": 2203,
+      "tiles": [
+        "tiles/home-390-light-01.jpg",
+        "tiles/home-390-light-02.jpg"
+      ],
+      "full": null,
+      "truncated": false,
+      "theme_via": "preference",
+      "findings": [
+        {
+          "id": "margins",
+          "severity": "fail",
+          "message": "Uneven side margins: left 24px, right 102px",
+          "count": 1,
+          "samples": []
+        },
+        {
+          "id": "empty-band",
+          "severity": "fail",
+          "message": "Empty band taller than one screen",
+          "count": 1,
+          "samples": [
+            "at 590px, 1469px tall"
+          ]
+        },
+        {
+          "id": "hidden-content",
+          "severity": "fail",
+          "message": "Text is still invisible after scrolling through the page",
+          "count": 1,
+          "samples": [
+            "This text never becomes visible at all here."
+          ]
+        },
+        {
+          "id": "tap-target",
+          "severity": "warn",
+          "message": "Tap target under 44px",
+          "count": 3,
+          "samples": [
+            "a About",
+            "a Missing",
+            "a Jump"
+          ]
+        },
+        {
+          "id": "tap-target",
+          "severity": "fail",
+          "message": "Tap target under 24px",
+          "count": 3,
+          "samples": [
+            "a Ext",
+            "input ",
+            "button Send"
+          ]
+        },
+        {
+          "id": "broken-image",
+          "severity": "fail",
+          "message": "Image did not load",
+          "count": 1,
+          "samples": [
+            "nope.png"
+          ]
+        },
+        {
+          "id": "img-alt",
+          "severity": "fail",
+          "message": "Image has no alt attribute",
+          "count": 1,
+          "samples": [
+            "nope.png"
+          ]
+        },
+        {
+          "id": "img-size",
+          "severity": "warn",
+          "message": "Image has no width and height attributes",
+          "count": 1,
+          "samples": [
+            "nope.png"
+          ]
+        },
+        {
+          "id": "contrast",
+          "severity": "fail",
+          "message": "Text contrast below WCAG AA",
+          "count": 1,
+          "samples": [
+            "1.92:1 on p.low: This low contrast paragraph should be fl"
+          ]
+        },
+        {
+          "id": "field-label",
+          "severity": "fail",
+          "message": "Form field has no label",
+          "count": 1,
+          "samples": [
+            "input"
+          ]
+        },
+        {
+          "id": "placeholder-text",
+          "severity": "fail",
+          "message": "Unfinished placeholder text on the page",
+          "count": 1,
+          "samples": [
+            "Coming soon"
+          ]
+        },
+        {
+          "id": "transition-all",
+          "severity": "warn",
+          "message": "transition: all on an interactive element",
+          "count": 4,
+          "samples": [
+            "a"
+          ]
+        }
+      ],
+      "console": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "failed_requests": [
+        "GET http://127.0.0.1:8931/nope.png (404)"
+      ]
+    },
+    {
+      "id": "home-1440-light",
+      "route": "/",
+      "viewport": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "title": "Seeded site",
+      "page_height": 2083,
+      "tiles": [
+        "tiles/home-1440-light-01.jpg"
+      ],
+      "full": null,
+      "truncated": false,
+      "theme_via": "preference",
+      "findings": [
+        {
+          "id": "margins",
+          "severity": "fail",
+          "message": "Uneven side margins: left 24px, right 522px",
+          "count": 1,
+          "samples": []
+        },
+        {
+          "id": "empty-band",
+          "severity": "fail",
+          "message": "Empty band taller than one screen",
+          "count": 1,
+          "samples": [
+            "at 494px, 1469px tall"
+          ]
+        },
+        {
+          "id": "hidden-content",
+          "severity": "fail",
+          "message": "Text is still invisible after scrolling through the page",
+          "count": 1,
+          "samples": [
+            "This text never becomes visible at all here."
+          ]
+        },
+        {
+          "id": "broken-image",
+          "severity": "fail",
+          "message": "Image did not load",
+          "count": 1,
+          "samples": [
+            "nope.png"
+          ]
+        },
+        {
+          "id": "img-alt",
+          "severity": "fail",
+          "message": "Image has no alt attribute",
+          "count": 1,
+          "samples": [
+            "nope.png"
+          ]
+        },
+        {
+          "id": "img-size",
+          "severity": "warn",
+          "message": "Image has no width and height attributes",
+          "count": 1,
+          "samples": [
+            "nope.png"
+          ]
+        },
+        {
+          "id": "long-lines",
+          "severity": "warn",
+          "message": "Lines over about 90 characters",
+          "count": 6,
+          "samples": [
+            "p.low",
+            "p.ghost",
+            "p"
+          ]
+        },
+        {
+          "id": "contrast",
+          "severity": "fail",
+          "message": "Text contrast below WCAG AA",
+          "count": 1,
+          "samples": [
+            "1.92:1 on p.low: This low contrast paragraph should be fl"
+          ]
+        },
+        {
+          "id": "field-label",
+          "severity": "fail",
+          "message": "Form field has no label",
+          "count": 1,
+          "samples": [
+            "input"
+          ]
+        },
+        {
+          "id": "placeholder-text",
+          "severity": "fail",
+          "message": "Unfinished placeholder text on the page",
+          "count": 1,
+          "samples": [
+            "Coming soon"
+          ]
+        },
+        {
+          "id": "transition-all",
+          "severity": "warn",
+          "message": "transition: all on an interactive element",
+          "count": 4,
+          "samples": [
+            "a"
+          ]
+        }
+      ],
+      "console": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ],
+      "failed_requests": [
+        "GET http://127.0.0.1:8931/nope.png (404)"
+      ]
+    },
+    {
+      "id": "about-html-390-light",
+      "route": "/about.html",
+      "viewport": [
+        390,
+        844
+      ],
+      "theme": "light",
+      "title": "About",
+      "page_height": 844,
+      "tiles": [
+        "tiles/about-html-390-light-01.jpg"
+      ],
+      "full": null,
+      "truncated": false,
+      "theme_via": "preference",
+      "findings": [],
+      "console": [],
+      "failed_requests": []
+    },
+    {
+      "id": "about-html-1440-light",
+      "route": "/about.html",
+      "viewport": [
+        1440,
+        900
+      ],
+      "theme": "light",
+      "title": "About",
+      "page_height": 900,
+      "tiles": [
+        "tiles/about-html-1440-light-01.jpg"
+      ],
+      "full": null,
+      "truncated": false,
+      "theme_via": "preference",
+      "findings": [],
+      "console": [],
+      "failed_requests": []
+    }
+  ],
+  "site_findings": [],
+  "route_findings": {
+    "/": [
+      {
+        "id": "reduced-hidden",
+        "severity": "fail",
+        "message": "Content stays invisible under reduced motion until the page is scrolled (1)",
+        "count": 1,
+        "samples": [
+          "This text never becomes visible at all here."
+        ]
+      },
+      {
+        "id": "reduced-animating",
+        "severity": "fail",
+        "message": "Endless animations keep running under reduced motion (1)",
+        "count": 1,
+        "samples": []
+      },
+      {
+        "id": "focus-visible",
+        "severity": "fail",
+        "message": "Keyboard focus has no visible outline or ring",
+        "count": 4,
+        "samples": [
+          "a About",
+          "a Missing",
+          "a Jump"
+        ]
+      },
+      {
+        "id": "broken-link",
+        "severity": "fail",
+        "message": "Link returns 404",
+        "count": 1,
+        "samples": [
+          "/missing.html"
+        ]
+      },
+      {
+        "id": "broken-anchor",
+        "severity": "fail",
+        "message": "In-page link points at a section that does not exist",
+        "count": 1,
+        "samples": [
+          "#nope"
+        ]
+      },
+      {
+        "id": "empty-submit",
+        "severity": "fail",
+        "message": "An empty form tried to send a request",
+        "count": 1,
+        "samples": [
+          "POST http://127.0.0.1:8931/send"
+        ]
+      }
+    ],
+    "/about.html": []
+  },
+  "external_links": [
+    "https://example.com/"
+  ],
+  "extras": [],
+  "errors": [],
+  "notes": []
+}

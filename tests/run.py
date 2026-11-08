@@ -82,6 +82,10 @@ SCRIPT_COVERAGE = {
     "skills/julia/scripts/check_julia.py": "tests/fixtures/julia",
     "skills/orchestrator/scripts/engine.py": "tests/fixtures/orchestrator",
     "skills/spec-writer/scripts/check_spec.py": "tests/fixtures/spec-writer",
+    "skills/visual-qa/scripts/capture.py": "tests/fixtures/visual-qa",
+    "skills/visual-qa/scripts/report.py": "tests/fixtures/visual-qa",
+    "skills/visual-qa/scripts/page_checks.js": "tests/fixtures/visual-qa",
+    "skills/visual-qa/scripts/steps.js": "tests/fixtures/visual-qa",
 }
 REQUIRED_FIXTURES = [
     "doc-trimmer",
@@ -97,6 +101,9 @@ REQUIRED_FIXTURES = [
     "orchestrator-projects",
     "spec-writer",
     "spec-writer-projects",
+    "visual-qa",
+    "visual-qa/capture",
+    "visual-qa/capture-injection",
     "empty",
 ]
 CASE_KEYS = {
@@ -558,6 +565,7 @@ def cmd_scripts(_args):
     r.check("usage error: build_tokens_json.py with no argument prints usage", rc != 0 and "usage" in out, "exit %d" % rc)
 
     engine_tests(r)
+    visual_qa_tests(r)
 
     return r.finish()
 
@@ -577,6 +585,102 @@ ENGINE_BAD_ROUTES = {
     "bad-prefix-clash": r"p4 and p5 can run together but both change skills/py/SKILL\.md",
     "bad-main-session-not-parked": r"p4: main_session_skill only belongs on a parked phase",
 }
+
+
+def visual_qa_tests(r):
+    """capture.py against a stand-in for playwright-cli, report.py against a real capture."""
+    scripts = ROOT / "skills" / "visual-qa" / "scripts"
+    capture, report = scripts / "capture.py", scripts / "report.py"
+    fx = FIXTURES / "visual-qa"
+    fake = " ".join([sys.executable, "-I", "-B", str(fx / "fake_cli.py")])
+    tmp = Path(tempfile.mkdtemp(prefix="visual-qa-"))
+    try:
+        # capture.py: a local site, with one route that has no dark theme and one that fails
+        out = tmp / "local"
+        rc, text = run_py(capture, ["--url", "http://localhost:3000", "--out", out, "--viewports", "390x844", "--cli", fake])
+        r.check("capture.py: a step that fails is reported and ends in RESULT FAIL", rc == 1 and "RESULT  FAIL" in text and "broken" in text, "exit %d: %s" % (rc, text[-300:]))
+        data = json.loads(read(out / "results.json"))
+        log = read(out / "cli.log")
+        ids = [s["id"] for s in data["shots"]]
+        r.check("capture.py: light and dark shots, with the dark shot of a route with no dark theme dropped", ids == ["home-390-light", "home-390-dark", "about-390-light"], str(ids))
+        r.check("capture.py: says which route has no dark theme", any("/about" in n and "dark" in n for n in data["notes"]), str(data["notes"]))
+        r.check("capture.py: writes tiles and full-page images", (out / "tiles" / "home-390-dark-02.jpg").is_file() and (out / "full" / "home-390-dark.png").is_file())
+        r.check("capture.py: opens a visible browser", re.search(r"open about:blank --headed", log) is not None, log[:200])
+        r.check("capture.py: closes the browser even after a failed step", log.strip().splitlines()[-1].endswith("close"), log[-200:])
+        r.check("capture.py: uses its own session, not the user's", all(ln.startswith(("-s=visual-qa-", "--version")) for ln in log.strip().splitlines()), log[:200])
+        merged = data["route_findings"]["/"]
+        r.check("capture.py: repeated findings are merged", len(merged) == 1 and merged[0]["count"] == 2 and merged[0]["samples"] == ["a", "b"], str(merged))
+        r.check("capture.py: the phone menu image is saved", any((out / x["image"]).is_file() for x in data["extras"]), str(data["extras"]))
+        r.check("capture.py: Chromium is configured", "chromium" in read(out / ".playwright" / "cli.config.json"))
+        r.check("capture.py: leaves no step file behind", not (out / ".step.js").exists())
+
+        # capture.py: not a local site
+        out = tmp / "remote"
+        rc, text = run_py(capture, ["--url", "https://example.org", "--out", out, "--routes", "/", "--viewports", "390x844", "--themes", "light", "--cli", fake])
+        data = json.loads(read(out / "results.json"))
+        r.check("capture.py: a remote site runs clean", rc == 0 and "RESULT  PASS" in text, "exit %d: %s" % (rc, text[-300:]))
+        r.check("capture.py: no clicking or submitting on a remote site", '"step": "interact"' not in read(out / "cli.log") and not data["run"]["interactions"] and data["notes"], str(data["notes"]))
+        rc, text = run_py(capture, ["--url", "https://example.org", "--out", tmp / "allowed", "--routes", "/", "--viewports", "390x844", "--themes", "light", "--allow-remote", "--cli", fake])
+        r.check("capture.py: --allow-remote turns interactions on", rc == 0 and json.loads(read(tmp / "allowed" / "results.json"))["run"]["interactions"], text[-200:])
+
+        # capture.py: refusals
+        rc, text = run_py(capture, ["--url", "http://localhost:3000", "--out", out, "--cli", fake])
+        r.check("capture.py: refuses a folder that already has files", rc == 1 and "already has files" in text, "exit %d" % rc)
+        rc, text = run_py(capture, ["--url", "http://localhost:3000", "--out", tmp / "badview", "--viewports", "wide", "--cli", fake])
+        r.check("usage error: capture.py with a bad viewport exits 2", rc == 2, "exit %d: %s" % (rc, text[-200:]))
+        rc, text = run_py(capture, ["--url", "http://localhost:3000", "--out", tmp / "nocli", "--cli", "no-such-playwright-cli"])
+        r.check("capture.py: a missing CLI says how to install it", rc == 1 and "npm install -g @playwright/cli" in text, "exit %d: %s" % (rc, text[-200:]))
+
+        # The JavaScript parses, joined the way capture.py joins it
+        if shutil.which("node"):
+            joined = tmp / "joined.js"
+            joined.write_text("async page => {\nconst CONFIG = {};\nconst PAGE_CHECKS = %s;\n%s\n}\n" % (read(scripts / "page_checks.js").strip(), read(scripts / "steps.js")), encoding="utf-8")
+            p = subprocess.run(["node", "--check", str(joined)], capture_output=True, text=True)
+            r.check("page_checks.js and steps.js parse", p.returncode == 0, p.stderr[-300:])
+        else:
+            r.warn("page_checks.js and steps.js parse", "node is not installed; not checked")
+
+        # report.py
+        run = tmp / "run"
+        shutil.copytree(fx / "capture", run)
+        rc, text = run_py(report, ["--run", run])
+        r.check("report.py: no grades.json fails", rc == 1 and "grades.json" in text, "exit %d" % rc)
+        rc, text = run_py(report, ["--run", run, "--skeleton"])
+        blank = json.loads(read(run / "grades.json"))
+        r.check("report.py --skeleton: one entry per shot and seven areas", rc == 0 and len(blank["shots"]) == 4 and len(blank["shots"]["home-390-light"]) == 7, text[-200:])
+        rc, text = run_py(report, ["--run", run, "--skeleton"])
+        r.check("report.py --skeleton: never overwrites grades", rc == 1 and "already exists" in text, "exit %d" % rc)
+        rc, text = run_py(report, ["--run", run])
+        r.check("report.py: blank grades fail", rc == 1 and "has grade '?'" in text and "summary is empty" in text and "top_fixes" in text, "exit %d: %s" % (rc, text[-200:]))
+
+        good = json.loads(read(fx / "grades-good.json"))
+        missing = json.loads(json.dumps(good))
+        del missing["shots"]["about-html-390-light"]
+        (run / "grades.json").write_text(json.dumps(missing), encoding="utf-8")
+        rc, text = run_py(report, ["--run", run])
+        r.check("report.py: a shot with no grades fails", rc == 1 and "no grades for shot about-html-390-light" in text, "exit %d: %s" % (rc, text[-200:]))
+
+        high = json.loads(json.dumps(good))
+        for area in high["shots"]["home-390-light"]:
+            high["shots"]["home-390-light"][area]["grade"] = "A"
+        (run / "grades.json").write_text(json.dumps(high), encoding="utf-8")
+        results = json.loads(read(run / "results.json"))
+        results["shots"][0]["findings"][0]["samples"] = ["</script><img src=x onerror=alert(1)>"]
+        (run / "results.json").write_text(json.dumps(results), encoding="utf-8")
+        rc, text = run_py(report, ["--run", run])
+        r.check("report.py: complete grades build the report", rc == 0 and "RESULT  PASS" in text and (run / "report.html").is_file() and (run / "summary.md").is_file(), "exit %d: %s" % (rc, text[-300:]))
+        html = read(run / "report.html")
+        r.check("report.py: page text cannot close the script block", "</script><img" not in html and "__REPORT_DATA__" not in html)
+        m = re.search(r'<script id="data" type="application/json">(.*?)</script>', html, re.S)
+        shot = next(s for s in json.loads(m.group(1))["shots"] if s["id"] == "home-390-light")
+        layout, spacing, motion = shot["areas"]["layout"], shot["areas"]["spacing"], shot["areas"]["motion"]
+        r.check("report.py: a measured fault lowers the grade and says so", layout["grade"] == "C" and layout["capped_from"] == "A" and "margins" in layout["capped_by"] and spacing["grade"] == "C", str(layout))
+        r.check("report.py: motion comes from the measurements", motion["grade"] == "D" and "hidden-content" in motion["reason"], str(motion))
+        r.check("report.py: images are embedded", "data:image/jpeg;base64," in html)
+        rc, text = run_py(report, ["--run", tmp / "no-such-folder"])
+        r.check("usage error: report.py with no folder exits 2", rc == 2, "exit %d" % rc)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def engine_tests(r):

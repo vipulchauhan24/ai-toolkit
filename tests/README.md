@@ -75,6 +75,7 @@ tests/fixtures/
   frontend-react/{base,next}/{clean,seeded}/ + expected.json
   ui-developer/base/{clean,seeded}/          + expected.json
   design-system-builder/{clean/Mini, seeded/MiniLowContrast}/tokens.css
+  visual-qa/{capture,capture-injection,site}/ + fake_cli.py, grades-good.json
   doc-trimmer/  doc-reviewer/  project-planner-pattern/  project-planner-greenfield/
   frontend-react-projects/  ui-developer-projects/  skill-runner/  empty/    (inputs for model cases)
 ```
