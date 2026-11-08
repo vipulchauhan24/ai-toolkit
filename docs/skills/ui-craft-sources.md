@@ -41,6 +41,47 @@ For whoever maintains `ui-craft`. The skill never reads this file, and agents do
 | [Clutch](https://clutch.co/visualobjects/web-design/blog/event-landing-pages) | Event page essentials | Snippet | Practitioner |
 | [GetResponse](https://www.getresponse.com/blog/waitlist-landing-page), [Moosend](https://moosend.com/?p=67875) | Waitlist page content | Snippet | Practitioner |
 
+## System, components and sections
+
+| Source | Used for | Read | Strength |
+|---|---|---|---|
+| [WCAG 2.2: Target size (minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) | 24px minimum target (AA) | Fetched | Primary |
+| [WCAG 2.2: Contrast (minimum)](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) | 4.5:1 and 3:1, what counts as large text | Fetched | Primary |
+| [WCAG 2.2: Non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) | 3:1 for controls and meaningful graphics | Fetched | Primary |
+| [WCAG 2.2: Focus appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html) | 2px, 3:1 focus ring. This is AAA, adopted here as the target | Fetched | Primary |
+| [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/) | Which widget patterns exist. Individual pattern pages were not read | Fetched index only | Primary |
+| [NN/g: Designing effective carousels](https://www.nngroup.com/articles/designing-effective-carousels/) | Carousel limits, no autoplay on mobile | Fetched | Primary |
+| [NN/g: Accordions on desktop](https://www.nngroup.com/articles/accordions-on-desktop/) | When accordions help and hurt | Fetched | Primary |
+| [NN/g: Mobile navigation patterns](https://www.nngroup.com/articles/mobile-navigation-patterns/) | Visible navigation for few links, hidden menus are least discoverable | Fetched | Primary |
+| [Practical Typography: Line length](https://practicaltypography.com/line-length.html) | 45 to 90 characters | Fetched | Practitioner, respected |
+| [Vercel web interface guidelines](https://github.com/vercel-labs/web-interface-guidelines) | Focus, scroll margin, touch, safe areas, hover, images | Fetched | Primary |
+| `ui-developer/references/app-screens.md` in this repository | Ranges for sidebars, rows, type and colour on app screens, from its study of 23 real product screens. Adapted from taste-skill. Rewritten here | Direct | Practitioner, measured |
+
+The 44px touch target is a common platform convention. Apple's guideline page and Material's window-size page could not be loaded, so it is not confirmed from them. WCAG's own minimum is 24px.
+
+### Measurements of real sites
+
+Measured in a browser in November 2026, at 1440 and 390 wide, on 12 product sites: Linear, Stripe, Vercel, Raycast, Notion, Figma, Framer, Resend, Supabase, React, Tailwind and Apple. Each cell is the median, then the range. The script takes the most common or median value on one page, so treat these as approximate. Portfolios were measured too (Brittany Chiang, Lee Robinson, Rauno, Paco): their headings run much smaller, from 16 to 48px, and pages are shorter.
+
+| Measure | At 1440 | At 390 |
+|---|---|---|
+| h1 size | 60.0 (34 to 96) | 36.0 (34 to 64) |
+| h2 size | 44.0 (20 to 56) | 32 (22 to 48) |
+| paragraph size | 15 (13 to 21) | 15 (14 to 18) |
+| paragraph line height | 1.4 (1.2 to 2) | 1.5 (1.2 to 2) |
+| nav height | 64.0 (44 to 78.4) | 64.5 (64 to 72) |
+| button height | 40.0 (34 to 48) | 39.0 (28 to 47.4) |
+| button radius | 8.0 (4 to 16) | 8 (4 to 16) |
+| button text | 16.0 (12 to 17) | 15.5 (12 to 17) |
+| card radius | 12.0 (6 to 18) | 16 (6 to 21.3) |
+| grid gap | 16.0 (8 to 48) | 16.0 (8 to 48) |
+| gap above h2 | 227.8 (16 to 446) | 125.5 (16 to 400) |
+| main left margin | 104 (40 to 104) | 24.0 (16 to 192) |
+
+How these became tokens: `--text-h1` (36 to 64px), `--text-h2` (28 to 44px), `--nav-height` (64px), `--control-md` (40px), soft radius (12px on cards), `--section` (64 to 120px each side, so about 128 to 240px between sections) and `--gutter` (24px on phones).
+
+Real sites often use buttons under 44px on phones. This skill sets 44px on touch anyway, for usability.
+
 ## Working defaults
 
 These are judgement calls, with no research behind them. Change them freely:
@@ -51,6 +92,9 @@ These are judgement calls, with no research behind them. Change them freely:
 - Dialog and label patterns in `copy-app.md`.
 - What follows a sign-up, and who should attend, in `copy-event.md`.
 - `copy-ecommerce.md`, beyond the general points above.
+- The spacing relationships, component padding and sizes that are not in the measurement table.
+- The variant lists in `sections/`, and which variant suits what.
+- The radius families.
 
 ## Decisions
 

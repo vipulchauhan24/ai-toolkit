@@ -63,7 +63,7 @@ Write each page in `COPY.md` using the roles in `copy.md` section 2. Include the
 python3 -I <this-skill-folder>/scripts/check_copy.py COPY.md
 ```
 
-Run it as one command on its own, with nothing chained before or after it. Fix every FAIL. Fix each WARN, or keep it on purpose and give the reason in the report. Repeat at most three times. If the script cannot run, say so in the report. Never report a pass you did not see, and never replace the script with a check by hand. Then do the seven checks at the end of `copy-human.md` and the kind file's checklist.
+Run it as one command on its own, with nothing chained before or after it. Every FAIL must be fixed. A WARN may stay if you have a reason, and the report gives it. Repeat at most three times. If the script cannot run, say so in the report. Never report a pass you did not see, and never replace the script with a check by hand. Then do the seven checks at the end of `copy-human.md` and the kind file's checklist.
 
 ## 6. Report
 
