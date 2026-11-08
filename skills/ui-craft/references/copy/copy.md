@@ -1,6 +1,6 @@
 # Copy: rules for every page
 
-Words come before layout. A headline that needs four lines cannot be saved by typography, and a section with nothing to say cannot be saved by a nice card. Write the whole page as text first, check it, and only then write markup.
+Words come before layout. No typeface rescues a four-line headline, and a pretty card does nothing for a section with no point. Write the whole page as text first, check it, and only then write markup.
 
 Read this file for every job. Then read the file for the kind of page, then `copy-human.md`.
 
@@ -99,7 +99,7 @@ Collect, word for word where you can, from the brief, the client's files and any
 - Who it is for, and who it is not for.
 - What the reader does today instead.
 - The real difference, and what proves it.
-- Numbers, each with where it came from.
+- Numbers, and the source of each.
 - Names of people, clients and products that may be shown.
 - Quotes, exactly as said, with who said them.
 - Odd true details: how the work is really done, a limit, something inconvenient.
@@ -109,7 +109,7 @@ Collect, word for word where you can, from the brief, the client's files and any
 
 If a fact is missing, ask. If you cannot ask, write a plainer line, or drop the section and add it to `## missing`. A page with four true sections beats one with seven padded ones. Never ship "Coming soon" cards, brackets or sample text.
 
-**Sample details are the one exception**, and only when the brief gives the shape but not every value: six rooms "from €140", a short menu. Write realistic details so the design can be judged at its real density. Put them in the fact sheet marked `(sample)` and list them in the report for the client to confirm.
+**Sample details are the one exception**, and only when the brief gives the shape but not every value: eight apartments at "about €90", a short list of treatments. Write realistic details so the design can be judged at its real density. Put them in the fact sheet marked `(sample)` and list them in the report for the client to confirm.
 
 ## 4. Voice and tone
 
@@ -143,7 +143,7 @@ Reading level: about grade 8 to 9 for the general public, about grade 12 for spe
 
 ## 6. The page as an argument
 
-Before writing lines, write the page as a list of claims, one per section, each with its proof:
+Before writing lines, list what the page must establish, one claim to a section, and note the evidence for it:
 
 ```text
 1. We repair bikes at your door in south Leeds.    -> the van outside a house
@@ -202,7 +202,7 @@ Avoid:
 - **A button says what happens:** a verb and the thing. "Book a table", "Download for Mac", "Email me". One to five words.
 - **Never** "Click here" or "Submit". Avoid "Learn more", "Get started" and "Discover" when you can name the thing. Real sites do use "Get started" when the next step really is starting, so it warns rather than fails.
 - **Say what the button leads to.** If there is a price, a card requirement or a form behind it, the reader should not be surprised.
-- **The main action keeps one name** everywhere on the site.
+- **Use the same wording for the main action** on every page.
 - **At most two actions in a hero,** one clearly primary.
 - **A link makes sense on its own.** Its words say where it goes. "Read the case study", and not "here".
 - **Navigation:** up to five plain nouns. Use the words a visitor would look for.
@@ -241,11 +241,11 @@ These are copy too. A hand-tuned headline above a stock error message gives the 
 ## 11. Numbers, dates and units
 
 - Use digits for counts: "8 developers", "3 projects".
-- Keep each number in the sentence it proves, with its unit. A bare number means little.
+- Keep each number beside the claim it supports, with its unit. A bare number means little.
 - A number from real records is rarely tidy. If every figure on the page ends in zero, check where they came from.
 - A figure means something only next to what it was before or what it is compared with: "from 500 to 100 per second".
 - Write dates in full where space allows: "12 March 2026". Choose one format per site.
-- Put a non-breaking space between a number and its unit, so "10 km" does not split across lines.
+- Join a number to its unit with a non-breaking space, so "10 km" does not split across lines.
 - Line up figures in columns with tabular numerals.
 - One fact has one value and one wording everywhere it appears.
 
@@ -255,9 +255,9 @@ These are copy too. A hand-tuned headline above a stock error message gives the 
 - **Curly quotes and apostrophes** (“ ” ’), never straight ones, on a finished page.
 - **A real ellipsis** (…), never three dots.
 - **En dash for ranges** (9–5, 2020–2024). Em dashes sparingly.
-- **Non-breaking space** before the last short word of a headline when it would sit alone on a line.
-- **No all caps** for anything longer than three words.
-- **No centred paragraphs** longer than three lines, and no justified text.
+- **Non-breaking space** to stop one short word being left alone on the last line of a headline.
+- **All caps** only for labels of one to three words.
+- **Centre** only text of up to three lines, and never justify.
 - **Line length:** about 45 to 75 characters for reading. Past 90 is hard work.
 - **Body text at 16px or more** on the web, and never below 14px for running text.
 - **Bold** picks out a few words a scanner should catch. A page where everything is bold has nothing bold.
@@ -267,7 +267,7 @@ These are copy too. A hand-tuned headline above a stock error message gives the 
 
 ## 13. Proof
 
-- Show the thing itself, large. A real demonstration outranks any quote.
+- The product on screen, at a good size, is the strongest proof. A demonstration beats a testimonial.
 - Say how it works, specifically. A mechanism convinces more than an adjective.
 - Use a real number, a real name or a real customer, placed beside the claim it supports.
 - Quote people word for word, with their name and role.
@@ -282,6 +282,6 @@ These are copy too. A hand-tuned headline above a stock error message gives the 
 
 ## 15. Check it
 
-1. Run `python3 -I <skill>/scripts/check_copy.py COPY.md`. Fix every FAIL. Fix each WARN, or keep it on purpose and say why.
+1. Run `python3 -I <skill>/scripts/check_copy.py COPY.md`. Every FAIL must be fixed. A WARN may stay if you have a reason, and you state it.
 2. Do the checks at the end of `copy-human.md`.
 3. Read the kind file's checklist.

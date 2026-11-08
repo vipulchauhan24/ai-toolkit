@@ -54,7 +54,7 @@ Real examples of the plain approach: Linear's "The product development system fo
 - "Error tracking for Rails apps"
 - "Payroll that closes in one afternoon"
 
-**Sub-line:** how it works and the main benefit, in 15 to 30 words. One mechanism or one fact.
+**Sub-line:** the mechanism and the main gain, in 15 to 30 words. One mechanism or one fact.
 
 Avoid a fill-in-the-blanks headline, where only the nouns would change for a competitor. If AI is the point, say what it does: "Reads each delivery note and updates the count."
 

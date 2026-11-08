@@ -17,7 +17,7 @@ Copy written by someone who knows the subject tends to have four things:
 
 ## The tells, and what to do instead
 
-One tell proves little. Clusters and repetition are what readers notice. The script column shows what `check_copy.py` counts.
+A single instance means nothing. Readers notice patterns. The script column shows what `check_copy.py` counts.
 
 ### Words that stand in for facts
 
@@ -28,10 +28,10 @@ One tell proves little. Clusters and repetition are what readers notice. The scr
 | Grand verbs for "is" | serves as, stands as, boasts, plays a key role | "is", "has" | `puffery` |
 | Stock lines | "In today's fast-paced world", "Look no further", "Say goodbye to", "Whether you're a…" | Delete it. The next sentence is usually where the page starts | `stock-phrase` |
 | Résumé clichés | passionate, results-driven, detail-oriented, team player, proven track record | The project that shows it | `ai-word`, `stock-phrase` |
-| Dead metaphors | landscape, ecosystem, journey, "where X meets Y", "in the heart of" | The street, the tool, the thing | partly |
+| Dead metaphors | landscape, ecosystem, journey, "in the heart of", "where X meets Y" | The street, the tool, the thing | partly |
 | Virtue claims | honest, genuine, truly, simply, actually, thoughtful | Show it. A page that calls itself honest is not convincing anyone | `virtue` |
 
-A word that is literal for the client stays: a climbing harness, bespoke tailoring. Add it to `allow:`.
+Keep a word when it is the literal name for something: a climbing harness, bespoke tailoring. Add it to `allow:`.
 
 ### Sentence shapes
 
@@ -68,7 +68,7 @@ These look like good writing, which is why they get through.
 | Tell | Instead |
 |---|---|
 | Every section is label, claim heading, short intro, three cards | Choose the shape from what the section has to say: a list, a table, one paragraph, one line |
-| A strip of three stats under the hero, on every page | Put each number in the sentence it proves. Keep a strip only for real figures that matter together |
+| A strip of three stats under the hero, on every page | Move each number next to the claim it supports. Keep a strip only for real figures that matter together |
 | A small label above every heading | One or two a page, when the heading needs it |
 | A dry one-liner closing every paragraph | End on information. Spend humour in the small text: the 404, the empty state, the sent message |
 | A witty sign-off in the footer | Facts: name, year, legal links |
@@ -138,9 +138,9 @@ Leave these alone. Each one is a normal part of good writing.
 ## Checks before you finish
 
 1. **Run the script.** `check_copy.py COPY.md`.
-2. **The swap test.** Replace the client's name with a competitor's, and read the headline and section headings again. Any line that stays true is empty. Rewrite it from the fact sheet.
+2. **The swap test.** Replace the client's name with a competitor's, and read the headline and section headings again. Any line that stays true is empty, so rewrite it with real facts.
 3. **Read it out loud.** Imagine the client saying it to a customer across a table. Anything that would embarrass them goes.
-4. **The stranger test.** Read only the first screen. Can you say what this is, who it is for and what to do next?
+4. **The stranger test.** Read only the first screen. Can you tell what is on offer, whom it serves and the next step?
 5. **The trace test.** Point to where each claim came from. If you can't, it goes.
 6. **The replacement test.** Look for the tic that replaced the one you removed.
 7. **Sameness.** If you have written other pages in this project or session, read their headlines side by side. A shared rhythm or joke is a tic.
