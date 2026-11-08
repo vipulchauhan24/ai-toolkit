@@ -102,7 +102,8 @@
       const inline = el.tagName === "A" && getComputedStyle(el).display === "inline"
         && short(el.parentElement.textContent).length > short(el.textContent).length + 3;
       if (inline) continue;
-      const r = el.getBoundingClientRect();
+      const wrapped = el.matches('input[type=checkbox],input[type=radio]') && el.labels && el.labels[0]; // the label is the target
+      const r = (wrapped || el).getBoundingClientRect();
       const small = Math.min(r.width, r.height);
       if (small < 24) add("tap-target", "fail", "Tap target under 24px", desc(el) + " " + short(el.textContent));
       else if (small < 44) add("tap-target", "warn", "Tap target under 44px", desc(el) + " " + short(el.textContent));

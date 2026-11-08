@@ -22,6 +22,14 @@ const scrollThrough = async () => {
   await settle();
 };
 
+// Resizing a desktop browser leaves it a mouse device, so a phone width would not get
+// pointer: coarse styles. Touch emulation turns those media queries on.
+let touchCdp = null;
+const setTouch = async (width) => {
+  touchCdp = touchCdp || await page.context().newCDPSession(page);
+  await touchCdp.send("Emulation.setTouchEmulationEnabled", { enabled: width <= 820 });
+};
+
 const capture = async (cdp, clip) => {
   const shot = await cdp.send("Page.captureScreenshot", { format: "jpeg", quality: 85, captureBeyondViewport: true, clip });
   return shot.data;
@@ -84,6 +92,7 @@ const discover = async () => {
 
 const shot = async () => {
   const log = listen();
+  await setTouch(CONFIG.width);
   await page.setViewportSize({ width: CONFIG.width, height: CONFIG.height });
   await page.emulateMedia({ colorScheme: CONFIG.theme, reducedMotion: "no-preference" });
   const response = await page.goto(CONFIG.url, { waitUntil: "load" });
@@ -113,6 +122,7 @@ const shot = async () => {
 };
 
 const reduced = async () => {
+  await setTouch(CONFIG.width);
   await page.setViewportSize({ width: CONFIG.width, height: CONFIG.height });
   await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
   await page.goto(CONFIG.url, { waitUntil: "load" });
@@ -152,6 +162,7 @@ const interact = async () => {
     return route.abort();
   };
   await page.route("**/*", guard);
+  await setTouch(1440);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ colorScheme: "light", reducedMotion: "no-preference" });
   await page.goto(CONFIG.url, { waitUntil: "load" });
@@ -226,6 +237,7 @@ const interact = async () => {
   }
 
   // Phone menu
+  await setTouch(390);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(CONFIG.url, { waitUntil: "load" });
   await settle();

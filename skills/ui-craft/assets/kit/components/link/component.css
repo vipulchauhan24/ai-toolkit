@@ -4,4 +4,5 @@
   .link:hover { text-decoration-thickness: 2px; }
   .link--plain:hover { background-size: 100% 1px; }
 }
-@media (pointer: coarse) { .link--plain { min-height: var(--touch); } }
+.link--block { display: inline-flex; align-items: center; min-height: var(--space-6); }
+@media (pointer: coarse) { .link--plain, .link--block { min-height: var(--touch); } }

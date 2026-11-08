@@ -15,3 +15,4 @@
   .nav__links, .nav__action { display: inline-flex; }
   .nav__toggle, .nav__sheet { display: none; }
 }
+@media (pointer: coarse) { .nav__links a { display: inline-flex; align-items: center; min-height: var(--touch); } }

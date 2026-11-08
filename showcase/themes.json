@@ -1,0 +1,7 @@
+{
+  "themes": [
+    { "id": "warm", "label": "Warm editorial", "palette": "clay", "fonts": "fraunces-inter", "radius": "soft", "mode": "light" },
+    { "id": "cool", "label": "Cool product", "palette": "ink-blue", "fonts": "inter-tight-inter", "radius": "tight", "mode": "light" },
+    { "id": "vivid", "label": "Dark vivid", "palette": "plum", "fonts": "space-grotesk-ibm", "radius": "sharp", "mode": "dark" }
+  ]
+}

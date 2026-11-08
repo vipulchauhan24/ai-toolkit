@@ -10,7 +10,7 @@
 | `margins` | Left and right content edges differ by more than 8px or 2% of the width | | Layout | C | |
 | `empty-band` | A stretch of plain background is taller than one screen | Over 60% of a screen | Spacing | C | B |
 | `hidden-content` | Text is still invisible after the whole page was scrolled | | Motion | D | |
-| `tap-target` | Under 24px, at widths up to 820px | Under 44px | Responsiveness | C | none |
+| `tap-target` | Under 24px, at widths up to 820px, measured with touch emulation on. A checkbox or radio is measured by its label | Under 44px | Responsiveness | C | none |
 | `broken-image` | An image did not load | | Imagery | D | |
 | `img-alt` | An image has no `alt` attribute | | Accessibility | C | |
 | `img-size` | | No `width` and `height` attributes | none | | |

@@ -84,6 +84,8 @@ Work out `--has` as `intake.md` describes. It writes `DESIGN.md`, `design.json` 
 
 Read `references/system/system.md` and `references/system/layout.md` in full. For each section in `design.json`, read `references/sections/<id>.md`. Read `references/components/<name>.md` for each component you use, and `references/motion/motion.md`.
 
+To compare a section's variants, look at its contact sheet, `assets/kit/sheets/<id>.jpg`, and open only the samples you need.
+
 Write one line per section as a note: the claim, the layout, the visual, the motion. If a chosen variant does not suit the facts, take another variant of the same section and update `DESIGN.md` and `design.json`.
 
 ## 6. Build

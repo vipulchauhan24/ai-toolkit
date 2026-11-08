@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Career on its real dates</title>
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/tokens.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/reset.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/base.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/utilities.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/motion/motion.css">
+<style>
+.years, .span-row { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); column-gap: 1px; }
+.years { font-size: var(--text-xs); color: var(--ink-2); font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--line); padding-bottom: var(--space-2); margin-bottom: var(--space-4); }
+.spans { display: grid; gap: var(--space-3); list-style: none; padding: 0; }
+.span-row__bar { grid-column: calc(var(--_start) + 1) / span var(--_len); padding: var(--space-4); background: var(--surface); border-left: 2px solid var(--accent); }
+.span-row__bar h3 { font-size: var(--text-base); font-family: var(--font-body); font-weight: 600; }
+.span-row__bar p { font-size: var(--text-sm); color: var(--ink-2); margin-top: var(--space-1); }
+.span-row__dates { font-size: var(--text-xs); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+@media (max-width: 767px) {
+  .years { display: none; }
+  .span-row { display: block; }
+}
+</style>
+</head>
+<body>
+<main><section class="section"><div class="container">
+<!-- sample:start -->
+<div class="section__head"><h2>Eight years, to scale</h2></div>
+<div class="years" aria-hidden="true"><span>2018</span><span>2019</span><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+<ol class="spans">
+<li class="span-row"><div class="span-row__bar" style="--_start:5;--_len:4"><span class="span-row__dates">2023 to now</span><h3>Tidewater Freight</h3><p>Dispatch board across three depots.</p></div></li>
+<li class="span-row"><div class="span-row__bar" style="--_start:2;--_len:3"><span class="span-row__dates">2020 to 2023</span><h3>Orbis Learning</h3><p>Led a team of 8 on the course marketplace.</p></div></li>
+<li class="span-row"><div class="span-row__bar" style="--_start:0;--_len:2"><span class="span-row__dates">2018 to 2020</span><h3>Parcelline</h3><p>Live courier tracking.</p></div></li>
+</ol>
+<!-- sample:end -->
+</div></section></main>
+</body>
+</html>

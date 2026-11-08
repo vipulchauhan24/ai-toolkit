@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results drawn to scale</title>
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/tokens.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/reset.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/base.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/base/utilities.css">
+<link rel="stylesheet" href="/skills/ui-craft/assets/kit/motion/motion.css">
+<style>
+.bars { width: 100%; border-collapse: collapse; }
+.bars th { text-align: left; font-weight: 500; padding-block: var(--space-6) var(--space-2); }
+.bars th span { display: block; font-size: var(--text-sm); color: var(--ink-2); font-weight: 400; }
+.bars td { padding-block: var(--space-1); }
+.bars tr.first td { padding-top: 0; }
+.bars__when { width: 5rem; font-size: var(--text-sm); color: var(--ink-2); }
+.bars__fill { display: block; height: var(--space-8); width: calc(var(--_v) * 1%); background: var(--line-strong); }
+.bars__fill--after { background: var(--accent); }
+.bars__value { width: 7rem; text-align: right; font-family: var(--font-display); font-size: var(--text-h3); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: no-preference) {
+  .bars__fill { transform-origin: left; animation: grow var(--duration-reveal) var(--ease-out) both; }
+  @keyframes grow { from { transform: scaleX(0.02); } to { transform: none; } }
+}
+@media (max-width: 480px) { .bars__when { width: 3.5rem; } .bars__value { width: 4.5rem; } }
+</style>
+</head>
+<body>
+<main><section class="section"><div class="container container--narrow">
+<!-- sample:start -->
+<div class="section__head"><h2>What the rewrites changed</h2><p class="lead">Each pair is drawn to the same scale, so the gap you see is the real one.</p></div>
+<table class="bars">
+<tbody>
+<tr><th colspan="3" scope="colgroup">Style recalculations per second<span>Route board, 2024</span></th></tr>
+<tr><td class="bars__when">Before</td><td><span class="bars__fill" style="--_v:100"></span></td><td class="bars__value">500</td></tr>
+<tr><td class="bars__when">After</td><td><span class="bars__fill bars__fill--after" style="--_v:20"></span></td><td class="bars__value">100</td></tr>
+<tr><th colspan="3" scope="colgroup">Minutes to plan a day of routes<span>Three depots, 2024</span></th></tr>
+<tr><td class="bars__when">Before</td><td><span class="bars__fill" style="--_v:100"></span></td><td class="bars__value">40</td></tr>
+<tr><td class="bars__when">After</td><td><span class="bars__fill bars__fill--after" style="--_v:30"></span></td><td class="bars__value">12</td></tr>
+</tbody>
+</table>
+<!-- sample:end -->
+</div></section></main>
+</body>
+</html>

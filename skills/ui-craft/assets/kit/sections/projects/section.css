@@ -15,3 +15,4 @@
 .project-alt h3 { margin-bottom: var(--space-3); }
 .project-alt .frame { aspect-ratio: 16 / 10; }
 @media (min-width: 1024px) { .project-alt { grid-template-columns: 7fr 5fr; gap: var(--space-12); } .project-alt:nth-child(even) .frame { order: 2; } .project-alt:nth-child(even) { grid-template-columns: 5fr 7fr; } }
+.project-alt .link--block { margin-top: var(--space-3); }

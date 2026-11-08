@@ -580,6 +580,7 @@ def cmd_scripts(_args):
     visual_qa_tests(r)
     copy_check_tests(r)
     ui_craft_script_tests(r)
+    showcase_tests(r)
 
     return r.finish()
 
@@ -700,6 +701,36 @@ def copy_check_tests(r):
         r.check("usage error: check_copy.py with a missing --facts file exits 2", rc == 2, "exit %d" % rc)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def showcase_tests(r):
+    """The showcase stays in step with the kit, and every item loads in a browser."""
+    script = ROOT / "showcase" / "build_showcase.py"
+    steps = read(ROOT / "skills" / "visual-qa" / "scripts" / "steps.js")
+    r.check("visual-qa: phone widths use touch emulation", "Emulation.setTouchEmulationEnabled" in steps and steps.count("await setTouch(") == 4)
+    rc, out = run_py(script, [])
+    r.check("showcase: manifest, themes, fonts and contact sheets are current", rc == 0, out[-400:])
+    manifest = json.loads(read(ROOT / "showcase" / "manifest.json"))
+    tmp = Path(tempfile.mkdtemp(prefix="showcase-"))
+    try:
+        trimmed = tmp / "missing.json"
+        trimmed.write_text(json.dumps({"items": manifest["items"][1:]}), encoding="utf-8")
+        rc, out = run_py(script, ["--manifest", trimmed])
+        r.check("showcase: a kit item with no manifest entry fails", rc == 1 and "no manifest entry: " + manifest["items"][0]["id"] in out, out[-300:])
+        ghost = tmp / "ghost.json"
+        ghost.write_text(json.dumps({"items": manifest["items"] + [{"id": "components/ghost"}]}), encoding="utf-8")
+        rc, out = run_py(script, ["--manifest", ghost])
+        r.check("showcase: a manifest entry with no kit item fails", rc == 1 and "components/ghost" in out, out[-300:])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    if not shutil.which("playwright-cli"):
+        r.warn("showcase: browser test skipped", "playwright-cli is not installed")
+        return
+    rc, out = run_py(script, ["--verify"], timeout=600)
+    if "browser step failed" in out:
+        r.warn("showcase: browser test skipped", out[-200:])
+    else:
+        r.check("showcase: every item loads with no console errors, including long content", rc == 0, out[-500:])
 
 
 def ui_craft_script_tests(r):
