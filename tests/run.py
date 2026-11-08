@@ -397,6 +397,8 @@ def cmd_static(_args):
     bad = [ln for ln in out.splitlines() if ln.startswith(("MISSING", "DIFFERS"))]
     r.check("shared files match scripts/shared_files.json", rc == 0 and not bad, "; ".join(bad) or out.strip()[-200:])
 
+    ui_craft_reference_checks(r)
+
     # Readme and ignore file
     readme = read(ROOT / "README.md")
     heads = [ln for ln in readme.split("\n") if ln.startswith("## ")]
@@ -589,6 +591,29 @@ ENGINE_BAD_ROUTES = {
     "bad-prefix-clash": r"p4 and p5 can run together but both change skills/py/SKILL\.md",
     "bad-main-session-not-parked": r"p4: main_session_skill only belongs on a parked phase",
 }
+
+
+def ui_craft_reference_checks(r):
+    """ui-craft stays consistent: one token list, and references that point at real files."""
+    base = ROOT / "skills" / "ui-craft" / "references"
+    system = base / "system" / "system.md"
+    if not system.is_file():
+        return
+    defined = set(re.findall(r"`(--[a-z0-9-]+)`", read(system)))
+    files = sorted(f for d in ("system", "components", "sections") for f in (base / d).glob("*.md"))
+    used, broken = {}, []
+    for f in files:
+        text = read(f)
+        for token in re.findall(r"(?<![\w-])--[a-z][a-z0-9-]*", text):
+            if not token.endswith("-") and token not in defined:
+                used.setdefault(token, set()).add(f.name)
+        for ref in re.findall(r"`((?:\.\./)?[\w/-]+\.md)`", text):
+            if ref not in ("DESIGN.md", "COPY.md") and not (f.parent / ref).exists():
+                broken.append("%s -> %s" % (f.name, ref))
+    r.check("ui-craft: every token used is defined in system.md", not used, str(used)[:300])
+    r.check("ui-craft: every file a reference names exists", not broken, "; ".join(broken)[:300])
+    links = [rel(f) for f in sorted(base.rglob("*.md")) if f.name != "NOTICE.md" and "http" in read(f)]
+    r.check("ui-craft: working files hold rules only, with no links", not links, ", ".join(links))
 
 
 def copy_check_tests(r):
