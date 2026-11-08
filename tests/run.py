@@ -82,6 +82,7 @@ SCRIPT_COVERAGE = {
     "skills/julia/scripts/check_julia.py": "tests/fixtures/julia",
     "skills/orchestrator/scripts/engine.py": "tests/fixtures/orchestrator",
     "skills/spec-writer/scripts/check_spec.py": "tests/fixtures/spec-writer",
+    "skills/ui-craft/scripts/check_copy.py": "tests/fixtures/ui-craft",
     "skills/visual-qa/scripts/capture.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/report.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/page_checks.js": "tests/fixtures/visual-qa",
@@ -101,6 +102,8 @@ REQUIRED_FIXTURES = [
     "orchestrator-projects",
     "spec-writer",
     "spec-writer-projects",
+    "ui-craft",
+    "ui-craft-projects",
     "visual-qa",
     "visual-qa/capture",
     "visual-qa/capture-injection",
@@ -566,6 +569,7 @@ def cmd_scripts(_args):
 
     engine_tests(r)
     visual_qa_tests(r)
+    copy_check_tests(r)
 
     return r.finish()
 
@@ -585,6 +589,43 @@ ENGINE_BAD_ROUTES = {
     "bad-prefix-clash": r"p4 and p5 can run together but both change skills/py/SKILL\.md",
     "bad-main-session-not-parked": r"p4: main_session_skill only belongs on a parked phase",
 }
+
+
+def copy_check_tests(r):
+    """check_copy.py behaviour that the clean and seeded fixture sets cannot express."""
+    script = ROOT / "skills" / "ui-craft" / "scripts" / "check_copy.py"
+    clean = FIXTURES / "ui-craft" / "base" / "clean" / "COPY-portfolio.md"
+    page = FIXTURES / "ui-craft" / "base" / "clean" / "index.html"
+    text = read(clean)
+    rc, out = run_py(script, [])
+    r.check("usage error: check_copy.py with no file exits 2", rc == 2, "exit %d" % rc)
+    rc, out = run_py(script, ["no-such-file.md"])
+    r.check("usage error: check_copy.py with a missing file exits 2", rc == 2, "exit %d" % rc)
+    tmp = Path(tempfile.mkdtemp(prefix="copy-"))
+    try:
+        def check(name, content, *flags):
+            f = tmp / name
+            f.write_text(content, encoding="utf-8")
+            return run_py(script, list(flags) + [f])
+        literal = text.replace("Most of my work is on data-heavy tools", "I sell a climbing harness and a robust rope and a crucial knot")
+        rc, out = check("words.md", literal)
+        r.check("check_copy.py: hype words fail", rc == 1 and "ai-word" in out, out[-200:])
+        rc, out = check("allowed.md", literal, "--allow", "harness,robust,crucial")
+        r.check("check_copy.py: --allow keeps literal words", rc == 0 and "ai-word" not in out, out[-200:])
+        rc, out = check("allow-line.md", literal.replace("voice: plain", "allow: harness, robust, crucial\nvoice: plain"))
+        r.check("check_copy.py: allow: in the file keeps literal words", rc == 0 and "ai-word" not in out, out[-200:])
+        rc, out = check("waitlist.md", text.replace("kind: portfolio", "kind: event").replace("link: Read the timetable case study", "body: Coming soon"))
+        r.check("check_copy.py: 'coming soon' is allowed on an event or waitlist page", rc == 0, out[-200:])
+        rc, out = check("page.html", read(page).replace("Most of my work", "We cut errors by 41%. Most of my work"), "--facts", clean)
+        r.check("check_copy.py --facts: a number in the HTML must trace to the fact sheet", rc == 1 and "unsourced-number" in out, out[-200:])
+        rc, out = run_py(script, ["--facts", clean, page])
+        r.check("check_copy.py --facts: a clean page passes", rc == 0, out[-200:])
+        rc, out = check("warn.md", text.replace("button: Email me", "button: Learn more"))
+        r.check("check_copy.py: a vague button warns but passes", rc == 0 and "WARN" in out and "button" in out, out[-200:])
+        rc, out = run_py(script, ["--facts", tmp / "absent.md", page])
+        r.check("usage error: check_copy.py with a missing --facts file exits 2", rc == 2, "exit %d" % rc)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def visual_qa_tests(r):
