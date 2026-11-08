@@ -47,7 +47,7 @@ Before writing any phase document, read `references/project-planner-rules.md`. I
 
 Never phase by layer ("schema, then API, then UI" or "backend, then frontend"). A layer-based phase produces nothing a user or downstream system can exercise until every layer is done. Instead, cut vertically: each phase touches every layer it needs -- however thinly -- and ends with something that runs end to end and demonstrates real behavior.
 
-Phase 1 is a local walking skeleton: the thinnest possible path through the full system for one trivial flow (for example, save a record and read it back), wired for real (real network calls, real storage, real auth if auth gates the flow), not stubbed. The most important real scenario from the spec lands in the phase after the skeleton and delivery phases, not in Phase 1. Every phase after that adds one more increment of capability on top of a system that already works.
+Phase 1 is a local walking skeleton: the thinnest possible path through the full system for one trivial flow (for example, save a record and read it back), wired for real (real network calls, real storage, real auth if auth gates the flow), not stubbed. The most important real scenario from the spec lands in the phase after the skeleton, not in Phase 1. Every phase after that adds one more increment of capability on top of a system that already works.
 
 **Example -- a URL shortener spec.**
 
@@ -59,29 +59,25 @@ Bad (layer-based -- nothing works until phase 3):
 
 Good (vertical slices -- each phase is a working product):
 
-- Phase 1: local skeleton -- a form saves a long URL to the real database and shows it back, started with one command. No short codes, no auth, no deploy yet.
-- Phase 2: deployment -- the same app runs at a live URL, and a push to main redeploys it.
-- Phase 3: paste a long URL, get a short code back, visiting the short code redirects to the long URL. No auth, no stats yet.
-- Phase 4: short codes are scoped to a logged-in user's account (adds auth end to end: login, ownership check, per-user list view).
-- Phase 5: click count and last-accessed time shown on each link (adds the `clicks` table, an increment-on-redirect write, and a stats row in the UI).
+- Phase 1: local skeleton -- a form saves a long URL to the real database and shows it back, started with one command. No short codes, no auth yet.
+- Phase 2: paste a long URL, get a short code back, visiting the short code redirects to the long URL. No auth, no stats yet.
+- Phase 3: short codes are scoped to a logged-in user's account (adds auth end to end: login, ownership check, per-user list view).
+- Phase 4: click count and last-accessed time shown on each link (adds the `clicks` table, an increment-on-redirect write, and a stats row in the UI).
+
+Deployment is not a phase: the user deploys (Rule 10).
 
 ## Sequencing Rules
 
-1. **Phase 1 is a local working skeleton.** It should touch every architectural component the final system needs, at minimal depth, for one trivial flow, and run locally with one command. Deployment or release is not part of it (see Rule 10).
+1. **Phase 1 is a local working skeleton.** It should touch every architectural component the final system needs, at minimal depth, for one trivial flow, and run locally with one command. It holds no deployment or release work (see Rule 10).
 2. **Each phase adds exactly one coherent capability.** If a phase description needs "and" to summarize it in one sentence, it is probably two phases.
 3. **Order by dependency, not by convenience.** A phase may only depend on capabilities delivered in strictly earlier phases -- never on a phase that comes after it. When dependency order leaves a tie, do the riskiest or least-certain part first -- incremental and reversible beats big-bang; surface unknowns while there is still time to change course.
 4. **Every phase ends in a working, demoable state.** Stopping after any phase should never leave the system half-built or non-functional.
-5. **Fold plumbing into the phase that needs it.** Do not create a phase whose sole content is infrastructure, schema, or scaffolding with no observable behavior -- attach that work to the first phase that exercises it. The delivery phase in Rule 10 passes because its result is observable (a live URL, an installable package).
+5. **Fold plumbing into the phase that needs it.** Do not create a phase whose sole content is infrastructure, schema, or scaffolding with no observable behavior -- attach that work to the first phase that exercises it.
 6. **Name cross-cutting concerns explicitly.** For auth, observability, validation, rate limiting, and error handling, state per phase whether a minimal version is enough or the full version is required, and call out which later phase upgrades it.
 7. **Let complexity set the phase count.** Do not force a round number of phases. Count independent capabilities, integration points, and risk areas in the source spec; that count drives the number of phases.
 8. **Bound each phase's size.** A phase should be implementable in roughly 1-3 focused agent sessions and land as one PR. If a phase touches more than ~8 files or introduces more than 2 new services/classes, split it further. Setup and boilerplate files (configs, lockfiles, CI definitions, generated code) do not count toward the file limit; only files with behavior do. If even the skeleton is too large under this count, split it again into smaller working slices -- never by layer.
 9. **Don't design what already exists.** Before specifying a new pattern, queue, cache, or abstraction inside a phase, check whether the stack already has a built-in or established pattern for it.
-10. **Put a delivery phase right after the skeleton, shaped to the project type.** Delivery is risky (hosting limits, networking, secrets, registry rules, packaging mistakes), so surface it before any real feature depends on it. It must have an observable result. Pick one:
-    - **Deployed project (service, web app, bot, job):** a deployment phase. Result: the skeleton's flow works at a live URL, CI/CD runs on push to the main branch, and environment config and secrets are set up.
-    - **Published project (library, SDK, CLI, plugin):** a packaging and release phase. Result: the skeleton can be built and installed from the published artifact (package registry, tag, binary) into a fresh project; versioning and release steps are written down; CI runs tests on every change. For these projects, the public API surface (names, signatures, types, errors) takes the place of "API contracts," and usage examples take the place of the "UX flow."
-    - **Not delivered (internal script, one-off tool, local-only project):** skip the delivery phase and say so in one line in the overview.
-
-    A library's release is repeated, not one-time: later phases that change the public API must state the version bump (major, minor, patch) and any breaking change in their Rollout section.
+10. **No delivery phase and no testing phase.** The user deploys and releases by hand. Never write a phase for deployment, hosting, CI/CD, publishing to a registry, or a release, and say so in one line in the overview: "Deployment and release are not planned; you do them." Never write a phase whose only job is testing (end-to-end, browser or visual testing): each phase carries its own test plan, and visual checks of the UI are run separately. For a published project (library, SDK, CLI, plugin), the public API surface (names, signatures, types, errors) takes the place of "API contracts," usage examples take the place of the "UX flow," and every phase that changes the public API states the version bump (major, minor, patch) and any breaking change in its Rollout section.
 
 ## Per-Phase Design Document
 
@@ -137,13 +133,13 @@ Where a number is missing (a latency budget, a row count, a concurrency limit) a
 ## Output Structure
 
 1. **Overview** -- one paragraph per phase (goal + what it unlocks), followed by an ASCII dependency diagram across phases plus a one-paragraph sequencing rationale explaining what would break if the order changed.
-2. **Parallelization note** -- if two or more phases (or workstreams within a phase) touch disjoint modules and share no dependency, call this out as an opportunity to hand them to separate agents in parallel; group into lanes (`Lane A: phase 2 -> phase 4 (sequential)`, `Lane B: phase 3 (independent)`). Each lane runs in its own git worktree and lands as its own PR. If everything is strictly sequential, say so in one line instead of forcing a diagram.
+2. **Parallelization note** -- if two or more phases (or workstreams within a phase) touch disjoint modules and share no dependency, call this out as an opportunity to hand them to separate agents in parallel; group into lanes (`Lane A: phase 2 -> phase 4 (sequential)`, `Lane B: phase 3 (independent)`). Each lane runs in its own git worktree and lands as its own pushed branch. If everything is strictly sequential, say so in one line instead of forcing a diagram.
 
    Lanes may run in parallel only if the plan settles file conflicts in advance, so state all three of these in the note:
 
    - **Shared files, by name.** List every file that more than one lane would edit (route tables, config, dependency manifests, migrations, index or barrel files). If a lane would need to edit a shared file in a way that can't be settled up front, do not run those lanes in parallel.
    - **Who changes each shared file.** Assign each shared file to one earlier phase (or to the skeleton), which makes the change before any lane starts, for example by adding the route or config entries that the lanes will fill in. The lanes then only add to separate files.
-   - **Merge order.** State which lane's PR merges first, and require the other lanes to update from the main branch before merging. Pick the order by risk and size: the lane that changes more shared behavior goes first.
+   - **Merge order.** State which lane's branch merges first, and require the other lanes to update from the main branch before merging. Pick the order by risk and size: the lane that changes more shared behavior goes first.
 
 3. **One fully expanded design document per phase**, in phase order, each self-contained per the template above.
 
@@ -151,11 +147,12 @@ Where a number is missing (a latency budget, a row count, a concurrency limit) a
 
 Default to printing the overview and all phase documents inline in the response, separated by a horizontal rule (`---`), unless the user asks for files on disk.
 
-When the user asks for files (or the input itself was a file path), write them next to the source spec:
+When the user asks for files (or the input itself was a file path), write them to `.plans/phases/` at the root of the project being planned: the git repository's root, or the current working directory when there is no repository yet. Phase documents stay out of the codebase and are never committed.
 
-- If the source spec lives at `some/dir/spec.md`, write to `some/dir/phases/phase-N-<slug>.md`.
-- If there is no source file (spec was pasted or described), ask the user where to write, or default to `./phases/` in the current working directory.
-- Always write an index file, `phases/README.md`, containing the Overview section (phase summaries, dependency diagram, parallelization note) with links to each `phase-N-<slug>.md`.
+- Write each phase to `.plans/phases/phase-N-<slug>.md`.
+- Always write an index file, `.plans/phases/README.md`, containing the Overview section (phase summaries, dependency diagram, parallelization note) with links to each `phase-N-<slug>.md`.
+- Before writing, check that the project's `.gitignore` lists `.plans/`. If it does not, add the line (create `.gitignore` if there is none) and say so in the reply.
+- If the user names a different folder, write there instead, and still add that folder to `.gitignore` unless the user says to commit it.
 
 Follow `references/markdown-rules.md` for all Markdown in the output.
 
@@ -179,5 +176,6 @@ Before returning the result, verify for every phase document:
 - The phase depends only on interfaces defined in earlier phases -- check for forward references.
 - Every manual prerequisite has a name, a destination, and a way to verify it, or the phase states "None."
 - The phase's file count and new-component count fall within the sizing bound, or the oversized phase has been split.
+- No phase is a deployment, release, CI/CD or testing-only phase (Rule 10).
 
 **Final self-check.** For each phase document, switch perspective: read it as the implementing agent would, with zero other context beyond the completed prior phases. Try to name one design decision you would still have to make. If you can name one, the document is not done -- go back and decide it.

@@ -7,8 +7,8 @@ User says: "plan this project using docs/link-shortener-spec.md and write the ph
 Actions:
 1. Read the spec. No codebase exists, so this is greenfield: Phase 1 must pin the stack and the coding pattern once, each with a rationale.
 2. The spec leaves the database open. That is high-stakes, so ask, naming the options and a recommendation. Settle a low-stakes gap (default page size) yourself and record it as an assumption at the top of the affected phase.
-3. Cut vertical slices, not layers: a local walking skeleton first, then one capability per phase, then a delivery phase shaped to the project type.
-4. Write `docs/phases/README.md` (summaries, dependency diagram, sequencing reason, parallelization note) and `docs/phases/phase-N-<slug>.md`. Run the Handoff Readiness Checklist, then the final self-check.
+3. Cut vertical slices, not layers: a local walking skeleton first, then one capability per phase. No deployment, release or testing-only phase; the overview says the user deploys.
+4. Check that `.gitignore` lists `.plans/` and add it if missing. Write `.plans/phases/README.md` (summaries, dependency diagram, sequencing reason, parallelization note) and `.plans/phases/phase-N-<slug>.md`. Run the Handoff Readiness Checklist, then the final self-check.
 
 Result: an index plus one self-contained phase document per phase, with no TBDs and every field typed.
 

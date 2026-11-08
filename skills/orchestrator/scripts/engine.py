@@ -15,7 +15,7 @@ Usage (from the project root):
     python3 -I engine.py start ID [ID ...]            mark phases running, JSON: runner calls
     python3 -I engine.py record ID RUN_DIR [--tokens N]
                                                       read RUN_DIR/report.md, mark built or failed
-    python3 -I engine.py pr ID URL                    record the pull request of a built phase
+    python3 -I engine.py pushed ID BRANCH             record the pushed branch of a built phase
     python3 -I engine.py merge ID                     mark a built phase (or a finished parked step) merged
     python3 -I engine.py fail ID --reason TEXT        mark a running or built phase failed
     python3 -I engine.py retry ID                     send a failed, running or built phase back to pending
@@ -24,7 +24,7 @@ Usage (from the project root):
 Options for every command: --root DIR (default: current directory) and --dir DIR
 (default: ROOT/.orchestrator, holds route.json and state.json).
 
-Output: validate, init, approve, record, merge, fail and retry print FAIL lines and
+Output: validate, init, approve, record, pushed, merge, fail and retry print FAIL lines and
 end with `RESULT  PASS` or `RESULT  FAIL`. next and start print one JSON object.
 Exit codes: 0 done, 1 refused or failed, 2 usage error.
 """
@@ -555,17 +555,19 @@ def cmd_merge(proj, args):
     return out_result([])
 
 
-def cmd_pr(proj, args):
+def cmd_pushed(proj, args):
     route, state = load_all(proj)
     if args.id not in state["phases"]:
         return out_result(["%s is not a phase" % args.id])
     ps = state["phases"][args.id]
     if ps["status"] != "built":
-        return out_result(["%s is %s: a pull request belongs to a built phase" % (args.id, ps["status"])])
-    ps["pr"] = args.url
-    log(state, "pr", args.id, args.url)
+        return out_result(["%s is %s: only a built phase has a branch to push" % (args.id, ps["status"])])
+    if not args.branch.strip():
+        return out_result(["the branch name is empty"])
+    ps["branch"] = args.branch
+    log(state, "pushed", args.id, args.branch)
     proj.save(state)
-    print("OK  %s pull request recorded" % args.id)
+    print("OK  %s pushed on %s; it stays locked for its dependents until `merge %s`" % (args.id, args.branch, args.id))
     return out_result([])
 
 
@@ -606,7 +608,7 @@ def cmd_status(proj, args):
         i = ph["id"]
         s = state["phases"][i]
         label = "halted" if i in halted else s["status"]
-        print("%-14s %-9s %-24s %s" % (i, label, ",".join(ph.get("depends_on", [])) or "-", s["note"] or s.get("pr") or ""))
+        print("%-14s %-9s %-24s %s" % (i, label, ",".join(ph.get("depends_on", [])) or "-", s["note"] or (("pushed: " + s["branch"]) if s.get("branch") else "")))
     gates = state.get("gates", {})
     print("Gate A: %s   Gate B: %s" % ("approved" if "a" in gates else "not approved", "approved" if "b" in gates else "not approved"))
     merged = sum(1 for i in state["phases"] if state["phases"][i]["status"] == "merged")
@@ -616,7 +618,7 @@ def cmd_status(proj, args):
 
 COMMANDS = {
     "validate": cmd_validate, "init": cmd_init, "approve": cmd_approve, "next": cmd_next,
-    "start": cmd_start, "record": cmd_record, "pr": cmd_pr, "merge": cmd_merge, "fail": cmd_fail,
+    "start": cmd_start, "record": cmd_record, "pushed": cmd_pushed, "merge": cmd_merge, "fail": cmd_fail,
     "retry": cmd_retry, "status": cmd_status,
 }
 
@@ -640,9 +642,9 @@ def build_parser():
     r.add_argument("id")
     r.add_argument("run_dir")
     r.add_argument("--tokens", type=int, default=None, help="total tokens the run used, if known")
-    pr = sub.add_parser("pr", parents=[common])
-    pr.add_argument("id")
-    pr.add_argument("url")
+    pu = sub.add_parser("pushed", parents=[common])
+    pu.add_argument("id")
+    pu.add_argument("branch")
     for name in ("merge", "retry"):
         m = sub.add_parser(name, parents=[common])
         m.add_argument("id")

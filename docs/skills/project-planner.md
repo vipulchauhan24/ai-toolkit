@@ -9,7 +9,7 @@ The project planner skill turns one product and engineering spec into an ordered
 3. The planner reads your codebase (if there is one) and the phase-writing rules in `references/project-planner-rules.md`.
 4. The planner asks you about high-stakes decisions, such as the tech stack, shared data model, auth, and breaking changes.
 5. The planner writes an overview and one design document per phase.
-6. You give each phase document to a coding agent and review the PR it produces.
+6. You give each phase document to a coding agent and review the branch it produces.
 
 ## Using the Skill
 
@@ -45,18 +45,19 @@ The planner stops and asks when a decision is hard to reverse. Examples are the 
 
 ### Step 4: Review the Plan
 
-If you asked for files, the planner writes them next to your spec:
+If you asked for files, the planner writes them to `.plans/phases/` at the project root, away from the code, and adds `.plans/` to `.gitignore` if it is missing:
 
 ```text
-docs/
-  checkout-spec.md
+.plans/
   phases/
     README.md
     phase-1-<slug>.md
     phase-2-<slug>.md
 ```
 
-Open `phases/README.md` first. It holds:
+Phase documents are never committed. To write them somewhere else, name the folder in your request.
+
+Open `.plans/phases/README.md` first. It holds:
 
 - a summary of each phase
 - a dependency diagram and the reason for the order
@@ -72,8 +73,8 @@ For each phase:
 
 1. Complete the manual prerequisites listed in the document (accounts, API keys, secrets, DNS). The agent cannot do these.
 2. Start a session and point it at the phase document.
-3. Let the agent implement it and open one PR.
-4. Review the PR against the phase's acceptance criteria and definition of done.
+3. Let the agent implement it on one branch, then commit and push it.
+4. Open a pull request yourself and review it against the phase's acceptance criteria and definition of done.
 5. Merge before starting any phase that depends on it.
 
 ### Step 6: Run Phases in Parallel (Optional)
@@ -84,11 +85,7 @@ If the parallelization note lists lanes, you can run each lane in its own git wo
 
 Phase 1 is a local walking skeleton. It connects every part of the system for one trivial flow and runs with one command.
 
-A delivery phase follows, shaped to the project type:
-
-- Deployed project: a deployment phase with a live URL and CI/CD.
-- Library, SDK, CLI, or plugin: a packaging and release phase that installs from the published artifact.
-- Internal script or local-only tool: no delivery phase.
+There is no delivery phase and no testing-only phase. You deploy and release yourself, and each phase carries its own test plan. Visual checks of the UI run separately.
 
 Every later phase adds one capability on top of a working system. Each phase document covers:
 

@@ -1,6 +1,6 @@
 # Orchestrator Skill
 
-The orchestrator takes a spec through to merged pull requests. It gets the spec written and approved, gets the project split into phases, then runs each phase through the right skills in a separate git worktree, in dependency order. It stops at the points where you decide, and it never merges for you.
+The orchestrator takes a spec through to one pushed branch per phase. It gets the spec written and approved, gets the project split into phases, then runs each phase through the right skills in a separate git worktree, in dependency order. It stops at the points where you decide. It commits and pushes each built phase's branch, but it never opens a pull request and never merges: you do both.
 
 It works in Claude Code only. It is the one skill that calls other skills: spec-writer, doc-trimmer, doc-reviewer, project-planner and design-system-builder run in your conversation, because they ask you questions. Each build phase runs in the `skill-runner` agent in its own worktree, in the background, because a build does not need to ask anything.
 
@@ -17,15 +17,15 @@ The conductor does not decide the order from memory. It asks the engine, and doe
 
 - Claude Code with the Agent and Skill tools, a git repository, and the `ai-toolkit` plugin installed (the orchestrator starts `ai-toolkit:skill-runner`).
 - **Python 3.9 or later** (required). It runs the engine. Without it, the skill stops and says so.
-- The `gh` command logged in, if you want the orchestrator to open pull requests.
-- A spec, a short brief, or a `phases/` folder from project-planner.
+- A git remote you can push to. Without one, built phases are committed but not pushed.
+- A spec, a short brief, or a `.plans/phases/` folder from project-planner.
 
 ## Using the Skill
 
 In Claude Code, open the project and ask:
 
 - `build this project from the spec`
-- `orchestrate the plan in phases/`
+- `orchestrate the plan in .plans/phases/`
 - `carry on with the next phase`
 
 It asks once for anything missing: the spec or brief, the project name, the base branch, the design system and how many helpers may run at once (3 by default). Reply `use defaults` to take the defaults.
@@ -36,12 +36,13 @@ Add `.orchestrator/` to the project's `.gitignore`. The route, the ledger and th
 
 1. **Spec.** A brief, or a spec with gaps, goes to spec-writer, which asks every gap in one batch and writes `spec.md`. Doc-trimmer and doc-reviewer run on it (always for a spec the skill drafted, on request for yours). You read the three files.
 2. **Gate A.** You say which file is approved. It becomes `spec.approved.md`. Nothing later reads any other spec file.
-3. **Phases.** If `phases/` exists it is read. Otherwise project-planner writes it and asks you the stack, data and auth questions.
+3. **Phases.** If `.plans/phases/` exists it is read. Otherwise project-planner writes it and asks you the stack, data and auth questions. `.plans/` is git-ignored, so helpers in worktrees read the phase documents from your main checkout by absolute path.
 4. **Route.** The orchestrator writes `.orchestrator/route.json` from the plan and the engine validates it: no missing dependency, no cycle, and no two phases that can run together change the same file.
 5. **Gate B.** You see one table: each phase, its skills, what it waits for, what runs side by side, and what is parked for you. You confirm or edit.
 6. **Build loop.** The engine says which phases may start. The orchestrator starts them in worktrees, up to the helper cap. When one finishes, the engine reads its report and accepts it only if every skill is `done` and shows evidence.
-7. **Pull requests.** For each batch you are asked once: commit, push and open a pull request for each? Only on yes.
-8. **Merge.** You merge in GitHub and tell the orchestrator. It asks you to update the base branch, marks the phase merged, and the phases that waited for it can start.
+7. **Commit and push.** Each built phase is committed on its own branch and pushed, without asking. No pull request is opened. It never pushes to the base branch and never force-pushes. If a push fails, you get the error and the worktree path.
+8. **Visual QA.** If the phase changed the UI and the `visual-qa` skill is installed, you are asked whether to run it on that phase.
+9. **Merge.** You open a pull request from the pushed branch, merge it, and tell the orchestrator. It asks you to update the base branch, marks the phase merged, and the phases that waited for it can start.
 
 ### What it parks
 
@@ -75,13 +76,13 @@ python3 -I skills/orchestrator/scripts/engine.py next
 python3 -I skills/orchestrator/scripts/engine.py validate
 ```
 
-The others (`init`, `approve`, `start`, `record`, `pr`, `merge`, `fail`, `retry`) change the ledger and are run by the orchestrator. If the ledger is wrong, `retry <phase>` sends a failed, running or built phase back to pending.
+The others (`init`, `approve`, `start`, `record`, `pushed`, `merge`, `fail`, `retry`) change the ledger and are run by the orchestrator. If the ledger is wrong, `retry <phase>` sends a failed, running or built phase back to pending.
 
 ## What the Skill Does Not Do
 
 - It does not write code itself. The skills do.
-- It does not merge pull requests, and it does not push or open one without your yes.
-- It does not build deployment, hosting or release phases. It parks them for you.
+- It does not open or merge pull requests. It pushes phase branches only, never the base branch.
+- It does not build deployment, hosting or release phases. project-planner no longer plans them; if an older plan has one, it is parked for you.
 - It does not guess a gap in the spec. It asks, or it records the gap as an open question.
 - It does not work outside Claude Code.
 - It does not yet record token use or grades. The ledger has a `tokens` field for a run; a report that grades the work comes later.

@@ -54,13 +54,13 @@ The sequencing, sizing, and document-structure rules live in the planner's `SKIL
 - The test plan lists tests by name or by behavior, not only by count. Each acceptance criterion maps to at least one named test.
 - Write each bug-fix phase's first test as the reproduction of the bug, and put it first in the test plan.
 - State which layers run offline and what is faked in each layer (clock, network, randomness). State which layers need a real database or service and how the test run gets one.
-- State the command that runs the full suite, and the check that must pass before the PR merges.
+- State the command that runs the full suite, and the check that must pass before the phase's branch is pushed.
 - For each failure mode in the phase, name the test that covers it, or mark it as an uncovered gap.
 
 ## Data and Migrations
 
 - Write each schema change as a migration with the full definition. State that it applies to an empty database and to the previous release.
-- A breaking change gets split across phases into add, backfill, switch, and remove. Each step is its own phase or its own PR, and each is backward compatible with the previous release. Say which phase holds each step.
+- A breaking change gets split across phases into add, backfill, switch, and remove. Each step is its own phase or its own branch, and each is backward compatible with the previous release. Say which phase holds each step.
 - Give every migration a rollback entry: the exact reverse steps, or "not reversible" with the backup to restore from. Mark the remove step as not reversible.
 - State how a migration is proven before merge (for example, applied and reversed on a copy of the previous schema in CI).
 
@@ -74,15 +74,15 @@ The sequencing, sizing, and document-structure rules live in the planner's `SKIL
 
 ## Git and Pull Requests
 
-- Each phase lands as one PR. A phase that needs more than one PR is too large; split it.
+- Each phase lands as one branch. The branch is committed and pushed when the phase is done; the user opens and merges the pull request. A phase that needs more than one branch is too large; split it.
 - State the branch name for each phase, following the project's existing pattern.
-- State the PR's required checks. Never plan a merge with failing checks.
+- State the checks that must pass before the branch is pushed. Never plan a merge with failing checks.
 - Do not list generated files or build output in the file reference table unless the project commits them.
 
 ## Documentation
 
 - Each phase lists the documentation it changes in the file reference table: README sections, API docs, and the decision log.
-- Phase 1 creates the README with install, run, test, and deploy commands. Later phases update it when they change those commands.
+- Phase 1 creates the README with install, run, and test commands. Later phases update it when they change those commands.
 - When a phase makes an architectural decision, the document records it as a decision: the choice, the reason, and the alternative considered. The phase also names the file where the decision is kept.
 
 ## Instructions to Embed in Every Phase Document
