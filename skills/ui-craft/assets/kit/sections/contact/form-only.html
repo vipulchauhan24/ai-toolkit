@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact: form-only</title>
+<meta name="description" content="Kit sample: Contact: form-only. Replace all text with the project's COPY.md.">
+<link rel="stylesheet" href="../../base/tokens.css">
+<link rel="stylesheet" href="../../base/reset.css">
+<link rel="stylesheet" href="../../base/base.css">
+<link rel="stylesheet" href="../../base/utilities.css">
+<link rel="stylesheet" href="../../motion/motion.css">
+<link rel="stylesheet" href="../../components/button/component.css">
+<link rel="stylesheet" href="../../components/form/component.css">
+<link rel="stylesheet" href="section.css">
+</head>
+<body>
+<h1 class="visually-hidden">Contact: form-only</h1>
+<!-- sample:start -->
+<section class="section" id="contact"><div class="container"><div class=narrow><div class="prose" data-reveal><div class="section__head"><h2>Contact</h2><p class=lead>I reply within two working days.</p></div>
+
+<form class="form" data-form action="#">
+<div class="field"><label class="field__label" for="f-name">Your name</label><input class="input" id="f-name" name="name" autocomplete="name" required aria-describedby="f-name-e"><p class="field__error" id="f-name-e" hidden>Enter your name so I know who is writing.</p></div>
+<div class="field"><label class="field__label" for="f-email">Email</label><input class="input" id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-h f-email-e"><p class="field__hint" id="f-email-h">I only use this to reply.</p><p class="field__error" id="f-email-e" hidden>Enter an email address, like name@example.com.</p></div>
+<div class="field"><label class="field__label" for="f-msg">Message</label><textarea class="input" id="f-msg" name="message" required aria-describedby="f-msg-e"></textarea><p class="field__error" id="f-msg-e" hidden>Write a short message.</p></div>
+<label class="check"><input type="checkbox" name="copy"> Send me a copy</label>
+<div><button class="btn btn--primary btn--lg">Send message</button></div>
+</form>
+<p class="form__success" hidden tabindex="-1">Message sent. Sample only: nothing was really sent.</p>
+</div></div></div></section>
+<!-- sample:end -->
+<script type="module" src="../../motion/motion.js"></script>
+</body>
+</html>

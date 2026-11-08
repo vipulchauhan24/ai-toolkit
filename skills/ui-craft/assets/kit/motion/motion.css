@@ -1,0 +1,13 @@
+@keyframes kit-rise { from { opacity: 0.01; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+[data-enter] { animation: kit-rise var(--duration-reveal) var(--ease-out) both; animation-delay: calc(var(--_i, 0) * 60ms); }
+
+[data-parallax] { overflow: hidden; }
+[data-parallax] img, [data-parallax] video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  [data-enter] { animation: none; }
+}
+
+@media print { [data-reveal], [data-reveal-group] > * { opacity: 1 !important; transform: none !important; } }

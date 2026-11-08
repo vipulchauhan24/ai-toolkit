@@ -1,0 +1,9 @@
+:root { interpolate-size: allow-keywords; }
+.accordion__item { border-bottom: 1px solid var(--line); }
+.accordion__item summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: var(--control-lg); padding-block: var(--space-4); font-weight: 500; cursor: pointer; list-style: none; }
+.accordion__item summary::-webkit-details-marker { display: none; }
+.accordion__item summary .icon { transition: transform var(--duration-enter) var(--ease-out); }
+.accordion__item[open] summary .icon { transform: rotate(180deg); }
+.accordion__item::details-content { height: 0; overflow: clip; transition: height var(--duration-enter) var(--ease-out), content-visibility var(--duration-enter) allow-discrete; } /* audit:ok the one documented height animation */
+.accordion__item[open]::details-content { height: auto; }
+.accordion__panel { padding-bottom: var(--space-4); color: var(--ink-2); }

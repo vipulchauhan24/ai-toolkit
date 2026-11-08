@@ -6,6 +6,8 @@ The files in `system/`, `components/` and `sections/` were also written for this
 
 The patterns in `copy-human.md` also draw on Wikipedia's "Signs of AI writing" (<https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing>), paraphrased and credited here. Wikipedia text is available under CC BY-SA.
 
+`assets/kit/vendor/motion.js` is a bundle of Motion (MIT), and its license is beside it. Icons in the kit are from Tabler Icons (MIT). The kit's HTML, CSS and JS were written for this skill.
+
 The original `taste-skill` license text follows, as the license requires.
 
 ---

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nav component</title>
+<meta name="description" content="Kit sample: Nav component. Replace all text with the project's COPY.md.">
+<link rel="stylesheet" href="../../base/tokens.css">
+<link rel="stylesheet" href="../../base/reset.css">
+<link rel="stylesheet" href="../../base/base.css">
+<link rel="stylesheet" href="../../base/utilities.css">
+<link rel="stylesheet" href="../../motion/motion.css">
+<link rel="stylesheet" href="../../components/nav/component.css">
+<link rel="stylesheet" href="../../components/button/component.css">
+</head>
+<body>
+<h1 class="visually-hidden">Nav component</h1>
+<!-- sample:start -->
+<header class="nav" data-nav><div class="container nav__inner">
+<a class="nav__brand" href="#">Noor Haddad</a>
+<nav class="nav__links" aria-label="Main"><a href="#work">Work</a><a href="#experience">Experience</a><a href="#about">About</a></nav>
+<div class="nav__end"><a class="btn btn--primary nav__action" href="#contact">Email me</a><button class="nav__toggle" aria-expanded="false" aria-controls="nav-sheet">Menu</button></div>
+</div>
+<div class="nav__sheet" id="nav-sheet" hidden><a href="#work">Work</a><a href="#experience">Experience</a><a href="#about">About</a><a href="#contact">Email me</a></div>
+</header>
+<main><div class="container section prose"><p id="work">Scroll a little to see the bar gain its background. At phone width the links move into a menu.</p><div class="sample-spacer"></div><p id="experience">Experience</p><p id="about">About</p><p id="contact">Contact</p></div></main>
+<!-- sample:end -->
+<script type="module" src="../../motion/motion.js"></script>
+</body>
+</html>

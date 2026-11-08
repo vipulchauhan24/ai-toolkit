@@ -82,6 +82,21 @@ How these became tokens: `--text-h1` (36 to 64px), `--text-h2` (28 to 44px), `--
 
 Real sites often use buttons under 44px on phones. This skill sets 44px on touch anyway, for usability.
 
+## Motion
+
+| Source | Used for | Read | Strength |
+|---|---|---|---|
+| [NN/g: Animation duration](https://www.nngroup.com/articles/animation-duration/) | 100ms feedback, 200 to 300ms for screen changes, 400ms upper limit, exits shorter than entrances, ease-out to enter | Fetched | Primary |
+| [NN/g: Animation purpose](https://www.nngroup.com/articles/animation-purpose-ux/) | When motion helps, and warnings about overuse | Fetched | Primary |
+| [WCAG 2.2: Pause, stop, hide](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html) | Controls for motion over 5 seconds (A) | Fetched | Primary |
+| [WCAG 2.2: Animation from interactions](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html) | Reduced motion (AAA, adopted here) | Fetched | Primary |
+| [web.dev: Animations guide](https://web.dev/articles/animations-guide) | Animate transform and opacity, `will-change` sparingly | Fetched | Primary |
+| [Motion docs: animate](https://motion.dev/docs/animate), [inView](https://motion.dev/docs/inview), [scroll](https://motion.dev/docs/scroll), [React accessibility](https://motion.dev/docs/react-accessibility) | The APIs and sizes used | Fetched | Primary |
+
+Material 3's motion pages could not be loaded, so their tokens are not used. Stagger amounts (50ms, 60ms) and reveal distance (16px) are working defaults.
+
+`assets/kit/vendor/motion.js` is built from `motion` 14.10.1 with esbuild, exporting `animate` from `motion/mini` and `inView`, `scroll` and `stagger` from `motion` (about 8KB gzipped). Tabler icons are pinned at v3.50.0.
+
 ## Working defaults
 
 These are judgement calls, with no research behind them. Change them freely:

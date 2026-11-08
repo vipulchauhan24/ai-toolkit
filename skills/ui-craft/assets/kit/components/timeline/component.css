@@ -1,0 +1,11 @@
+.timeline { position: relative; display: flex; flex-direction: column; gap: var(--space-10); }
+.timeline__item { display: grid; gap: var(--space-2); }
+.timeline__date { font-size: var(--text-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.timeline__rail, .timeline__progress { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; }
+.timeline__rail { display: none; background: var(--line); }
+.timeline__progress { display: none; background: var(--accent); transform: scaleY(0); transform-origin: top; }
+@media (min-width: 768px) {
+  .timeline { padding-left: var(--space-8); }
+  .timeline__item { grid-template-columns: 160px minmax(0, 1fr); gap: var(--space-8); align-items: baseline; }
+  .timeline__rail, .timeline__progress:not([hidden]) { display: block; }
+}

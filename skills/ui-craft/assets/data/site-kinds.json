@@ -1,0 +1,278 @@
+{
+  "portfolio": {
+    "density": "comfortable",
+    "default_theme": "both",
+    "motion_levels": [
+      "quiet",
+      "standard"
+    ],
+    "radius": [
+      "sharp",
+      "tight",
+      "soft"
+    ],
+    "order": {
+      "lead": [
+        "projects",
+        "proof-stats",
+        "experience"
+      ],
+      "end": [
+        "contact",
+        "cta-close",
+        "footer"
+      ]
+    },
+    "type_contrast": [
+      {
+        "id": "even"
+      },
+      {
+        "id": "quiet"
+      },
+      {
+        "id": "loud",
+        "skip_with_hero": [
+          "statement",
+          "proof-panel",
+          "split"
+        ]
+      }
+    ],
+    "backgrounds": [
+      "plain",
+      "banded",
+      "ruled"
+    ],
+    "headings": [
+      "left",
+      "side",
+      "center"
+    ],
+    "images": [
+      "natural",
+      "framed",
+      "mono"
+    ],
+    "heroes": [
+      {
+        "id": "proof-panel",
+        "needs": [
+          "numbers"
+        ]
+      },
+      {
+        "id": "name-led",
+        "needs": []
+      },
+      {
+        "id": "statement",
+        "needs": []
+      },
+      {
+        "id": "split",
+        "needs": [
+          "images"
+        ]
+      },
+      {
+        "id": "centered",
+        "needs": []
+      }
+    ],
+    "sections": [
+      {
+        "id": "proof-stats",
+        "needs": [
+          "numbers"
+        ],
+        "optional": true,
+        "skip_with_hero": [
+          "proof-panel"
+        ],
+        "variants": [
+          {
+            "id": "sentence",
+            "shape": "text"
+          },
+          {
+            "id": "row",
+            "shape": "stats"
+          },
+          {
+            "id": "divided",
+            "shape": "stats"
+          },
+          {
+            "id": "with-source",
+            "shape": "rows"
+          }
+        ]
+      },
+      {
+        "id": "projects",
+        "needs": [
+          "projects"
+        ],
+        "variants": [
+          {
+            "id": "list-rows",
+            "shape": "rows"
+          },
+          {
+            "id": "feature-first",
+            "needs": [
+              "images"
+            ],
+            "shape": "media"
+          },
+          {
+            "id": "image-grid",
+            "needs": [
+              "images"
+            ],
+            "shape": "media"
+          },
+          {
+            "id": "alternating",
+            "needs": [
+              "images"
+            ],
+            "shape": "media"
+          }
+        ]
+      },
+      {
+        "id": "experience",
+        "needs": [
+          "experience"
+        ],
+        "variants": [
+          {
+            "id": "rows",
+            "shape": "rows"
+          },
+          {
+            "id": "timeline",
+            "shape": "rail"
+          },
+          {
+            "id": "by-company",
+            "shape": "stacked"
+          },
+          {
+            "id": "accordion",
+            "shape": "disclosure"
+          }
+        ]
+      },
+      {
+        "id": "testimonials",
+        "needs": [
+          "quotes"
+        ],
+        "optional": true,
+        "variants": [
+          {
+            "id": "single-large",
+            "shape": "statement"
+          },
+          {
+            "id": "two-column",
+            "shape": "columns"
+          }
+        ]
+      },
+      {
+        "id": "skills-stack",
+        "needs": [
+          "skills"
+        ],
+        "variants": [
+          {
+            "id": "grouped-list",
+            "shape": "rows"
+          },
+          {
+            "id": "icon-grid",
+            "shape": "tiles"
+          },
+          {
+            "id": "inline",
+            "shape": "text"
+          }
+        ]
+      },
+      {
+        "id": "about",
+        "needs": [],
+        "variants": [
+          {
+            "id": "text-only",
+            "shape": "text"
+          },
+          {
+            "id": "text-portrait",
+            "needs": [
+              "portrait"
+            ],
+            "shape": "media"
+          }
+        ]
+      },
+      {
+        "id": "contact",
+        "needs": [],
+        "variants": [
+          {
+            "id": "direct",
+            "shape": "statement"
+          },
+          {
+            "id": "split",
+            "needs": [
+              "form"
+            ],
+            "shape": "columns"
+          },
+          {
+            "id": "form-only",
+            "needs": [
+              "form"
+            ],
+            "shape": "form"
+          }
+        ]
+      },
+      {
+        "id": "cta-close",
+        "needs": [],
+        "optional": true,
+        "skip_with_section": [
+          "contact"
+        ],
+        "variants": [
+          {
+            "id": "quiet",
+            "shape": "text"
+          }
+        ]
+      },
+      {
+        "id": "footer",
+        "needs": [],
+        "variants": [
+          {
+            "id": "minimal",
+            "shape": "bar"
+          },
+          {
+            "id": "large-name",
+            "shape": "statement"
+          }
+        ]
+      }
+    ],
+    "copy_file": "references/copy/copy-portfolio.md"
+  }
+}

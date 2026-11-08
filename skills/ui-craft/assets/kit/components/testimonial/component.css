@@ -1,0 +1,6 @@
+.quote { display: flex; flex-direction: column; gap: var(--space-4); }
+.quote blockquote { font-size: var(--text-lead); color: var(--ink); }
+.quote--large blockquote { font-family: var(--font-display); font-size: var(--text-h2); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); }
+.quote figcaption { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); }
+.quote__name { font-weight: 500; }
+.quote__role { color: var(--ink-2); }

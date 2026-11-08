@@ -1,0 +1,31 @@
+/* The look each project sets on <html>, from DESIGN.md. Load after base.css.
+   Every value is an existing token, so the type and spacing scales stay fixed.
+   :where keeps these at element weight, so a class such as .display or .small still wins. */
+
+:where(:root[data-type="quiet"]) h1 { font-size: var(--text-h2); }
+:where(:root[data-type="quiet"]) h2 { font-size: var(--text-h3); }
+:where(:root[data-type="loud"]) h1 { font-size: var(--text-display); }
+:where(:root[data-type="loud"]) h2 { font-size: var(--text-h1); line-height: var(--leading-tight); }
+
+:root[data-bands="banded"] main > .section:nth-of-type(even) { background: var(--surface); }
+:root[data-bands="ruled"] main > .section + .section { border-top: 1px solid var(--line); }
+
+:root[data-heads="center"] .section__head { text-align: center; }
+:root[data-heads="center"] .section__head p { margin-inline: auto; }
+:root[data-heads="center"] .section .narrow:has(.section__head) { margin-inline: auto; }
+@media (min-width: 1024px) {
+  /* A side column is narrow, so its heading stays at h2 size even when type is loud. */
+  :root[data-heads="side"] .section :is(.container, .narrow, .narrow > .about-text):has(> .section__head) {
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: var(--grid-gap); align-items: start;
+  }
+  :root[data-heads="side"] .section :is(.container, .narrow, .narrow > .about-text):has(> .section__head) > :not(.section__head) { grid-column: 2; }
+  :root[data-heads="side"] .section :is(.container, .narrow, .narrow > .about-text) > .section__head { grid-column: 1; grid-row: 1 / span 9; margin-bottom: 0; }
+  :root[data-heads="side"] .section :is(.container, .narrow, .narrow > .about-text) > .section__head h2 { font-size: var(--text-h2); }
+  :root[data-heads="side"] .section .narrow:has(> .section__head, > .about-text > .section__head) { max-width: none; }
+}
+
+:root[data-images="framed"] main .frame:not([data-parallax]) { padding: var(--space-2); border: 1px solid var(--line); background: var(--surface); }
+:root[data-images="mono"] main img { filter: grayscale(1); transition: filter var(--duration-enter) var(--ease-out); }
+@media (hover: hover) {
+  :root[data-images="mono"] main a:hover img, :root[data-images="mono"] main .frame:hover img { filter: none; }
+}

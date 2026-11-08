@@ -1,0 +1,268 @@
+{
+  "palettes": [
+    {
+      "id": "moss",
+      "mood": "calm",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.0048 160)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.008 160)",
+        "ink": "oklch(22% 0.008 160)",
+        "ink-2": "oklch(41% 0.008 160)",
+        "ink-3": "oklch(47% 0.008 160)",
+        "line": "oklch(89.5% 0.008 160)",
+        "line-strong": "oklch(60% 0.008 160)",
+        "accent": "oklch(44% 0.1 160)",
+        "on-accent": "oklch(98.5% 0.006 160)",
+        "accent-soft": "oklch(93% 0.035 160)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.0096 160)",
+        "surface": "oklch(21.5% 0.0096 160)",
+        "surface-2": "oklch(26% 0.0096 160)",
+        "ink": "oklch(94% 0.0048 160)",
+        "ink-2": "oklch(77% 0.0064 160)",
+        "ink-3": "oklch(70% 0.0064 160)",
+        "line": "oklch(31% 0.008 160)",
+        "line-strong": "oklch(58% 0.008 160)",
+        "accent": "oklch(79% 0.11 160)",
+        "on-accent": "oklch(19% 0.03 160)",
+        "accent-soft": "oklch(30% 0.050 160)"
+      }
+    },
+    {
+      "id": "ember",
+      "mood": "warm",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.0072 45)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.012 45)",
+        "ink": "oklch(22% 0.012 45)",
+        "ink-2": "oklch(41% 0.012 45)",
+        "ink-3": "oklch(47% 0.012 45)",
+        "line": "oklch(89.5% 0.012 45)",
+        "line-strong": "oklch(60% 0.012 45)",
+        "accent": "oklch(50% 0.15 45)",
+        "on-accent": "oklch(98.5% 0.006 45)",
+        "accent-soft": "oklch(93% 0.052 45)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.0144 45)",
+        "surface": "oklch(21.5% 0.0144 45)",
+        "surface-2": "oklch(26% 0.0144 45)",
+        "ink": "oklch(94% 0.0072 45)",
+        "ink-2": "oklch(77% 0.009600000000000001 45)",
+        "ink-3": "oklch(70% 0.009600000000000001 45)",
+        "line": "oklch(31% 0.012 45)",
+        "line-strong": "oklch(58% 0.012 45)",
+        "accent": "oklch(76% 0.13 45)",
+        "on-accent": "oklch(19% 0.03 45)",
+        "accent-soft": "oklch(30% 0.059 45)"
+      }
+    },
+    {
+      "id": "ink-blue",
+      "mood": "technical",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.0072 255)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.012 255)",
+        "ink": "oklch(22% 0.012 255)",
+        "ink-2": "oklch(41% 0.012 255)",
+        "ink-3": "oklch(47% 0.012 255)",
+        "line": "oklch(89.5% 0.012 255)",
+        "line-strong": "oklch(60% 0.012 255)",
+        "accent": "oklch(47% 0.14 255)",
+        "on-accent": "oklch(98.5% 0.006 255)",
+        "accent-soft": "oklch(93% 0.049 255)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.0144 255)",
+        "surface": "oklch(21.5% 0.0144 255)",
+        "surface-2": "oklch(26% 0.0144 255)",
+        "ink": "oklch(94% 0.0072 255)",
+        "ink-2": "oklch(77% 0.009600000000000001 255)",
+        "ink-3": "oklch(70% 0.009600000000000001 255)",
+        "line": "oklch(31% 0.012 255)",
+        "line-strong": "oklch(58% 0.012 255)",
+        "accent": "oklch(76% 0.12 255)",
+        "on-accent": "oklch(19% 0.03 255)",
+        "accent-soft": "oklch(30% 0.054 255)"
+      }
+    },
+    {
+      "id": "clay",
+      "mood": "editorial",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.0084 30)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.014 30)",
+        "ink": "oklch(22% 0.014 30)",
+        "ink-2": "oklch(41% 0.014 30)",
+        "ink-3": "oklch(47% 0.014 30)",
+        "line": "oklch(89.5% 0.014 30)",
+        "line-strong": "oklch(60% 0.014 30)",
+        "accent": "oklch(47% 0.11 30)",
+        "on-accent": "oklch(98.5% 0.006 30)",
+        "accent-soft": "oklch(93% 0.038 30)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.0168 30)",
+        "surface": "oklch(21.5% 0.0168 30)",
+        "surface-2": "oklch(26% 0.0168 30)",
+        "ink": "oklch(94% 0.0084 30)",
+        "ink-2": "oklch(77% 0.011200000000000002 30)",
+        "ink-3": "oklch(70% 0.011200000000000002 30)",
+        "line": "oklch(31% 0.014 30)",
+        "line-strong": "oklch(58% 0.014 30)",
+        "accent": "oklch(76% 0.09 30)",
+        "on-accent": "oklch(19% 0.03 30)",
+        "accent-soft": "oklch(30% 0.041 30)"
+      }
+    },
+    {
+      "id": "ochre",
+      "mood": "editorial",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.0096 80)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.016 80)",
+        "ink": "oklch(22% 0.016 80)",
+        "ink-2": "oklch(41% 0.016 80)",
+        "ink-3": "oklch(47% 0.016 80)",
+        "line": "oklch(89.5% 0.016 80)",
+        "line-strong": "oklch(60% 0.016 80)",
+        "accent": "oklch(48% 0.1 80)",
+        "on-accent": "oklch(98.5% 0.006 80)",
+        "accent-soft": "oklch(93% 0.035 80)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.0192 80)",
+        "surface": "oklch(21.5% 0.0192 80)",
+        "surface-2": "oklch(26% 0.0192 80)",
+        "ink": "oklch(94% 0.0096 80)",
+        "ink-2": "oklch(77% 0.0128 80)",
+        "ink-3": "oklch(70% 0.0128 80)",
+        "line": "oklch(31% 0.016 80)",
+        "line-strong": "oklch(58% 0.016 80)",
+        "accent": "oklch(81% 0.12 80)",
+        "on-accent": "oklch(19% 0.03 80)",
+        "accent-soft": "oklch(30% 0.054 80)"
+      }
+    },
+    {
+      "id": "graphite",
+      "mood": "neutral",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.0024 250)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.004 250)",
+        "ink": "oklch(22% 0.004 250)",
+        "ink-2": "oklch(41% 0.004 250)",
+        "ink-3": "oklch(47% 0.004 250)",
+        "line": "oklch(89.5% 0.004 250)",
+        "line-strong": "oklch(60% 0.004 250)",
+        "accent": "oklch(30% 0.02 250)",
+        "on-accent": "oklch(98.5% 0.006 250)",
+        "accent-soft": "oklch(93% 0.007 250)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.0048 250)",
+        "surface": "oklch(21.5% 0.0048 250)",
+        "surface-2": "oklch(26% 0.0048 250)",
+        "ink": "oklch(94% 0.0024 250)",
+        "ink-2": "oklch(77% 0.0032 250)",
+        "ink-3": "oklch(70% 0.0032 250)",
+        "line": "oklch(31% 0.004 250)",
+        "line-strong": "oklch(58% 0.004 250)",
+        "accent": "oklch(90% 0.01 250)",
+        "on-accent": "oklch(19% 0.03 250)",
+        "accent-soft": "oklch(30% 0.005 250)"
+      }
+    },
+    {
+      "id": "plum",
+      "mood": "characterful",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.006 340)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.01 340)",
+        "ink": "oklch(22% 0.01 340)",
+        "ink-2": "oklch(41% 0.01 340)",
+        "ink-3": "oklch(47% 0.01 340)",
+        "line": "oklch(89.5% 0.01 340)",
+        "line-strong": "oklch(60% 0.01 340)",
+        "accent": "oklch(46% 0.14 340)",
+        "on-accent": "oklch(98.5% 0.006 340)",
+        "accent-soft": "oklch(93% 0.049 340)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.012 340)",
+        "surface": "oklch(21.5% 0.012 340)",
+        "surface-2": "oklch(26% 0.012 340)",
+        "ink": "oklch(94% 0.006 340)",
+        "ink-2": "oklch(77% 0.008 340)",
+        "ink-3": "oklch(70% 0.008 340)",
+        "line": "oklch(31% 0.01 340)",
+        "line-strong": "oklch(58% 0.01 340)",
+        "accent": "oklch(77% 0.12 340)",
+        "on-accent": "oklch(19% 0.03 340)",
+        "accent-soft": "oklch(30% 0.054 340)"
+      }
+    },
+    {
+      "id": "lagoon",
+      "mood": "calm",
+      "kinds": [
+        "portfolio"
+      ],
+      "light": {
+        "bg": "oklch(98.2% 0.006 205)",
+        "surface": "oklch(100% 0 0)",
+        "surface-2": "oklch(95% 0.01 205)",
+        "ink": "oklch(22% 0.01 205)",
+        "ink-2": "oklch(41% 0.01 205)",
+        "ink-3": "oklch(47% 0.01 205)",
+        "line": "oklch(89.5% 0.01 205)",
+        "line-strong": "oklch(60% 0.01 205)",
+        "accent": "oklch(46% 0.09 205)",
+        "on-accent": "oklch(98.5% 0.006 205)",
+        "accent-soft": "oklch(93% 0.032 205)"
+      },
+      "dark": {
+        "bg": "oklch(17% 0.012 205)",
+        "surface": "oklch(21.5% 0.012 205)",
+        "surface-2": "oklch(26% 0.012 205)",
+        "ink": "oklch(94% 0.006 205)",
+        "ink-2": "oklch(77% 0.008 205)",
+        "ink-3": "oklch(70% 0.008 205)",
+        "line": "oklch(31% 0.01 205)",
+        "line-strong": "oklch(58% 0.01 205)",
+        "accent": "oklch(78% 0.1 205)",
+        "on-accent": "oklch(19% 0.03 205)",
+        "accent-soft": "oklch(30% 0.045 205)"
+      }
+    }
+  ]
+}

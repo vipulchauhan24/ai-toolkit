@@ -1,0 +1,10 @@
+.proof-sentence { font-family: var(--font-display); font-size: var(--text-h2); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); max-width: 28ch; }
+.proof-sentence strong { font-weight: inherit; color: var(--accent); }
+.proof-divided { display: grid; border-block: 1px solid var(--line); }
+.proof-divided .stat { padding-block: var(--space-6); }
+.proof-divided .stat + .stat { border-top: 1px solid var(--line); }
+@media (min-width: 768px) { .proof-divided { grid-template-columns: repeat(3, minmax(0, 1fr)); } .proof-divided .stat { padding: var(--space-8); } .proof-divided .stat:first-child { padding-left: 0; } .proof-divided .stat + .stat { border-top: 0; border-left: 1px solid var(--line); } }
+.proof-sourced { display: grid; gap: var(--space-8); }
+.proof-sourced__item { display: grid; gap: var(--space-2); padding-bottom: var(--space-8); border-bottom: 1px solid var(--line); }
+.proof-sourced__note { font-size: var(--text-sm); color: var(--ink-2); max-width: var(--prose); }
+@media (min-width: 768px) { .proof-sourced__item { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--space-8); align-items: baseline; } }

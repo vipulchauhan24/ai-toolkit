@@ -1,0 +1,11 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; hanging-punctuation: first last; }
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd, ol, ul { margin: 0; }
+:where(ol[class], ul[class]) { list-style: none; padding: 0; } /* :where keeps this from beating component rules */
+img, svg, video, canvas { display: block; max-width: 100%; }
+img, video { height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; }
+table { border-collapse: collapse; }
+[hidden] { display: none !important; }

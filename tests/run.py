@@ -37,6 +37,7 @@ import datetime
 import glob
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -83,6 +84,12 @@ SCRIPT_COVERAGE = {
     "skills/orchestrator/scripts/engine.py": "tests/fixtures/orchestrator",
     "skills/spec-writer/scripts/check_spec.py": "tests/fixtures/spec-writer",
     "skills/ui-craft/scripts/check_copy.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/deal.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/contrast.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/icons.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/audit.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/sameness.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/preview.py": "tests/fixtures/ui-craft",
     "skills/visual-qa/scripts/capture.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/report.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/page_checks.js": "tests/fixtures/visual-qa",
@@ -572,6 +579,7 @@ def cmd_scripts(_args):
     engine_tests(r)
     visual_qa_tests(r)
     copy_check_tests(r)
+    ui_craft_script_tests(r)
 
     return r.finish()
 
@@ -612,7 +620,48 @@ def ui_craft_reference_checks(r):
                 broken.append("%s -> %s" % (f.name, ref))
     r.check("ui-craft: every token used is defined in system.md", not used, str(used)[:300])
     r.check("ui-craft: every file a reference names exists", not broken, "; ".join(broken)[:300])
-    links = [rel(f) for f in sorted(base.rglob("*.md")) if f.name != "NOTICE.md" and "http" in read(f)]
+    # The kit agrees with the token list, and every sample is complete.
+    kit = ROOT / "skills" / "ui-craft" / "assets" / "kit"
+    token_file = read(kit / "base" / "tokens.css")
+    in_tokens = set(re.findall(r"(--[a-z][a-z0-9-]*):", token_file))
+    r.check("ui-craft: every token in system.md has a value in tokens.css", defined <= in_tokens, str(sorted(defined - in_tokens))[:300])
+    unknown = {}
+    for f in sorted(kit.rglob("*.css")):
+        if "examples" in f.parts:
+            continue
+        for token in re.findall(r"var\((--[a-z][a-z0-9-]*)", read(f)):
+            if token not in defined and not token.startswith("--_"):
+                unknown.setdefault(token, set()).add(f.name)
+    r.check("ui-craft: kit CSS uses only listed tokens", not unknown, str(unknown)[:300])
+    missing_links, no_markers = [], []
+    for f in sorted(kit.rglob("*.html")):
+        text = read(f)
+        if "sample:start" not in text or "sample:end" not in text:
+            no_markers.append(rel(f))
+        for ref in re.findall(r'(?:href|src)="([^"#:]+\.(?:css|js|svg))"', text):
+            if not (f.parent / ref).exists():
+                missing_links.append("%s -> %s" % (f.name, ref))
+    r.check("ui-craft: every file a kit sample loads exists", not missing_links, "; ".join(missing_links)[:300])
+    r.check("ui-craft: every kit sample has sample markers", not no_markers, ", ".join(no_markers)[:300])
+    kinds = json.loads(read(ROOT / "skills" / "ui-craft" / "assets" / "data" / "site-kinds.json"))
+    absent = []
+    for kind in kinds.values():
+        absent += ["hero/" + h["id"] for h in kind["heroes"] if not (kit / "sections" / "hero" / (h["id"] + ".html")).is_file()]
+        for s in kind["sections"]:
+            absent += [s["id"] + "/" + v["id"] for v in s["variants"] if not (kit / "sections" / s["id"] / (v["id"] + ".html")).is_file()]
+    r.check("ui-craft: every variant the picker can choose exists in the kit", not absent, ", ".join(absent)[:300])
+    r.check("ui-craft: no page shell is offered as a model", all("shell" not in kind for kind in kinds.values()) and "as the model" not in read(ROOT / "skills" / "ui-craft" / "SKILL.md"))
+    motion = read(kit / "motion" / "motion.js")
+    still_block = re.search(r"if \(!still\) \{(.*?)\n\}", motion[motion.rindex("if (!still)"):], re.S)
+    r.check("ui-craft: parallax only runs without reduced motion", still_block is not None and "parallax();" in still_block.group(1) and motion.count("parallax();") == 1)
+    r.check("ui-craft: parallax is static below 768px", 'matchMedia("(min-width: 768px)")' in motion)
+    r.check("ui-craft: parallax sets its transform only from the script", "transform" not in re.sub(r"prefers-reduced-motion.*", "", "".join(ln for ln in read(kit / "motion" / "motion.css").splitlines() if "data-parallax" in ln)))
+    rc, out = run_py(ROOT / "skills" / "ui-craft" / "scripts" / "audit.py", [kit])
+    r.check("ui-craft: the kit passes its own audit", rc == 0, out[-300:])
+    rc, out = run_py(ROOT / "skills" / "ui-craft" / "scripts" / "contrast.py", [ROOT / "skills" / "ui-craft" / "assets" / "data" / "palettes.json"])
+    r.check("ui-craft: every palette passes the contrast check", rc == 0, out[-300:])
+
+    links = [rel(f) for f in sorted(base.rglob("*.md")) if f.name not in ("NOTICE.md", "review.md") and "http" in read(f)]
     r.check("ui-craft: working files hold rules only, with no links", not links, ", ".join(links))
 
 
@@ -649,6 +698,215 @@ def copy_check_tests(r):
         r.check("check_copy.py: a vague button warns but passes", rc == 0 and "WARN" in out and "button" in out, out[-200:])
         rc, out = run_py(script, ["--facts", tmp / "absent.md", page])
         r.check("usage error: check_copy.py with a missing --facts file exits 2", rc == 2, "exit %d" % rc)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def ui_craft_script_tests(r):
+    """deal.py, sameness.py, preview.py, contrast.py, icons.py and audit.py."""
+    scripts = ROOT / "skills" / "ui-craft" / "scripts"
+    deal, contrast, icons, audit = scripts / "deal.py", scripts / "contrast.py", scripts / "icons.py", scripts / "audit.py"
+    sameness, preview = scripts / "sameness.py", scripts / "preview.py"
+    tmp = Path(tempfile.mkdtemp(prefix="craft-"))
+    try:
+        history = tmp / "history.json"
+        def run_deal(name, has, *more):
+            return run_py(deal, ["--kind", "portfolio", "--has", has, "--out", tmp / name, "--history", history] + list(more))
+        rc, out = run_deal("a", "numbers,projects,experience,skills", "--seed", "1")
+        made = all((tmp / "a" / n).is_file() for n in ("DESIGN.md", "design.json", "design.css"))
+        r.check("deal.py: writes DESIGN.md, design.json and design.css", rc == 0 and made, out[-300:])
+        rc2, out2 = run_py(contrast, [tmp / "a" / "design.css"])
+        r.check("deal.py: the design.css it writes passes contrast", rc2 == 0, out2[-300:])
+        rc, out = run_deal("a", "numbers,projects")
+        r.check("deal.py: never overwrites an existing DESIGN.md", rc == 1 and "exists" in out, out[-200:])
+        rc, out = run_deal("a", "numbers,projects", "--force", "--seed", "2")
+        r.check("deal.py: --force replaces it", rc == 0, out[-200:])
+        rc, out = run_deal("bare", "", "--seed", "3")
+        plan = json.loads(read(tmp / "bare" / "design.json"))
+        ids = [s["id"] for s in plan["sections"]]
+        r.check("deal.py: no section without its material", rc == 0 and not {"projects", "experience", "skills-stack", "proof-stats", "testimonials"} & set(ids), str(ids))
+        r.check("deal.py: no hero that needs missing material", plan["hero"] not in ("proof-panel", "split"), plan["hero"])
+        history.write_text("[]", encoding="utf-8")
+        looks = []
+        for i in range(4):
+            run_deal("run%d" % i, "numbers,images,projects,experience,skills", "--seed", str(i + 10))
+            d = json.loads(read(tmp / ("run%d" % i) / "design.json"))
+            looks.append((d["hero"], d["palette"], d["fonts"]))
+        r.check("deal.py: consecutive projects get different heroes and palettes", len({x[0] for x in looks[:3]}) == 3 and len({x[1] for x in looks[:3]}) == 3, str(looks))
+        rc, out = run_py(deal, ["--kind", "saas", "--out", tmp / "s", "--history", history])
+        r.check("deal.py: a kind with no data fails clearly", rc == 1 and "no design data" in out, out[-200:])
+        rc, out = run_py(deal, ["--kind", "portfolio", "--has", "unicorns", "--out", tmp / "s", "--history", history])
+        r.check("usage error: deal.py with unknown material exits 2", rc == 2, "exit %d" % rc)
+
+        # New options, section order and the concept file
+        full = "numbers,images,portrait,projects,experience,skills,form"
+        history.write_text("[]", encoding="utf-8")
+        orders, seen = [], {"type_contrast": set(), "backgrounds": set(), "headings": set(), "images": set()}
+        bad_order = []
+        for i in range(30):
+            name = "opt%d" % i
+            run_deal(name, full, "--seed", str(i))
+            d = json.loads(read(tmp / name / "design.json"))
+            ids = [x["id"] for x in d["sections"]]
+            orders.append(tuple(ids))
+            for field in seen:
+                seen[field].add(d[field])
+            if ids[-1] != "footer" or ids[-2] != "contact" or ids[0] not in ("projects", "proof-stats", "experience"):
+                bad_order.append(ids)
+            if d["parallax"] and (any(x["variant"] == "timeline" for x in d["sections"]) or d["motion"] == "quiet"):
+                bad_order.append(("parallax", d["parallax"]))
+        r.check("deal.py: footer last, contact near the end, a strong section first, parallax within its budget", not bad_order, str(bad_order)[:300])
+        r.check("deal.py: the middle of the page is shuffled", len(set(orders)) >= 10, "%d orders" % len(set(orders)))
+        r.check("deal.py: every new option gets used", all(len(v) == 3 for v in seen.values()), str(seen))
+        attrs = read(tmp / "opt0" / "DESIGN.md")
+        r.check("deal.py: DESIGN.md lists the html attributes", all(a in attrs for a in ("data-type=", "data-bands=", "data-heads=", "data-images=")), attrs[:200])
+        rc, out = run_deal("noimg", "projects,experience", "--seed", "4")
+        d = json.loads(read(tmp / "noimg" / "design.json"))
+        r.check("deal.py: no images, so no image treatment or parallax", rc == 0 and d["images"] == "none" and d["parallax"] is None, str(d)[:200])
+        def with_concept(name, concept, has=full, *more):
+            f = tmp / (name + ".json")
+            f.write_text(json.dumps(concept), encoding="utf-8")
+            return run_deal(name, has, "--concept", f, *more)
+        concept = {"name": "Departures board", "hero": "custom", "palette": "graphite", "fonts": "geist", "radius": "round", "motion": "standard", "type_contrast": "loud",
+                   "backgrounds": "ruled", "headings": "side", "images": "mono", "parallax": "about", "order": ["about", "projects", "contact", "footer"],
+                   "sections": {"projects": "list-rows", "about": "text-portrait"}, "signature": {"id": "flight-board", "after": "projects", "fallback": "experience/rows"}}
+        before = read(history)
+        rc, out = with_concept("con", concept, full, "--no-history")
+        d = json.loads(read(tmp / "con" / "design.json"))
+        shape = (d["hero"], d["palette"], d["fonts"], d["radius"], d["type_contrast"], d["backgrounds"], d["headings"], d["images"], d["parallax"], [x["id"] for x in d["sections"]], d["concept"])
+        want = ("custom", "graphite", "geist", "round", "loud", "ruled", "side", "mono", "about", ["about", "projects", "flight-board", "contact", "footer"], "Departures board")
+        r.check("deal.py --concept: overrules every pick", rc == 0 and shape == want, out[-300:] + str(shape))
+        r.check("deal.py --no-history: leaves the history alone", read(history) == before)
+        text = read(tmp / "con" / "DESIGN.md")
+        r.check("deal.py --concept: DESIGN.md names the concept, signature and parallax", "Departures board" in text and "signature, fallback `experience/rows`" in text and "| parallax |" in text, text[-900:])
+        bad_concepts = {
+            "material": ({"hero": "split"}, "numbers", "hero"),
+            "section-material": ({"order": ["projects", "footer"]}, "numbers", "needs material"),
+            "palette": ({"palette": "nope"}, full, "palette"),
+            "footer": ({"order": ["about", "contact"]}, full, "end with footer"),
+            "closing": ({"order": ["contact", "about", "footer"]}, full, "may follow"),
+            "variant": ({"sections": {"contact": "nope"}}, full, "variant"),
+            "fallback": ({"order": ["projects", "footer"], "signature": {"id": "x", "after": "hero", "fallback": "projects/list-rows"}}, full, "already on the page"),
+            "parallax-images": ({"parallax": "about"}, "numbers", "needs real images"),
+            "parallax-quiet": ({"motion": "quiet", "parallax": "hero", "hero": "split"}, full, "quiet"),
+            "parallax-timeline": ({"motion": "standard", "hero": "split", "parallax": "hero", "sections": {"experience": "timeline"}}, full, "timeline"),
+            "parallax-target": ({"motion": "standard", "parallax": "contact", "sections": {"experience": "rows"}}, full, "not an image section"),
+        }
+        for name, (c, has, expect) in bad_concepts.items():
+            rc, out = with_concept("bad-" + name, c, has, "--history", tmp / "h2.json")
+            r.check("deal.py --concept: refuses " + name, rc == 1 and expect in out and not (tmp / ("bad-" + name) / "DESIGN.md").exists(), out[-300:])
+        notjson = tmp / "broken.json"
+        notjson.write_text("{", encoding="utf-8")
+        rc, out = run_deal("x", full, "--concept", notjson)
+        r.check("usage error: deal.py with an unreadable concept exits 2", rc == 2, "exit %d" % rc)
+        notjson.write_text('{"mood": "calm"}', encoding="utf-8")
+        rc, out = run_deal("x", full, "--concept", notjson)
+        r.check("usage error: deal.py with an unknown concept key exits 2", rc == 2, "exit %d" % rc)
+
+        # sameness.py
+        hist = tmp / "same.json"
+        hist.write_text("[]", encoding="utf-8")
+        run_deal("s1", full, "--seed", "1", "--history", hist)
+        design = tmp / "s1" / "design.json"
+        rc, out = run_py(sameness, [design, "--history", hist])
+        r.check("sameness.py: ignores its own entry in the history", rc == 0 and "no earlier" in out, out[-200:])
+        entries = json.loads(read(hist))
+        twin = dict(entries[0], run="other", at="2026-01-01T00:00:00Z")
+        hist.write_text(json.dumps([twin] + entries), encoding="utf-8")
+        rc, out = run_py(sameness, [design, "--history", hist])
+        r.check("sameness.py: an identical structure warns", rc == 0 and "WARN 100%" in out and "RESULT  WARN" in out, out[-200:])
+        other = dict(twin, hero="zzz", order=["a", "b"], shapes=["c", "d"], type_contrast="zzz", backgrounds="zzz", headings="zzz", images="zzz")
+        hist.write_text(json.dumps([other] + entries), encoding="utf-8")
+        rc, out = run_py(sameness, [design, "--history", hist])
+        r.check("sameness.py: a different structure passes", rc == 0 and "RESULT  PASS" in out, out[-200:])
+        custom = json.loads(read(design))
+        custom["hero"] = "custom"
+        custom_file = tmp / "custom.json"
+        custom_file.write_text(json.dumps(custom), encoding="utf-8")
+        hist.write_text(json.dumps([dict(twin, hero="custom")] + entries), encoding="utf-8")
+        rc, out = run_py(sameness, [custom_file, "--history", hist, "--threshold", "0.99"])
+        r.check("sameness.py: two custom heroes are not a repeat", "RESULT  PASS" in out, out[-200:])
+        hist.write_text(json.dumps([{"hero": "x", "palette": "y"}]), encoding="utf-8")
+        rc, out = run_py(sameness, [design, "--history", hist])
+        r.check("sameness.py: skips old entries with no structure", "no earlier" in out, out[-200:])
+        rc, out = run_py(sameness, [tmp / "absent.json"])
+        r.check("usage error: sameness.py with a missing file exits 2", rc == 2, "exit %d" % rc)
+        rc, out = run_py(sameness, [design, "--threshold", "7"])
+        r.check("usage error: sameness.py with a bad threshold exits 2", rc == 2, "exit %d" % rc)
+
+        # preview.py, with a stand-in for the browser
+        site = tmp / "previews"
+        site.mkdir()
+        for n in "abc":
+            (site / (n + ".html")).write_text("<h1>x</h1>", encoding="utf-8")
+        fake = "python3 -I " + str(FIXTURES / "ui-craft" / "preview" / "fake_cli.py")
+        rc, out = run_py(preview, ["--dir", site, "--names", "a,b,c", "--cli", fake])
+        shots = sorted(f.name for f in (site / "shots").glob("*.png"))
+        r.check("preview.py: saves each preview at both widths", rc == 0 and shots == sorted("%s-%d.png" % (n, w) for n in "abc" for w in (1440, 390)), out[-300:] + str(shots))
+        log = read(site / "shots" / ".browser" / "cli.log")
+        r.check("preview.py: visible browser, its own session, closed at the end", "--headed" in log and log.startswith("-s=ui-craft-preview-") and log.strip().splitlines()[-1].endswith("close"), log[:200])
+        r.check("preview.py: serves only on this machine", "http://127.0.0.1:" in log, log[:300])
+        os.environ["FAKE_CLI_FAIL"] = "goto"
+        try:
+            rc, out = run_py(preview, ["--dir", site, "--names", "a", "--cli", fake])
+        finally:
+            del os.environ["FAKE_CLI_FAIL"]
+        r.check("preview.py: a browser failure reports FAIL and still closes", rc == 1 and "FAIL goto failed" in out and read(site / "shots" / ".browser" / "cli.log").strip().splitlines()[-1].endswith("close"), out[-200:])
+        rc, out = run_py(preview, ["--dir", site, "--names", "zzz", "--cli", fake])
+        r.check("usage error: preview.py with a missing preview exits 2", rc == 2, "exit %d" % rc)
+        rc, out = run_py(preview, ["--dir", site, "--names", "../a", "--cli", fake])
+        r.check("usage error: preview.py refuses a path as a name", rc == 2, "exit %d" % rc)
+
+        low = tmp / "low.css"
+        low.write_text(read(tmp / "a" / "design.css").replace("--ink-2: oklch(41%", "--ink-2: oklch(80%"), encoding="utf-8")
+        rc, out = run_py(contrast, [low])
+        r.check("contrast.py: pale text fails", rc == 1 and "--ink-2 on --bg" in out, out[-300:])
+        rc, out = run_py(contrast, [])
+        r.check("usage error: contrast.py with no file exits 2", rc == 2, "exit %d" % rc)
+
+        src = tmp / "tabler"
+        src.mkdir()
+        (src / "star.svg").write_text("<!-- tags -->\n<svg></svg>\n", encoding="utf-8")
+        page = tmp / "page.html"
+        page.write_text('<i data-icon="star"></i><i data-icon="brand-postgresql"></i>', encoding="utf-8")
+        rc, out = run_py(icons, ["--out", tmp / "ic", "--base", src.as_uri(), page])
+        r.check("icons.py: copies what exists, without its comment", rc == 0 and read(tmp / "ic" / "star.svg").startswith("<svg"), out[-300:])
+        r.check("icons.py: lists what is missing, and draws nothing", "MISSING brand-postgresql" in out and not (tmp / "ic" / "brand-postgresql.svg").exists(), out[-300:])
+        rc, out = run_py(icons, ["--out", tmp / "ic", "--names", "../evil"])
+        r.check("usage error: icons.py refuses a path as a name", rc == 2, "exit %d" % rc)
+
+        bad = {
+            "a.css": (".x { color: #ff0000; }", "raw-colour"), "b.css": (".x { transition: all 200ms; }", "transition-all"),
+            "c.css": (".x { transition: width 200ms; }", "layout-animation"), "d.css": (".x { outline: none; }", "outline-removed"),
+            "e.html": ('<div style="margin:0"></div>', "inline-style"), "f.html": ('<img src="a.png" width="1" height="1">', "img-alt"),
+            "g.html": ('<img src="a.png" alt="x">', "img-size"),
+            "h.html": ('<div data-parallax><h2>Hello</h2><img src="a.png" alt="x" width="1" height="1"></div>', "parallax-text"),
+            "i.html": ('<div data-parallax><img src="a.png" alt="x" width="1" height="1"> Hello</div>', "parallax-text"),
+            "j.html": ('<div data-parallax></div>', "parallax-no-image"),
+            "k.html": ('<img data-parallax src="a.png" alt="x" width="1" height="1">', "parallax-frame"),
+            "l.html": ('<div data-parallax><img src="a.png" alt="x" width="1" height="1"></div><ol data-timeline></ol>', "scroll-linked"),
+            "m.html": ('<h1 data-parallax>Moving words</h1>', "parallax-text"),
+        }
+        for name, (content, cid) in bad.items():
+            f = tmp / name
+            f.write_text(content, encoding="utf-8")
+            rc, out = run_py(audit, [f])
+            r.check("audit.py: catches " + cid, rc == 1 and cid in out, out[-200:])
+        ok = tmp / "ok.css"
+        ok.write_text(".x { color: var(--ink); outline: none; } /* audit:ok ring on parent */\n", encoding="utf-8")
+        r.check("audit.py: audit:ok skips a line", run_py(audit, [ok])[0] == 0)
+        ok = tmp / "ok.html"
+        ok.write_text('<div class="frame" data-parallax><div><img src="a.png" alt="x" width="1" height="1"></div></div><p>Words after the frame</p>', encoding="utf-8")
+        r.check("audit.py: a good parallax frame passes", run_py(audit, [ok])[0] == 0)
+        rc, out = run_py(audit, [])
+        r.check("usage error: audit.py with no file exits 2", rc == 2, "exit %d" % rc)
+
+        if shutil.which("node"):
+            for js in ("motion.js", "theme.js"):
+                copy = tmp / (js + ".mjs")
+                copy.write_text(read(ROOT / "skills" / "ui-craft" / "assets" / "kit" / "motion" / js), encoding="utf-8")
+                p = subprocess.run(["node", "--check", str(copy)], capture_output=True, text=True)
+                r.check("kit script parses: " + js, p.returncode == 0, p.stderr[-300:])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

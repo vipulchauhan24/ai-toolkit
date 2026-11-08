@@ -36,7 +36,8 @@
     }
     return false;
   };
-  const concealed = (el) => el.closest('[aria-hidden="true"],[hidden],[inert],dialog:not([open])') !== null;
+  const aboveThePage = (el) => el.getBoundingClientRect().bottom + window.scrollY <= 0; // a skip link waiting off-screen
+  const concealed = (el) => aboveThePage(el) || el.closest('[aria-hidden="true"],[hidden],[inert],dialog:not([open])') !== null;
 
   const all = [...document.body.querySelectorAll("*")].filter((el) => !el.closest("script,style,noscript,template"));
   const textEls = all.filter((el) => !el.closest("svg") && ownText(el).length >= 2 && shown(el));

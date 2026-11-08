@@ -1,0 +1,11 @@
+.theme-toggle { position: relative; display: inline-flex; align-items: center; justify-content: center; width: var(--control-md); height: var(--control-md); border-radius: var(--radius-md); color: var(--ink-2); transition: background-color var(--duration-hover) var(--ease-out); }
+.theme-toggle .icon { position: absolute; transition: opacity var(--duration-hover) var(--ease-out), transform var(--duration-enter) var(--ease-out); }
+.theme-toggle .icon--moon { opacity: 0; transform: rotate(-45deg); }
+:root[data-theme="dark"] .theme-toggle .icon--moon { opacity: 1; transform: none; }
+:root[data-theme="dark"] .theme-toggle .icon--sun { opacity: 0; transform: rotate(45deg); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon--moon { opacity: 1; transform: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon--sun { opacity: 0; transform: rotate(45deg); }
+}
+@media (hover: hover) { .theme-toggle:hover { background: var(--surface-2); } }
+@media (pointer: coarse) { .theme-toggle { width: var(--touch); height: var(--touch); } }

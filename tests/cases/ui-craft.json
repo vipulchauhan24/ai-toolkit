@@ -16,7 +16,7 @@
       "ui-craft"
     ],
     "reads": [
-      "references/copy/copy\\.md",
+      "(?:references/)?copy/copy\\.md|\\bcopy\\.md copy-",
       "copy-portfolio\\.md",
       "copy-human\\.md",
       "python3 -I \\S*check_copy\\.py \\S*COPY\\.md"
@@ -82,5 +82,99 @@
     "post": [
       "python3 -I {repo}/skills/ui-craft/scripts/check_copy.py COPY.md"
     ]
+  },
+  {
+    "id": "ui-craft-builds-portfolio",
+    "tier": "slow",
+    "fixture": "ui-craft-projects",
+    "covers": [
+      "skills/ui-craft",
+      "skills/ui-craft/references/intake.md",
+      "skills/ui-craft/references/design-md.md",
+      "skills/ui-craft/references/review.md",
+      "skills/ui-craft/references/system/system.md",
+      "skills/ui-craft/references/motion/motion.md",
+      "skills/ui-craft/references/concept.md",
+      "skills/ui-craft/references/signature.md"
+    ],
+    "source": "ui-craft.md: Functional / Portfolio build",
+    "prompt": "Use the ai-toolkit:ui-craft skill to build my portfolio as a static site in the folder site/, from resume.md. Pass --history .history.json to deal.py. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(cp:*),Bash(mkdir:*),Bash(ls:*)",
+    "skills": [
+      "ui-craft"
+    ],
+    "reads": [
+      "concept\\.md",
+      "signature\\.md",
+      "system/system\\.md",
+      "python3 -I \\S*deal\\.py .*--concept",
+      "python3 -I \\S*audit\\.py",
+      "python3 -I \\S*check_copy\\.py",
+      "python3 -I \\S*sameness\\.py"
+    ],
+    "must": [
+      "(?i)live review skipped|not fetched|could not (?:be )?fetch|couldn.t fetch|no network|denied|unavailable|refused|not run"
+    ],
+    "files": [
+      {
+        "glob": "**/CONCEPTS.md",
+        "must": [
+          "(?m)^## A",
+          "(?m)^## B",
+          "(?m)^## C",
+          "(?m)^fails on someone else because:",
+          "(?m)^## chosen"
+        ]
+      },
+      {
+        "glob": "**/previews/a.html",
+        "must": [
+          "<h1",
+          "base/tokens\\.css"
+        ],
+        "must_not": [
+          "Noor Haddad"
+        ]
+      },
+      {
+        "glob": "**/previews/b.html",
+        "must": [
+          "<h1"
+        ]
+      },
+      {
+        "glob": "**/previews/c.html",
+        "must": [
+          "<h1"
+        ]
+      },
+      {
+        "glob": "**/concept.json",
+        "must": [
+          "\"name\""
+        ]
+      },
+      {
+        "glob": "**/DESIGN.md",
+        "must": [
+          "(?m)^## Sections",
+          "(?m)^- Concept: (?!none)"
+        ]
+      },
+      {
+        "glob": "**/index.html",
+        "must": [
+          "<h1"
+        ],
+        "must_not": [
+          "Noor Haddad",
+          "Tidewater"
+        ]
+      }
+    ],
+    "unchanged": [
+      "resume.md"
+    ],
+    "timeout": 1200
   }
 ]

@@ -1,0 +1,14 @@
+.xp-list { margin-top: var(--space-3); padding-left: 1.1em; list-style: disc; color: var(--ink-2); max-width: var(--prose); }
+.xp-list li + li { margin-top: var(--space-2); }
+.xp-title { font-size: var(--text-h3); font-family: var(--font-display); font-weight: 560; }
+.xp-tools { margin-top: var(--space-3); font-size: var(--text-sm); color: var(--ink-2); }
+.xp-rows { border-top: 1px solid var(--line); }
+.xp-row { display: grid; gap: var(--space-3); padding-block: var(--space-8); border-bottom: 1px solid var(--line); }
+.xp-row__when { font-size: var(--text-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+@media (min-width: 768px) { .xp-row { grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); gap: var(--space-8); } }
+.xp-co + .xp-co { margin-top: var(--space-16); }
+.xp-co__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2); padding-bottom: var(--space-4); margin-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
+.xp-co__role + .xp-co__role { margin-top: var(--space-8); }
+.xp-co__role h4 { font-size: var(--text-base); font-weight: 600; }
+.accordion summary .xp-summary { display: flex; flex-direction: column; }
+.accordion summary .xp-when { font-size: var(--text-sm); color: var(--ink-2); font-weight: 400; }

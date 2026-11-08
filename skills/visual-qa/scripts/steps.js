@@ -86,7 +86,8 @@ const shot = async () => {
   const log = listen();
   await page.setViewportSize({ width: CONFIG.width, height: CONFIG.height });
   await page.emulateMedia({ colorScheme: CONFIG.theme, reducedMotion: "no-preference" });
-  await page.goto(CONFIG.url, { waitUntil: "load" });
+  const response = await page.goto(CONFIG.url, { waitUntil: "load" });
+  if (response && response.status() >= 400) throw new Error("the page returned " + response.status() + ": " + CONFIG.url);
   await settle();
   let themeVia = "preference";
   if (CONFIG.theme === "dark" && CONFIG.lightBackground) {

@@ -15,6 +15,7 @@ Read this file for every build. Then read only the files you need.
 | The accessibility floor | `accessibility.md` |
 | Loading, empty, error, disabled and other states | `states.md` |
 | Dashboards, tables, settings, screens people work in | `app-screens.md` |
+| How things move | `../motion/motion.md` |
 | One component | `../components/<name>.md` |
 | One section of a page | `../sections/<name>.md` |
 
@@ -28,6 +29,8 @@ Read this file for every build. Then read only the files you need.
 | Centred layout with equal margins | Density: comfortable or compact |
 | How each component is built | Which sections exist, their order and variants |
 | Accessibility floor | Motion level and optional effect |
+| | Type contrast, section backgrounds, heading alignment, image treatment |
+| | The concept, and one section built from scratch |
 
 Never change a fixed value for one project. If something does not fit, change the layout.
 
@@ -115,6 +118,19 @@ This is the complete list. Component and section files may use only these names.
 | `--z-modal` | 300 |
 | `--z-toast` | 400 |
 | `--z-tooltip` | 500 |
+
+### Motion
+
+| Token | Value |
+|---|---|
+| `--duration-press` | 100ms |
+| `--duration-hover` | 150ms |
+| `--duration-enter` | 250ms |
+| `--duration-exit` | 180ms |
+| `--duration-reveal` | 400ms |
+| `--ease-out` | `cubic-bezier(0.22, 0.8, 0.3, 1)` |
+| `--ease-in` | `cubic-bezier(0.5, 0, 0.9, 0.4)` |
+| `--ease-in-out` | `cubic-bezier(0.45, 0, 0.2, 1)` |
 
 ### Colour
 

@@ -9,7 +9,7 @@ Everything sits on a 4px grid. Use the `--space-*` tokens only.
 | Side margin | `--gutter`: 24px on phones, growing to 64px. Never under 16px at any width |
 | Content width, most sections | `--container` |
 | Reading width: articles and long text | `--prose` |
-| Focused sections: FAQ, contact, a single statement | `--container-narrow` |
+| Focused sections: FAQ, contact, a single statement | `--container-narrow` as a max-width inside the normal container, so the left edge still lines up. Only a centred text group is centred in it |
 | Full-bleed images and colour bands | Up to `--container-wide`, or the full window. Their content stays in the container |
 | Section padding, top and bottom | `--section` |
 | Space above the first section under a fixed nav | `--nav-height` plus `--section` |
