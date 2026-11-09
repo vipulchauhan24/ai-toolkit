@@ -1,6 +1,6 @@
 {
   "name": "ai-toolkit",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Skills for building new products: a design system builder, a project planner that splits a spec into phases for a coding agent, a spec writer that turns a brief into a complete spec, an orchestrator that runs the phases through the skills in dependency order, a doc trimmer, a doc reviewer, a React and Next.js code skill, a Node.js skill, a Python skill (Django and FastAPI) and a Julia skill that write backend code to fixed rules and check it, stopping at the API and database boundaries, a UI developer that builds from a design system's tokens, a visual QA skill that opens a site in a visible browser and grades every screenshot, and a skill-runner subagent that runs named skills in the background and writes a report file.",
   "author": {
     "name": "Vipul Chauhan",
