@@ -71,6 +71,19 @@
   --warning: oklch(48% 0.1 75);
   --warning-soft: oklch(94% 0.05 85);
   --focus: oklch(55% 0.14 240);
+
+  /* Roles a colour combo can fill. Each defaults to an existing role, so a palette without them looks the same. */
+  --link: var(--ink);
+  --link-line: var(--accent);
+  --accent-2: var(--accent);
+  --on-accent-2: var(--on-accent);
+  --band: var(--surface);
+  --band-ink: var(--ink);
+  --band-ink-2: var(--ink-2);
+  --band-ink-3: var(--ink-3);
+  --band-line: var(--line);
+  --highlight: var(--accent-soft);
+  --on-highlight: var(--ink);
 }
 
 :root[data-theme="dark"] { color-scheme: dark; }

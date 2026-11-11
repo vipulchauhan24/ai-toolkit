@@ -8,3 +8,5 @@
 - Does not shrink or wrap: `flex: none; white-space: nowrap`.
 
 **Avoid:** a badge above every heading. Solid bright fills in lists. Two badges that say the same thing. "New" that never goes away.
+
+A combo's highlight colour is `.badge--highlight` (`--highlight` with `--on-highlight`), for tags and markers.

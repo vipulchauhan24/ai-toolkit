@@ -21,7 +21,7 @@
 - "Split this spec into phases." (project-planner)
 - "Write a design doc for the checkout flow." (not the spec template)
 - "Summarise this spec."
-- "Build the first screen from this spec." (ui-developer or frontend-react)
+- "Build the first screen from this spec." (ui-craft or frontend-react)
 - "Choose a database for this project."
 - "Write a README for this repo."
 - "Translate this spec into French."
@@ -37,6 +37,11 @@
 - Given: `partial-spec.md`, which follows the template but has empty lines in Data and Cross-cutting
 - When: the skill runs
 - Then: it keeps the existing answers word for word, fills only the empty lines (or marks them `Undecided`), writes the result to a new file and leaves `partial-spec.md` unchanged.
+
+**PDF brief**
+- Given: a brief as a PDF, and a run that cannot ask questions
+- When: the skill runs
+- Then: it reads the PDF with the Read tool, installs nothing, and the spec holds the brief's facts.
 
 **Missing input**
 - Given: a path to a file that does not exist

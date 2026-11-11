@@ -29,7 +29,7 @@ For whoever maintains `ui-craft`. The skill never reads this file, and agents do
 | [Diátaxis](https://diataxis.fr/how-to-guides/) | The four documentation kinds, writing a how-to | Fetched | Primary |
 | [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) | Writing tells, title case, what is not a tell. About encyclopedia text. The last 44,700 characters were not read | Fetched | Primary, dates quickly |
 | [taste-skill](https://github.com/Leonxlnx/taste-skill) | Fact sheet, counting habits, over-correction | Direct | Practitioner |
-| `ui-developer` copy rules in this repository | Argument-first method, headline budget idea. Adapted from taste-skill | Direct | Practitioner |
+| Copy rules of an earlier skill in this repository, since removed | Argument-first method, headline budget idea. Adapted from taste-skill | Direct | Practitioner |
 | [linear.app](https://linear.app/), [stripe.com](https://stripe.com/) | Real headlines, sentence case, proof, November 2026 | Fetched | Observation |
 | [brittanychiang.com](https://brittanychiang.com/) | Portfolio structure, and a test for false alarms in `check_copy.py` | Fetched | Observation |
 | [NN/g: Writing, snippets on one idea per paragraph](https://www.nngroup.com/articles/applying-writing-guidelines-web-pages/) | One idea per paragraph, as reported in a search result | Snippet | Check |
@@ -55,7 +55,7 @@ For whoever maintains `ui-craft`. The skill never reads this file, and agents do
 | [NN/g: Mobile navigation patterns](https://www.nngroup.com/articles/mobile-navigation-patterns/) | Visible navigation for few links, hidden menus are least discoverable | Fetched | Primary |
 | [Practical Typography: Line length](https://practicaltypography.com/line-length.html) | 45 to 90 characters | Fetched | Practitioner, respected |
 | [Vercel web interface guidelines](https://github.com/vercel-labs/web-interface-guidelines) | Focus, scroll margin, touch, safe areas, hover, images | Fetched | Primary |
-| `ui-developer/references/app-screens.md` in this repository | Ranges for sidebars, rows, type and colour on app screens, from its study of 23 real product screens. Adapted from taste-skill. Rewritten here | Direct | Practitioner, measured |
+| App-screen rules of an earlier skill in this repository, since removed | Ranges for sidebars, rows, type and colour on app screens, from its study of 23 real product screens. Adapted from taste-skill. Rewritten here | Direct | Practitioner, measured |
 
 The 44px touch target is a common platform convention. Apple's guideline page and Material's window-size page could not be loaded, so it is not confirmed from them. WCAG's own minimum is 24px.
 
@@ -97,6 +97,19 @@ Material 3's motion pages could not be loaded, so their tokens are not used. Sta
 
 `assets/kit/vendor/motion.js` is built from `motion` 14.10.1 with esbuild, exporting `animate` from `motion/mini` and `inView`, `scroll` and `stagger` from `motion` (about 8KB gzipped). Tabler icons are pinned at v3.50.0.
 
+## Colour combos
+
+`assets/data/combos.json` holds 24 combos, written for this skill, tagged by site kind and audience. They follow conventions common to editorial, product and local-business sites: a near-black text colour with a slightly warm or cool off-white, one saturated action colour, and in larger combos a pale band colour and a highlight. Every combo is generated into `palettes.json` by `scripts/colors.py`, which fails the build if any pair misses WCAG 2.2 AA in light or dark.
+
+Rules the derivation follows, and where they come from:
+
+- Contrast minimums: WCAG 2.2, 1.4.3 (text, 4.5:1, or 3:1 at 18.66px bold and 24px), and 1.4.11 (controls, 3:1).
+- Shades are mixed in OKLab and kept in sRGB by lowering chroma, as CSS Color 4 does when it maps a colour into the gamut.
+- Label colour by hue: yellows, ambers and limes carry dark labels. This is a design convention, not a standard.
+- Links that fail as text become ink with an underline in the action colour, so the colour still shows without failing 1.4.3.
+
+Found in the first portfolio test (2026-11-11): white on `#D9541E` is 4.01:1, so a brand orange with white labels fails AA. The skill now offers the nearest passing shade, large bold labels, the other label, or keeping it, and never swaps silently.
+
 ## Working defaults
 
 These are judgement calls, with no research behind them. Change them freely:
@@ -110,6 +123,7 @@ These are judgement calls, with no research behind them. Change them freely:
 - The spacing relationships, component padding and sizes that are not in the measurement table.
 - The variant lists in `sections/`, and which variant suits what.
 - The radius families.
+- The 24 combos, their audience tags, and the 0.68 lightness line for light or dark labels.
 
 ## Decisions
 

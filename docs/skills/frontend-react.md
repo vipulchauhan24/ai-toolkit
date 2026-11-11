@@ -2,7 +2,7 @@
 
 The frontend-react skill writes React code, and Next.js code when the project uses it, to a fixed set of rules and proves it with checks. It covers how the code is written: components, hooks, state, effects, forms, performance (request waterfalls, bundle size, re-renders), a typed data boundary, error boundaries, tests, and for Next.js the server and client component split, data fetching and hydration. It matches the project's own conventions first, and it runs the project's typecheck, lint, tests and build, then a React check script.
 
-It does not choose colors, tokens, spacing or component looks. Use ui-developer for that (see "Using it with ui-developer" below). It does not build APIs, databases or auth, and it is not for Vue, Svelte, Angular or plain HTML.
+It does not choose colors, tokens, spacing or component looks. Those come from ui-craft's `DESIGN.md` (see "Using it with ui-craft" below). It does not build APIs, databases or auth, and it is not for Vue, Svelte, Angular or plain HTML.
 
 ## What You Need
 
@@ -21,28 +21,22 @@ In Claude Code, open the project and ask for the React code:
 
 With a phase document from project-planner, give its path. The skill builds only the frontend scope the phase lists, types the data from the phase's contracts, and reports acceptance criteria by number. It stops with a Blocked report if the phase pins a stack the project doesn't match.
 
-## Using it with ui-developer
+## Using it with ui-craft
 
 The two skills are independent and don't call each other. Each one owns a different part of a UI task:
 
 | Skill          | Owns                                                                                   |
 | -------------- | -------------------------------------------------------------------------------------- |
-| ui-developer   | How it looks: the design system, tokens, no custom CSS, component states, the look-at list |
+| ui-craft       | How it looks: the copy, the concept, `DESIGN.md`, the sections and their motion        |
 | frontend-react | How the code is written: components, hooks, state, effects, data, forms, tests          |
 
-To get both in one run, name both skills in the prompt:
+Run ui-craft first, then frontend-react, on the same files:
 
 ```text
-Use ui-developer and frontend-react to build the billing settings screen with Ember.
+Use ui-craft and then frontend-react to build .plans/phases/phase-3-about.md.
 ```
 
-Or, with a phase document:
-
-```text
-Use ui-developer and frontend-react to build docs/phases/phase-3-link-list.md.
-```
-
-When both run, ui-developer decides appearance and frontend-react decides code structure. If they disagree on appearance, the design system wins. If they disagree on code structure, the React rules win. Both write the same files, so run them in one pass and not as two separate runs. Running only ui-developer works, but the React code then follows only the project's own conventions, not these rules. The orchestrator skill, when it exists, loads both for you.
+frontend-react never changes the look that `DESIGN.md` sets. In a project without `DESIGN.md`, the look follows the design system the spec names, or the project's existing styles. The orchestrator runs both, in that order, for each screen phase.
 
 ## What the Skill Does Not Do
 

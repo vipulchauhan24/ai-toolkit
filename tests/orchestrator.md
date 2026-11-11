@@ -17,7 +17,7 @@ The engine (`skills/orchestrator/scripts/engine.py`) is tested offline by `pytho
 
 ## Should NOT trigger
 
-- "Build this screen." (ui-developer)
+- "Build this screen." (frontend-react)
 - "Write this React component." (frontend-react)
 - "Write the Node service for orders." (backend-node)
 - "Plan this project using docs/spec.md." (project-planner)

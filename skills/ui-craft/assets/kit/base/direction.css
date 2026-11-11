@@ -7,7 +7,10 @@
 :where(:root[data-type="loud"]) h1 { font-size: var(--text-display); }
 :where(:root[data-type="loud"]) h2 { font-size: var(--text-h1); line-height: var(--leading-tight); }
 
-:root[data-bands="banded"] main > .section:nth-of-type(even) { background: var(--surface); }
+:root[data-bands="banded"] main > .section:nth-of-type(even) {
+  background: var(--band); color: var(--band-ink);
+  --ink: var(--band-ink); --ink-2: var(--band-ink-2); --ink-3: var(--band-ink-3); --line: var(--band-line); --link: var(--band-ink);
+}
 :root[data-bands="ruled"] main > .section + .section { border-top: 1px solid var(--line); }
 
 :root[data-heads="center"] .section__head { text-align: center; }

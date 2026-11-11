@@ -21,7 +21,7 @@ The north star is that the planner has nothing left to guess. Every line of the 
 
 - **Python 3 and the check script are required.** Run `python3 --version` and confirm `scripts/check_spec.py` exists in this skill's folder. If either is missing, write a Blocked report (see §6) that names what is missing and how to fix it (install Python 3, or restore the script), and stop. Do not write the spec without being able to check it.
 - Read `assets/spec-template.md` and `references/markdown-rules.md` in this skill's folder. If the template is missing, that is a Blocked report too.
-- Input is a file path or pasted text. With no input at all, interactive: ask once for a brief or the path to a spec. Non-interactive: Blocked, naming the missing input. A path that does not exist is Blocked.
+- Input is a file path or pasted text. Read a `.pdf` with the Read tool, which extracts its text (use its `pages` option for a long file). Use `pdftotext` only if the Read tool cannot open it. Never install a package (pip, npm, apt or any other) to read a document: if nothing can read it, ask for the text. With no input at all, interactive: ask once for a brief or the path to a spec. Non-interactive: Blocked, naming the missing input. A path that does not exist is Blocked.
 
 ## 1. Read the input
 

@@ -153,3 +153,7 @@ All values come from the palette and switch with the theme.
 | `--negative` `--negative-soft` | Errors, destructive actions |
 | `--warning` `--warning-soft` | Caution |
 | `--focus` | Focus ring |
+| `--link` `--link-line` | Text links and their underline. Links take the action colour only when it reads as text at 4.5:1 |
+| `--accent-2` `--on-accent-2` | A second button colour, only for two distinct actions of similar weight |
+| `--band` `--band-ink` `--band-ink-2` `--band-ink-3` `--band-line` | Banded section backgrounds and the text and lines on them |
+| `--highlight` `--on-highlight` | Tags, badges and markers |

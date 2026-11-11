@@ -15,8 +15,8 @@
 
 ## Should NOT trigger
 
-- "Build this screen." (ui-developer)
-- "Restyle this page." (ui-developer)
+- "Build this screen." (frontend-react)
+- "Restyle this page." (ui-craft)
 - "Write Playwright end-to-end tests for checkout."
 - "Run the unit tests."
 - "Review this React code against the rules." (frontend-react)

@@ -1,7 +1,7 @@
 ---
 name: ui-craft
 description: >
-  Designs and builds web pages from real facts: gathers the material, writes all the copy in COPY.md, proposes three concepts from that material with real previews, fixes the direction in DESIGN.md, composes the page using a kit of tested HTML, CSS and JS with subtle motion, and checks the result. Full build for portfolios and personal sites. For other kinds (SaaS, app screens, blog or docs, service, shop, local place, event) it writes the copy only, for now. Use for "build my portfolio", "make my personal site", "write the copy for this page", "this copy sounds like AI", "check this page copy". Not for app screens or product UI builds yet (use ui-developer), not for grading a finished site in a browser (use visual-qa), and not for tightening an existing document (use doc-trimmer).
+  Designs and builds web pages from real facts: gathers the material, writes all the copy in COPY.md, proposes three concepts from that material with real previews, fixes the direction in DESIGN.md, composes the page using a kit of tested HTML, CSS and JS with subtle motion, and checks the result. Full build for portfolios and personal sites. For other kinds (SaaS, app screens, blog or docs, service, shop, local place, event) it writes the copy only, for now. Use for "build my portfolio", "make my personal site", "write the copy for this page", "this copy sounds like AI", "check this page copy". Not for app screens or product UI builds yet, not for grading a finished site in a browser (use visual-qa), and not for tightening an existing document (use doc-trimmer).
 license: MIT
 compatibility: Needs file access and Python 3.9 or later. Installing fonts in a project needs npm. The live guidelines review needs network access.
 model: sonnet
@@ -11,10 +11,14 @@ model: sonnet
 
 Writes a page, then designs and builds it. **Intake -> copy -> concept -> direction -> plan -> build -> check -> report.**
 
-| Kind | What this skill does now |
-|---|---|
-| `portfolio` | The whole run |
-| Any other | Sections 1 to 2 only. Stop after the copy and say that building this kind is not available yet |
+| Request | Sections | Notes |
+|---|---|---|
+| Build a portfolio or personal site | 1 to 8 | The default for `portfolio` |
+| Design direction only, such as a planner's Design direction phase | 1 to 4, then 8 | No build. The report names the files for later phases |
+| A phase build: a phase document, and `DESIGN.md` exists | 5 to 8 | See "Phase builds" below |
+| Any other kind | 1, 2 and 8 | Copy only: say that building this kind is not available yet |
+
+**Phase builds.** Read `COPY.md`, `DESIGN.md` and the phase document. The phase document sets the scope and behaviour; `DESIGN.md` sets the look. Never deal again. Build only the sections the phase names, and leave every other section as it is. If the phase document gives colours, classes, sizes or markup that differ from `DESIGN.md`, follow `DESIGN.md` and list each difference in the report. A section `DESIGN.md` does not list gets a variant chosen as in section 5, added to `DESIGN.md` and `design.json`. Copy missing from `COPY.md` is written as in section 2 and checked. In section 7, check only the files this phase changed, and skip `sameness.py`.
 
 **Hard rules**
 
@@ -27,7 +31,7 @@ Writes a page, then designs and builds it. **Intake -> copy -> concept -> direct
 
 ## 0. Preflight
 
-Check that these exist in this skill's folder: `references/copy/copy.md`, `references/copy/copy-human.md`, `references/system/system.md`, `scripts/check_copy.py`, `scripts/deal.py`, `scripts/audit.py`, `scripts/sameness.py`, `references/concept.md`, `references/signature.md`, and that `python3` runs. If one is missing, say so and stop.
+Check that these exist in this skill's folder: `references/copy/copy.md`, `references/copy/copy-human.md`, `references/system/system.md`, `scripts/check_copy.py`, `scripts/deal.py`, `scripts/colors.py`, `scripts/audit.py`, `scripts/sameness.py`, `references/concept.md`, `references/signature.md`, and that `python3` runs. If one is missing, say so and stop.
 
 Run shell commands one at a time, with nothing chained. If one is refused, try the plain single command before deciding the shell is unavailable.
 
@@ -78,7 +82,9 @@ Read `references/concept.md` and `references/signature.md` in full. Write `CONCE
 python3 -I <this-skill-folder>/scripts/deal.py --kind portfolio --has <material> --concept concept.json --out <project root>
 ```
 
-Work out `--has` as `intake.md` describes. It writes `DESIGN.md`, `design.json` and `design.css`. Read `references/design-md.md` and finish `DESIGN.md`.
+Work out `--has` and `--audience` as `intake.md` describes. Add `--colors colors.json` when the user's own colours are kept. It writes `DESIGN.md`, `design.json` and `design.css`, with every colour's role listed before any code.
+
+Each CHOICE line is a colour decision for the user: put its options to them, record the answer in `colors.json` under `decisions`, and deal again with `--force`. In a non-interactive run, keep the passing default and list the choice in the report. Read `references/design-md.md` and finish `DESIGN.md`.
 
 ## 5. Plan
 

@@ -34,20 +34,21 @@ idea: <one sentence, naming the thing the page does>
 facts: <the lines from ## facts that it draws on, word for word>
 first screen: <what fills it, and what the eye lands on first>
 structure: <section order, and what is left out>
-mood: <palette, fonts and type contrast, and why they suit the facts>
+mood: <colour combo, fonts and type contrast, and why they suit the facts and the audience>
 signature: <the one section built from scratch, from signature.md>
 fails on someone else because: <the fact it depends on>
 ```
 
 ## Concept files
 
-For each idea, write `previews/a.json`, `b.json` or `c.json`. Every key except `name` is optional, and any key left out is picked at random. Read `assets/data/site-kinds.json`, `palettes.json` and `fonts.json` for the allowed values.
+For each idea, write `previews/a.json`, `b.json` or `c.json`. Every key except `name` is optional, and any key left out is picked at random. Read `assets/data/site-kinds.json`, `palettes.json` and `fonts.json` for the allowed values. Choose the colour combo for the kind and the audience: each palette lists its `kinds` and `audiences`. If the user brought their own colours, leave `palette` out; `deal.py --colors` uses theirs.
 
 ```json
 {
   "name": "Departures board",
   "hero": "custom",
-  "palette": "ochre",
+  "palette": "graphite-paper-teal-night",
+  "two_actions": false,
   "fonts": "space-grotesk-ibm",
   "radius": "sharp",
   "motion": "standard",
@@ -62,6 +63,7 @@ For each idea, write `previews/a.json`, `b.json` or `c.json`. Every key except `
 }
 ```
 
+- `two_actions` is true only when the page has two distinct actions of similar weight, which allows a second button colour (`../system/color.md`).
 - `hero` is a kit hero, or `custom` when the preview's hero is built for this idea.
 - `order` leaves out the hero and the signature. It ends with `footer`, and `contact` comes after the middle sections. A section left out is dropped.
 - `images` is `none` when the project has no images or portrait.

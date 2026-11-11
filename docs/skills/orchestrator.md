@@ -44,6 +44,10 @@ Add `.orchestrator/` to the project's `.gitignore`. The route, the ledger and th
 8. **Visual QA.** If the phase changed the UI and the `visual-qa` skill is installed, you are asked whether to run it on that phase.
 9. **Merge.** You open a pull request from the pushed branch, merge it, and tell the orchestrator. It asks you to update the base branch, marks the phase merged, and the phases that waited for it can start.
 
+### Design direction and screens
+
+When the plan starts with a Design direction phase, the orchestrator runs `ui-craft` in your conversation, because you choose the concept, and commits `COPY.md`, `DESIGN.md` and the rest on that phase's branch. Later screen phases run `ui-craft` as a phase build, which builds only that phase's sections from `DESIGN.md`, followed by `frontend-react` for React and Next.js code. Projects without `DESIGN.md` use `frontend-react` alone, following the design system the spec names or the project's existing styles.
+
 ### What it parks
 
 A parked phase is one only you can do: buying a domain, setting a secret, launching, or anything the plan marks as a manual step. Phases that need a skill that is not installed (api-builder and the database skills until release 1.7.0) are parked too. Parked phases keep their place in the route and their dependents wait. When you have done the step, say so and the orchestrator marks it merged.

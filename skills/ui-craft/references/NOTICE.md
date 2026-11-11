@@ -1,8 +1,8 @@
 # Notice
 
-The files in `copy/` were written for this skill. Some of their ideas and structure come from the `taste-skill` project by Leonxlnx (<https://github.com/Leonxlnx/taste-skill>), directly and through this repository's earlier `ui-developer` copy rules, which were adapted from it. Those ideas include the fact sheet, counting writing habits per page, and watching for habits that replace the ones removed. `taste-skill` is licensed under the MIT License.
+The files in `copy/` were written for this skill. Some of their ideas and structure come from the `taste-skill` project by Leonxlnx (<https://github.com/Leonxlnx/taste-skill>), directly and through the copy rules of an earlier skill in this repository, since removed, which were adapted from it. Those ideas include the fact sheet, counting writing habits per page, and watching for habits that replace the ones removed. `taste-skill` is licensed under the MIT License.
 
-The files in `system/`, `components/` and `sections/` were also written for this skill. `system/app-screens.md` uses measurements from the study of real product screens in that earlier `ui-developer` file, which was adapted from `taste-skill`.
+The files in `system/`, `components/` and `sections/` were also written for this skill. `system/app-screens.md` uses measurements from the study of real product screens in that earlier skill, which was adapted from `taste-skill`.
 
 The patterns in `copy-human.md` also draw on Wikipedia's "Signs of AI writing" (<https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing>), paraphrased and credited here. Wikipedia text is available under CC BY-SA.
 

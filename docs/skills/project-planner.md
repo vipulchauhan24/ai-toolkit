@@ -85,6 +85,8 @@ If the parallelization note lists lanes, you can run each lane in its own git wo
 
 Phase 1 is a local walking skeleton. It connects every part of the system for one trivial flow and runs with one command.
 
+For a portfolio or personal site, a **Design direction** phase comes first. You do it in your conversation with `ui-craft`: it writes the copy, shows you three concepts as real first screens, and records the look in `DESIGN.md`. Colours or fonts named in your spec are passed to it, not written into phases. Later phase documents never set the look: no colour values, classes, sizes or markup for appearance. They say `Look: from DESIGN.md`.
+
 There is no delivery phase and no testing-only phase. You deploy and release yourself, and each phase carries its own test plan. Visual checks of the UI run separately.
 
 Every later phase adds one capability on top of a working system. Each phase document covers:

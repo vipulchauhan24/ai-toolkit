@@ -23,7 +23,7 @@ passes when it prints `RESULT  PASS`. FAIL and XPASS lines fail the run; WARN an
 XFAIL lines are listed in the release notes and do not.
 
 Tiers: fast (under about a minute each), slow (several minutes), network (needs
-internet, for Ember). `--tier fast` runs fast; `--tier slow` runs fast and slow
+internet). `--tier fast` runs fast; `--tier slow` runs fast and slow
 (the default); `--tier network` runs network only.
 
 Case files are tests/cases/*.json (see tests/README.md for the format).
@@ -74,7 +74,6 @@ DEFAULT_PATTERNS = {
 # Every script under skills/*/scripts needs a test. Later skill phases add their own entry.
 SCRIPT_COVERAGE = {
     "skills/frontend-react/scripts/check_react.py": "tests/fixtures/frontend-react",
-    "skills/ui-developer/scripts/audit_ui.py": "tests/fixtures/ui-developer",
     "skills/design-system-builder/scripts/check_contrast.py": "tests/fixtures/design-system-builder",
     "skills/design-system-builder/scripts/check_contrast.sh": "tests/fixtures/design-system-builder",
     "skills/design-system-builder/scripts/build_tokens_json.py": "tests/fixtures/design-system-builder",
@@ -90,6 +89,7 @@ SCRIPT_COVERAGE = {
     "skills/ui-craft/scripts/audit.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/sameness.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/preview.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/colors.py": "tests/fixtures/ui-craft",
     "skills/visual-qa/scripts/capture.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/report.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/page_checks.js": "tests/fixtures/visual-qa",
@@ -103,7 +103,6 @@ REQUIRED_FIXTURES = [
     "project-planner-pattern/conflicting-spec.md",
     "project-planner-greenfield",
     "frontend-react-projects",
-    "ui-developer-projects",
     "skill-runner",
     "orchestrator",
     "orchestrator-projects",
@@ -535,11 +534,9 @@ def cmd_scripts(_args):
 
     # Usage errors: no files given
     react = ROOT / "skills" / "frontend-react" / "scripts" / "check_react.py"
-    audit = ROOT / "skills" / "ui-developer" / "scripts" / "audit_ui.py"
     for label, script, args in (
         ("check_react.py with no file", react, []),
         ("check_react.py with only --next", react, ["--next"]),
-        ("audit_ui.py with no file", audit, []),
     ):
         rc, out = run_py(script, args)
         r.check("usage error: %s exits 2" % label, rc == 2, "exit %d" % rc)
@@ -798,14 +795,14 @@ def ui_craft_script_tests(r):
             f = tmp / (name + ".json")
             f.write_text(json.dumps(concept), encoding="utf-8")
             return run_deal(name, has, "--concept", f, *more)
-        concept = {"name": "Departures board", "hero": "custom", "palette": "graphite", "fonts": "geist", "radius": "round", "motion": "standard", "type_contrast": "loud",
+        concept = {"name": "Departures board", "hero": "custom", "palette": "graphite-white-cobalt", "fonts": "geist", "radius": "round", "motion": "standard", "type_contrast": "loud",
                    "backgrounds": "ruled", "headings": "side", "images": "mono", "parallax": "about", "order": ["about", "projects", "contact", "footer"],
                    "sections": {"projects": "list-rows", "about": "text-portrait"}, "signature": {"id": "flight-board", "after": "projects", "fallback": "experience/rows"}}
         before = read(history)
         rc, out = with_concept("con", concept, full, "--no-history")
         d = json.loads(read(tmp / "con" / "design.json"))
         shape = (d["hero"], d["palette"], d["fonts"], d["radius"], d["type_contrast"], d["backgrounds"], d["headings"], d["images"], d["parallax"], [x["id"] for x in d["sections"]], d["concept"])
-        want = ("custom", "graphite", "geist", "round", "loud", "ruled", "side", "mono", "about", ["about", "projects", "flight-board", "contact", "footer"], "Departures board")
+        want = ("custom", "graphite-white-cobalt", "geist", "round", "loud", "ruled", "side", "mono", "about", ["about", "projects", "flight-board", "contact", "footer"], "Departures board")
         r.check("deal.py --concept: overrules every pick", rc == 0 and shape == want, out[-300:] + str(shape))
         r.check("deal.py --no-history: leaves the history alone", read(history) == before)
         text = read(tmp / "con" / "DESIGN.md")
@@ -833,6 +830,51 @@ def ui_craft_script_tests(r):
         notjson.write_text('{"mood": "calm"}', encoding="utf-8")
         rc, out = run_deal("x", full, "--concept", notjson)
         r.check("usage error: deal.py with an unknown concept key exits 2", rc == 2, "exit %d" % rc)
+
+        # Colour combos, the user's own colours and the role map
+        colors = scripts / "colors.py"
+        rc, out = run_py(colors, ["check"])
+        r.check("colors.py: every combo derives a passing palette, and palettes.json is current", rc == 0, out[-300:])
+        combos = json.loads(read(ROOT / "skills" / "ui-craft" / "assets" / "data" / "combos.json"))["combos"]
+        sizes = {len(c["colors"]) for c in combos}
+        audiences = {a for c in combos for a in c["audiences"]}
+        r.check("colors.py: combos of 2 to 5 colours, for several audiences", sizes == {2, 3, 4, 5} and len(audiences) >= 5, str((sizes, audiences)))
+        own = {"name": "Mine", "colors": {"ink": "#111111", "cream": "#F3EEE3", "orange": "#D9541E"}, "roles": {"text": "ink", "background": "cream", "action": "orange"}}
+        def own_file(name, **extra):
+            f = tmp / name
+            f.write_text(json.dumps(dict(own, **extra)), encoding="utf-8")
+            return f
+        rc, out = run_py(colors, ["derive", own_file("own.json")])
+        r.check("colors.py derive: keeps the user's exact values", rc == 0 and "--accent  light #D9541E" in out and "--bg  light #F3EEE3" in out and "--ink  light #111111" in out, out[:300])
+        r.check("colors.py derive: a failing label becomes a CHOICE with options, not a silent swap", "CHOICE accent" in out and "shade #" in out and "large" in out and "other" in out, out[-500:])
+        r.check("colors.py derive: links that fail as text become ink, underlined in the action colour", "--link  light #111111" in out and "--link-line  light #D9541E" in out, out[:900])
+        rc, out = run_py(colors, ["derive", own_file("own-shade.json", decisions={"on-accent": "shade"})])
+        r.check("colors.py derive: the shade decision clears the choice", rc == 0 and "CHOICE" not in out and "--accent  light #D9541E" not in out, out[-300:])
+        rc, out = run_py(colors, ["near", own_file("own2.json"), "--html", tmp / "near" / "colors.html"])
+        r.check("colors.py near: suggests the closest combos and writes a swatch page", rc == 0 and "ink-cream-rust" in out.split("\n")[0] and (tmp / "near" / "colors.html").is_file(), out[:300])
+        rc, out = run_py(colors, ["suggest", "#D9541E", "--on", "#FFFFFF"])
+        r.check("colors.py suggest: finds a passing shade of the same hue", rc == 0 and "nearest passing shade" in out, out[-200:])
+        bad = own_file("bad.json", roles={"text": "ink", "background": "nope"})
+        rc, out = run_py(colors, ["derive", bad])
+        r.check("usage error: colors.py with a role naming a missing colour exits 2", rc == 2, "exit %d" % rc)
+        pale = {"name": "Pale", "colors": {"ink": "#111111", "white": "#FFFFFF", "yellow": "#FFE066"}, "roles": {"text": "ink", "background": "white", "action": "yellow"}}
+        f = tmp / "pale.json"
+        f.write_text(json.dumps(pale), encoding="utf-8")
+        rc, out = run_py(colors, ["derive", f])
+        r.check("colors.py derive: a pale yellow cannot be a button on white", rc == 1 and "needs 3:1" in out, out[-300:])
+        rc, out = run_deal("own", full, "--colors", own_file("own3.json"), "--seed", "5")
+        text = read(tmp / "own" / "DESIGN.md") if rc == 0 else ""
+        r.check("deal.py --colors: role map with uses, the user's values, and the open choice", rc == 0 and "| `--accent` | `#D9541E`" in text and "Primary button label" in text and "Open colour choices" in text and "CHOICE" in out, out[-300:])
+        rc, out = run_deal("large", full, "--colors", own_file("own4.json", decisions={"on-accent": "large"}), "--seed", "6")
+        css_text = read(tmp / "large" / "design.css") if rc == 0 else ""
+        rc2, out2 = run_py(contrast, [tmp / "large" / "design.css"]) if rc == 0 else (1, out)
+        r.check("deal.py --colors: large labels are written and pass at 3:1", rc == 0 and ".btn--primary { font-size: var(--text-h3); font-weight: 700; }" in css_text and rc2 == 0, out2[-300:])
+        rc, out = run_deal("aud", "numbers,projects", "--audience", "local", "--seed", "7")
+        d = json.loads(read(tmp / "aud" / "design.json")) if rc == 0 else {}
+        local = {c["id"] for c in combos if "local" in c["audiences"] and "portfolio" in c["kinds"]}
+        r.check("deal.py --audience: picks a combo made for that audience", d.get("palette") in local, str(d.get("palette")))
+        rc, out = with_concept("two", dict(concept, palette="navy-snow-cobalt-sky-ember", two_actions=True, order=["about", "projects", "contact", "footer"], signature=None, parallax=None), full, "--no-history")
+        r.check("deal.py: two distinct actions allow the combo's second button colour", rc == 0 and ".btn--accent-2" in read(tmp / "two" / "DESIGN.md"), out[-300:])
 
         # sameness.py
         hist = tmp / "same.json"
@@ -889,7 +931,7 @@ def ui_craft_script_tests(r):
         r.check("usage error: preview.py refuses a path as a name", rc == 2, "exit %d" % rc)
 
         low = tmp / "low.css"
-        low.write_text(read(tmp / "a" / "design.css").replace("--ink-2: oklch(41%", "--ink-2: oklch(80%"), encoding="utf-8")
+        low.write_text(re.sub(r"--ink-2: [^;]+;", "--ink-2: oklch(80% 0.01 90);", read(tmp / "a" / "design.css"), count=1), encoding="utf-8")
         rc, out = run_py(contrast, [low])
         r.check("contrast.py: pale text fails", rc == 1 and "--ink-2 on --bg" in out, out[-300:])
         rc, out = run_py(contrast, [])

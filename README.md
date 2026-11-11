@@ -8,7 +8,7 @@ You ask in plain words, and Claude uses the matching skill. Several skills need 
 
 A skill is a folder of instructions, and sometimes small check scripts, that Claude reads when your request matches it. It saves you from explaining how you want a job done each time. It also adds checks that a prompt alone can't, such as a script that fails when a page contains a number that isn't in your facts.
 
-This repository is one plugin, called `ai-toolkit`, holding 13 skills. Install the plugin once and all of them are available.
+This repository is one plugin, called `ai-toolkit`, holding 12 skills. Install the plugin once and all of them are available.
 
 ## What you can do with it
 
@@ -23,7 +23,6 @@ This repository is one plugin, called `ai-toolkit`, holding 13 skills. Install t
 | Get a designed, built personal site or portfolio | ui-craft | "Build my portfolio from resume.md" |
 | See how a site really looks and behaves on phones and desktops | visual-qa | "Run visual QA on this site" |
 | Create colours, type and components for a new product | design-system-builder | "Create a design system for this product" |
-| Build or restyle a product screen from a design system | ui-developer | "Build this screen" |
 | Write code to a fixed standard in React, Node.js, Python or Julia | frontend-react, backend-node, backend-python, julia | "Build this in Next.js" |
 
 ## Quick start
@@ -91,17 +90,16 @@ No coding needed.
 | Skill | What it does | What you get | What it won't do |
 |---|---|---|---|
 | [spec-writer](docs/skills/spec-writer.md) | Lists every line of the spec template your brief doesn't answer, and asks about all of them in one batch | A new `spec.md`, confirmed complete by a check script. Anything you leave open is marked `Undecided` with an open question | Guess a gap, choose your stack, or change your file |
-| [project-planner](docs/skills/project-planner.md) | Splits a spec into working slices, in dependency order. Asks about high-stakes decisions such as stack, data model and auth | An overview and one design document per phase, in `.plans/phases/`, kept out of git | Add a delivery or testing phase, or build anything |
+| [project-planner](docs/skills/project-planner.md) | Splits a spec into working slices, in dependency order. Asks about high-stakes decisions such as stack, data model and auth. For a portfolio, the first phase is a Design direction phase done with `ui-craft` | An overview and one design document per phase, in `.plans/phases/`, kept out of git | Add a delivery or testing phase, or build anything |
 | [orchestrator](docs/skills/orchestrator.md) | Gets the spec written and approved, gets it planned, then runs each phase through the right skills in its own git worktree. A small script keeps the order, so no step is skipped | One committed and pushed branch per phase. You approve the spec and the route, and phases only you can do are parked | Write code itself, open or merge pull requests, or force-push. Claude Code only |
 
 ### Design and web pages
 
 | Skill | What it does | What you get | What it won't do |
 |---|---|---|---|
-| [ui-craft](skills/ui-craft/SKILL.md) | Writes the words first, from real facts. For a portfolio or personal site, it then proposes three ideas drawn from your own material, previews each as a real first screen, and builds the one you choose | `COPY.md`, `CONCEPTS.md`, `DESIGN.md` and the built page, checked for invented facts, contrast and repeated layouts | Invent numbers, quotes or customers, or leave placeholders. Only portfolios are built so far. For SaaS, app screens, blogs, services, shops, local places and events it writes the copy only |
+| [ui-craft](skills/ui-craft/SKILL.md) | Writes the words first, from real facts. For a portfolio or personal site, it then proposes three ideas drawn from your own material, previews each as a real first screen, and builds the one you choose. It picks a colour combo for your audience, or uses your own colours and shows you options when one fails contrast. In a planned project it builds one phase at a time | `COPY.md`, `CONCEPTS.md`, `DESIGN.md` and the built page, checked for invented facts, contrast and repeated layouts | Invent numbers, quotes or customers, or leave placeholders. Only portfolios are built so far. For SaaS, app screens, blogs, services, shops, local places and events it writes the copy only |
 | [visual-qa](docs/skills/visual-qa.md) | Opens your site in a browser you can watch. Walks each route at five sizes in light and dark, tabs through the page, clicks links, submits forms empty so nothing is really sent, and checks reduced motion | An HTML report and a markdown summary, with each screenshot graded A to F in eight areas | Change your code |
 | [design-system-builder](docs/skills/design-system-builder.md) | Builds a design system from a brief, screenshots, a brand palette or a mix. Confirms a direction with you first | Tokens, light and dark themes, component specs and a contrast report | Change an existing codebase's tokens, or do one-off page work |
-| [ui-developer](docs/skills/ui-developer.md) | Builds or restyles screens using only a design system's tokens and utilities: Ember by default, or one you name | The UI, an audit for raw values and unknown classes, and a list of each state to look at | Write custom CSS, or build APIs, databases or auth |
 
 ### Writing code
 
@@ -109,7 +107,7 @@ These follow fixed rules, match your project's own conventions first, and run yo
 
 | Skill | Covers | Won't write |
 |---|---|---|
-| [frontend-react](docs/skills/frontend-react.md) | React and Next.js: components, hooks, state, effects, forms, performance, a typed data boundary, server and client components, tests | Colours or component looks (name `ui-developer` too), APIs, databases or auth |
+| [frontend-react](docs/skills/frontend-react.md) | React and Next.js: components, hooks, state, effects, forms, performance, a typed data boundary, server and client components, tests | Colours or component looks (those come from `ui-craft`), APIs, databases or auth |
 | [backend-node](docs/skills/backend-node.md) | TypeScript with Express or NestJS: types, errors, concurrency, configuration, services, entity classes from `schema.md`, logging, security, tests | Route handlers, controllers, queries, migrations or auth |
 | [backend-python](docs/skills/backend-python.md) | Django or FastAPI: types, errors, concurrency, configuration, model classes from `schema.md`, services, logging, security, tests | Views or route handlers, queries, migrations or auth |
 | [julia](docs/skills/julia.md) | Oxygen service structure, DataFrames.jl, JuMP.jl with HiGHS.jl (LP and QP), MLJ.jl model training, data analysis | Oxygen route handlers, database access or auth |
@@ -138,7 +136,6 @@ Claude Code, plus the following for each skill. If something required is missing
 | ui-craft | Python 3.9 or later. npm to install fonts. Playwright CLI for preview screenshots |
 | visual-qa | Python 3.9 or later, Node 20 or later, Playwright CLI with Chromium, and a display. WSL2 uses WSLg |
 | design-system-builder | Python 3. A model that reads images, for screenshot input |
-| ui-developer | Git, Python 3, and network access to fetch the default design system. The project needs the design system's utility classes (Tailwind v4 for Ember) |
 | frontend-react, backend-node | Python 3, plus your project's own tools |
 | backend-python | Python 3.9 or later, plus your project's own tools |
 | julia | Python 3, Julia 1.10 or later, and your project's packages |
@@ -218,7 +215,6 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
 | project-planner | `references/project-planner-rules.md`, `references/markdown-rules.md`, `references/architecture-patterns.md`, `assets/spec-template.md` |
 | design-system-builder | `references/tokens.example.css` |
 | ui-craft, copy only | `references/intake.md`, `references/copy/copy.md`, `references/copy/copy-human.md`, and the `copy-<kind>.md` file for your page |
-| ui-developer | `references/app-screens.md`, `references/copy.md`, `references/layout.md`, `scripts/audit_ui.py`. When needed, `references/phase-document.md` and `references/restyle.md` |
 | frontend-react | `references/react-rules.md`, `references/architecture-patterns.md`, `scripts/check_react.py`. For Next.js, `references/nextjs-rules.md`. For performance work, `references/react-performance-guidelines.md` |
 | backend-node, backend-python, julia, spec-writer | The whole skill folder |
 
@@ -229,7 +225,6 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
 - **Works in a plain chat if you paste the text:** doc-trimmer, doc-reviewer, and ui-craft's copy writing. File and URL input needs an agent with shell and file access.
 - **Needs an agent with a shell and Python 3:** spec-writer, frontend-react, backend-node, backend-python, julia. Without Python they stop and say so.
 - **design-system-builder** ends by running `./scripts/check_contrast.sh <theme-name>` and `python3 -I scripts/build_tokens_json.py <theme-name>`. In a plain chat, run them yourself on the generated folder, or the contrast check is skipped and `tokens.json` isn't generated. Screenshot mode needs a model that accepts images.
-- **ui-developer** fetches the design system with `git` and runs `scripts/audit_ui.py`, so it needs shell access. Without Python it falls back to manual searches.
 - **ui-craft's builds** need an agent with shell access and Python 3.9 or later.
 - **visual-qa** needs shell access, Python 3.9 or later, Node 20 or later and a display. It doesn't work in a plain chat.
 - **orchestrator** works in Claude Code only. It needs the Agent and Skill tools, git worktrees, the `skill-runner` agent and Python 3.9 or later for `scripts/engine.py`.
@@ -348,11 +343,10 @@ python3 -I tests/run.py static && python3 -I tests/run.py scripts
 
 ### Step 7: Model-run cases
 
-Needs the `claude` CLI, uses tokens and takes several minutes. It prints `RESULT  PASS` and writes `tests/runs/model-cases-<version>.md`. Run the `network` tier as well when Ember or `ui-developer` changed. A failing case is rerun once automatically; a second failure means the skill text is unclear, so fix the skill, not the case.
+Needs the `claude` CLI, uses tokens and takes several minutes. It prints `RESULT  PASS` and writes `tests/runs/model-cases-<version>.md`. A failing case is rerun once automatically; a second failure means the skill text is unclear, so fix the skill, not the case.
 
 ```bash
 python3 tests/run.py cases --tier slow
-python3 tests/run.py cases --tier network
 ```
 
 ### Step 8: Merge, tag, push (by hand)

@@ -15,8 +15,8 @@
 
 ## Should NOT trigger
 
-- "Build a landing page for my bakery." (ui-developer)
-- "Style this button with my design system." (ui-developer)
+- "Build a landing page for my bakery." (ui-craft)
+- "Style this button with my design system." (frontend-react)
 - "Change the primary color in our existing tokens.css." (edits an existing system)
 - "Write a React component for a modal." (frontend-react)
 - "Poke holes in this design system doc." (doc-reviewer)

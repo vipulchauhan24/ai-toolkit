@@ -1,7 +1,7 @@
 ---
 name: project-planner
 description: >
-  Splits a product + engineering spec into phases, each a working vertical slice with its own agent-ready design doc, plus an overview with dependency order. Asks about high-stakes decisions (stack, data model, auth) before writing. Use for "plan this project", "phase this spec", "split this into milestones for an agent to build", "break this spec into phases", "turn this PRD into an implementation plan", or when the user shares a spec or PRD and wants it built in stages. Works for new projects and existing codebases. Not for reviewing or critiquing a spec (use doc-reviewer), not for tightening its wording (use doc-trimmer), and not for building the UI or code itself (use ui-developer or frontend-react).
+  Splits a product + engineering spec into phases, each a working vertical slice with its own agent-ready design doc, plus an overview with dependency order. Asks about high-stakes decisions (stack, data model, auth) before writing. Use for "plan this project", "phase this spec", "split this into milestones for an agent to build", "break this spec into phases", "turn this PRD into an implementation plan", or when the user shares a spec or PRD and wants it built in stages. Works for new projects and existing codebases. Not for reviewing or critiquing a spec (use doc-reviewer), not for tightening its wording (use doc-trimmer), and not for building the UI or code itself (use ui-craft or frontend-react).
 license: MIT
 compatibility: Reads a spec file and, for an existing project, its codebase. Writing phase files needs file access.
 model: opus
@@ -20,6 +20,8 @@ If the user has no spec yet, point them to `assets/spec-template.md` in this ski
 Accept a PRD, an engineering design doc, a combined spec, or rough notes that mix product intent with technical detail. If the input only covers product intent, infer a reasonable engineering approach and mark it as an assumption. If it only covers engineering, infer the product framing (who benefits, what they can now do) for each phase.
 
 ## Verify Before Writing
+
+Read a `.pdf` with the Read tool, which extracts its text (use its `pages` option for a long file). Use `pdftotext` only if the Read tool cannot open it. Never install a package (pip, npm, apt or any other) to read a document: if nothing can read it, ask for the text.
 
 If a codebase is available, read it before writing any engineering content. Cite what exists today with `path:line`, not from memory or from what the spec assumes. If no codebase exists yet (greenfield), say so explicitly and proceed on the spec alone.
 
@@ -79,6 +81,9 @@ Deployment is not a phase: the user deploys (Rule 10).
 9. **Don't design what already exists.** Before specifying a new pattern, queue, cache, or abstraction inside a phase, check whether the stack already has a built-in or established pattern for it.
 10. **No delivery phase and no testing phase.** The user deploys and releases by hand. Never write a phase for deployment, hosting, CI/CD, publishing to a registry, or a release, and say so in one line in the overview: "Deployment and release are not planned; you do them." Never write a phase whose only job is testing (end-to-end, browser or visual testing): each phase carries its own test plan, and visual checks of the UI are run separately. For a published project (library, SDK, CLI, plugin), the public API surface (names, signatures, types, errors) takes the place of "API contracts," usage examples take the place of the "UX flow," and every phase that changes the public API states the version bump (major, minor, patch) and any breaking change in its Rollout section.
 
+11. **The look belongs to `ui-craft`.** For a project with web pages that `ai-toolkit:ui-craft` can build (portfolios and personal sites today), the first phase is **Design direction**: `ui-craft` writes `COPY.md`, proposes three concepts the user chooses from, and writes `DESIGN.md`, `design.json` and `design.css` at the project root. That phase is done in the user's conversation, because the user chooses. Its acceptance criteria are those files existing and the user approving the concept. Look decisions in the spec (colours, fonts, a style) are inputs to that phase, listed in it: the user's colours go to `colors.json`, as `ui-craft` describes, and are not written anywhere else. For other kinds of pages, the first phase still has `ui-craft` write `COPY.md`, and the look follows the design system the spec names.
+12. **Phase documents never set the look.** After a Design direction phase, never write colour values, font names, spacing or size numbers, Tailwind or CSS classes, or markup for appearance. Name each section the phase adds, where its words come from (`COPY.md`), its behaviour and its accessibility (keyboard, focus, labels, reduced motion), and write `Look: from DESIGN.md`. A section that `DESIGN.md` does not list is named, and `ui-craft` chooses its variant.
+
 ## Per-Phase Design Document
 
 A reader with zero context on the other phases must be able to implement this one from this document alone.
@@ -90,7 +95,7 @@ A reader with zero context on the other phases must be able to implement this on
 - **In scope** -- an exhaustive list of behavior this phase delivers.
 - **Out of scope** -- what looks related but is explicitly deferred, and to which later phase.
 - **Acceptance criteria** -- numbered, binary, testable statements with real numbers where relevant. "Returns 409 when the slug already exists" and "list endpoint responds in under 200ms for 10k rows" pass; "handles conflicts well" and "is performant" do not.
-- **UX flow** -- for user-facing phases, describe the flow step by step (screens, states, transitions) even without visual mockups.
+- **UX flow** -- for user-facing phases, describe the flow step by step (screens, states, transitions) even without visual mockups. Describe what happens, not how it looks: the look comes from `DESIGN.md` (rule 12).
 
 ### Engineering Section
 

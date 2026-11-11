@@ -1,0 +1,631 @@
+{
+ "combos": [
+  {
+   "id": "ink-paper",
+   "name": "Ink on paper",
+   "mood": "editorial",
+   "kinds": [
+    "portfolio",
+    "blog",
+    "service"
+   ],
+   "audiences": [
+    "hiring",
+    "creative",
+    "community"
+   ],
+   "colors": {
+    "ink": "#141414",
+    "paper": "#F5F2EA"
+   },
+   "roles": {
+    "text": "ink",
+    "background": "paper"
+   }
+  },
+  {
+   "id": "navy-snow",
+   "name": "Navy on snow",
+   "mood": "technical",
+   "kinds": [
+    "portfolio",
+    "saas",
+    "app",
+    "blog"
+   ],
+   "audiences": [
+    "hiring",
+    "technical",
+    "business"
+   ],
+   "colors": {
+    "navy": "#0F1B2D",
+    "snow": "#F4F6F9"
+   },
+   "roles": {
+    "text": "navy",
+    "background": "snow"
+   }
+  },
+  {
+   "id": "forest-linen",
+   "name": "Forest on linen",
+   "mood": "neutral",
+   "kinds": [
+    "portfolio",
+    "service",
+    "place",
+    "blog"
+   ],
+   "audiences": [
+    "local",
+    "community",
+    "hiring"
+   ],
+   "colors": {
+    "forest": "#1E2B22",
+    "linen": "#F1EEE6"
+   },
+   "roles": {
+    "text": "forest",
+    "background": "linen"
+   }
+  },
+  {
+   "id": "espresso-oat",
+   "name": "Espresso on oat",
+   "mood": "editorial",
+   "kinds": [
+    "place",
+    "blog",
+    "ecommerce",
+    "portfolio"
+   ],
+   "audiences": [
+    "local",
+    "consumers",
+    "creative"
+   ],
+   "colors": {
+    "espresso": "#2B1D16",
+    "oat": "#F3ECE2"
+   },
+   "roles": {
+    "text": "espresso",
+    "background": "oat"
+   }
+  },
+  {
+   "id": "ink-cream-rust",
+   "name": "Ink, cream and rust",
+   "mood": "editorial",
+   "kinds": [
+    "portfolio",
+    "blog",
+    "service",
+    "place"
+   ],
+   "audiences": [
+    "hiring",
+    "creative",
+    "local"
+   ],
+   "colors": {
+    "ink": "#111111",
+    "cream": "#F3EEE3",
+    "rust": "#B8441A"
+   },
+   "roles": {
+    "text": "ink",
+    "background": "cream",
+    "action": "rust"
+   }
+  },
+  {
+   "id": "graphite-white-cobalt",
+   "name": "Graphite, white and cobalt",
+   "mood": "technical",
+   "kinds": [
+    "saas",
+    "app",
+    "portfolio",
+    "blog"
+   ],
+   "audiences": [
+    "technical",
+    "business",
+    "hiring"
+   ],
+   "colors": {
+    "graphite": "#1A1D23",
+    "white": "#F7F8FA",
+    "cobalt": "#2F5BD3"
+   },
+   "roles": {
+    "text": "graphite",
+    "background": "white",
+    "action": "cobalt"
+   }
+  },
+  {
+   "id": "charcoal-sand-teal",
+   "name": "Charcoal, sand and teal",
+   "mood": "neutral",
+   "kinds": [
+    "portfolio",
+    "service",
+    "saas",
+    "place"
+   ],
+   "audiences": [
+    "business",
+    "local",
+    "hiring"
+   ],
+   "colors": {
+    "charcoal": "#22252A",
+    "sand": "#F2EEE6",
+    "teal": "#0F6E6E"
+   },
+   "roles": {
+    "text": "charcoal",
+    "background": "sand",
+    "action": "teal"
+   }
+  },
+  {
+   "id": "navy-ivory-coral",
+   "name": "Navy, ivory and coral",
+   "mood": "characterful",
+   "kinds": [
+    "portfolio",
+    "event",
+    "ecommerce",
+    "service"
+   ],
+   "audiences": [
+    "consumers",
+    "creative",
+    "community"
+   ],
+   "colors": {
+    "navy": "#13213C",
+    "ivory": "#FAF7F0",
+    "coral": "#C2413A"
+   },
+   "roles": {
+    "text": "navy",
+    "background": "ivory",
+    "action": "coral"
+   }
+  },
+  {
+   "id": "ink-mist-violet",
+   "name": "Ink, mist and violet",
+   "mood": "characterful",
+   "kinds": [
+    "portfolio",
+    "saas",
+    "event"
+   ],
+   "audiences": [
+    "creative",
+    "technical"
+   ],
+   "colors": {
+    "ink": "#16141F",
+    "mist": "#F4F3F8",
+    "violet": "#5B3FD1"
+   },
+   "roles": {
+    "text": "ink",
+    "background": "mist",
+    "action": "violet"
+   }
+  },
+  {
+   "id": "olive-bone-mustard",
+   "name": "Olive, bone and mustard",
+   "mood": "characterful",
+   "kinds": [
+    "portfolio",
+    "place",
+    "ecommerce",
+    "blog"
+   ],
+   "audiences": [
+    "creative",
+    "local",
+    "consumers"
+   ],
+   "colors": {
+    "olive": "#2A2B1E",
+    "bone": "#F4F1E8",
+    "mustard": "#E3B23C"
+   },
+   "roles": {
+    "text": "olive",
+    "background": "bone",
+    "highlight": "mustard"
+   }
+  },
+  {
+   "id": "plum-blush-raspberry",
+   "name": "Plum, blush and raspberry",
+   "mood": "characterful",
+   "kinds": [
+    "portfolio",
+    "ecommerce",
+    "event",
+    "blog"
+   ],
+   "audiences": [
+    "consumers",
+    "creative"
+   ],
+   "colors": {
+    "plum": "#2A1730",
+    "blush": "#FBF4F4",
+    "raspberry": "#B4235A"
+   },
+   "roles": {
+    "text": "plum",
+    "background": "blush",
+    "action": "raspberry"
+   }
+  },
+  {
+   "id": "slate-white-emerald",
+   "name": "Slate, white and emerald",
+   "mood": "technical",
+   "kinds": [
+    "saas",
+    "app",
+    "service",
+    "portfolio"
+   ],
+   "audiences": [
+    "business",
+    "technical",
+    "hiring"
+   ],
+   "colors": {
+    "slate": "#1C2526",
+    "white": "#F6F8F7",
+    "emerald": "#0B7A55"
+   },
+   "roles": {
+    "text": "slate",
+    "background": "white",
+    "action": "emerald"
+   }
+  },
+  {
+   "id": "cocoa-cream-terracotta",
+   "name": "Cocoa, cream and terracotta",
+   "mood": "editorial",
+   "kinds": [
+    "place",
+    "ecommerce",
+    "blog",
+    "service"
+   ],
+   "audiences": [
+    "local",
+    "consumers"
+   ],
+   "colors": {
+    "cocoa": "#2E211B",
+    "cream": "#F6EFE6",
+    "terracotta": "#A9472A"
+   },
+   "roles": {
+    "text": "cocoa",
+    "background": "cream",
+    "action": "terracotta"
+   }
+  },
+  {
+   "id": "black-white-red",
+   "name": "Black, white and signal red",
+   "mood": "characterful",
+   "kinds": [
+    "event",
+    "portfolio",
+    "ecommerce"
+   ],
+   "audiences": [
+    "community",
+    "consumers",
+    "creative"
+   ],
+   "colors": {
+    "black": "#0D0D0D",
+    "white": "#FFFFFF",
+    "red": "#D21F1A"
+   },
+   "roles": {
+    "text": "black",
+    "background": "white",
+    "action": "red"
+   }
+  },
+  {
+   "id": "ink-cream-rust-sage",
+   "name": "Ink, cream, rust and sage",
+   "mood": "editorial",
+   "kinds": [
+    "portfolio",
+    "service",
+    "place",
+    "blog"
+   ],
+   "audiences": [
+    "hiring",
+    "local",
+    "creative"
+   ],
+   "colors": {
+    "ink": "#111111",
+    "cream": "#F3EEE3",
+    "rust": "#B8441A",
+    "sage": "#DCE3D2"
+   },
+   "roles": {
+    "text": "ink",
+    "background": "cream",
+    "action": "rust",
+    "band": "sage"
+   }
+  },
+  {
+   "id": "navy-snow-cobalt-sky",
+   "name": "Navy, snow, cobalt and sky",
+   "mood": "technical",
+   "kinds": [
+    "saas",
+    "app",
+    "portfolio"
+   ],
+   "audiences": [
+    "technical",
+    "business",
+    "hiring"
+   ],
+   "colors": {
+    "navy": "#0F1B2D",
+    "snow": "#F4F6F9",
+    "cobalt": "#2C55C9",
+    "sky": "#E2EBFA"
+   },
+   "roles": {
+    "text": "navy",
+    "background": "snow",
+    "action": "cobalt",
+    "band": "sky"
+   }
+  },
+  {
+   "id": "graphite-paper-teal-night",
+   "name": "Graphite, paper, teal and a night band",
+   "mood": "technical",
+   "kinds": [
+    "portfolio",
+    "saas",
+    "service"
+   ],
+   "audiences": [
+    "technical",
+    "hiring",
+    "business"
+   ],
+   "colors": {
+    "graphite": "#1F2328",
+    "paper": "#F6F5F1",
+    "teal": "#0E6B6B",
+    "night": "#16191D"
+   },
+   "roles": {
+    "text": "graphite",
+    "background": "paper",
+    "action": "teal",
+    "band": "night"
+   }
+  },
+  {
+   "id": "black-white-red-ink",
+   "name": "Black, white, red and an ink band",
+   "mood": "characterful",
+   "kinds": [
+    "event",
+    "portfolio"
+   ],
+   "audiences": [
+    "community",
+    "creative"
+   ],
+   "colors": {
+    "black": "#0D0D0D",
+    "white": "#FFFFFF",
+    "red": "#D21F1A",
+    "ink": "#1B1B1B"
+   },
+   "roles": {
+    "text": "black",
+    "background": "white",
+    "action": "red",
+    "band": "ink"
+   }
+  },
+  {
+   "id": "espresso-oat-copper-sand",
+   "name": "Espresso, oat, copper and sand",
+   "mood": "editorial",
+   "kinds": [
+    "place",
+    "ecommerce",
+    "blog"
+   ],
+   "audiences": [
+    "local",
+    "consumers"
+   ],
+   "colors": {
+    "espresso": "#2B1D16",
+    "oat": "#F3ECE2",
+    "copper": "#9C4A22",
+    "sand": "#E8DCC8"
+   },
+   "roles": {
+    "text": "espresso",
+    "background": "oat",
+    "action": "copper",
+    "band": "sand"
+   }
+  },
+  {
+   "id": "ink-cream-rust-sage-mustard",
+   "name": "Ink, cream, rust, sage and mustard",
+   "mood": "editorial",
+   "kinds": [
+    "portfolio",
+    "blog",
+    "place"
+   ],
+   "audiences": [
+    "creative",
+    "hiring",
+    "local"
+   ],
+   "colors": {
+    "ink": "#111111",
+    "cream": "#F3EEE3",
+    "rust": "#B8441A",
+    "sage": "#DCE3D2",
+    "mustard": "#E9BC45"
+   },
+   "roles": {
+    "text": "ink",
+    "background": "cream",
+    "action": "rust",
+    "band": "sage",
+    "highlight": "mustard"
+   }
+  },
+  {
+   "id": "navy-snow-cobalt-sky-ember",
+   "name": "Navy, snow, cobalt, sky and ember",
+   "mood": "technical",
+   "kinds": [
+    "saas",
+    "portfolio",
+    "event",
+    "app"
+   ],
+   "audiences": [
+    "business",
+    "technical",
+    "hiring",
+    "community"
+   ],
+   "colors": {
+    "navy": "#0F1B2D",
+    "snow": "#F4F6F9",
+    "cobalt": "#2C55C9",
+    "sky": "#E2EBFA",
+    "ember": "#C2410C"
+   },
+   "roles": {
+    "text": "navy",
+    "background": "snow",
+    "action": "cobalt",
+    "band": "sky",
+    "action-2": "ember"
+   }
+  },
+  {
+   "id": "black-white-red-grey-yellow",
+   "name": "Black, white, red, grey and yellow",
+   "mood": "characterful",
+   "kinds": [
+    "event",
+    "ecommerce",
+    "portfolio"
+   ],
+   "audiences": [
+    "community",
+    "consumers"
+   ],
+   "colors": {
+    "black": "#0D0D0D",
+    "white": "#FFFFFF",
+    "red": "#D21F1A",
+    "grey": "#EDEDED",
+    "yellow": "#FFD43B"
+   },
+   "roles": {
+    "text": "black",
+    "background": "white",
+    "action": "red",
+    "band": "grey",
+    "highlight": "yellow"
+   }
+  },
+  {
+   "id": "forest-linen-moss-sand-coral",
+   "name": "Forest, linen, moss, sand and coral",
+   "mood": "neutral",
+   "kinds": [
+    "place",
+    "service",
+    "blog"
+   ],
+   "audiences": [
+    "local",
+    "community"
+   ],
+   "colors": {
+    "forest": "#1E2B22",
+    "linen": "#F1EEE6",
+    "moss": "#3D6B45",
+    "sand": "#E6DFCF",
+    "coral": "#F4C3B0"
+   },
+   "roles": {
+    "text": "forest",
+    "background": "linen",
+    "action": "moss",
+    "band": "sand",
+    "highlight": "coral"
+   }
+  },
+  {
+   "id": "slate-white-emerald-mint-clay",
+   "name": "Slate, white, emerald, mint and clay",
+   "mood": "technical",
+   "kinds": [
+    "saas",
+    "ecommerce",
+    "service"
+   ],
+   "audiences": [
+    "business",
+    "consumers"
+   ],
+   "colors": {
+    "slate": "#1C2526",
+    "white": "#F6F8F7",
+    "emerald": "#0B7A55",
+    "mint": "#DDEFE6",
+    "clay": "#A4461F"
+   },
+   "roles": {
+    "text": "slate",
+    "background": "white",
+    "action": "emerald",
+    "band": "mint",
+    "action-2": "clay"
+   }
+  }
+ ]
+}

@@ -42,7 +42,7 @@ If the user says "just do it" or the session cannot be interactive, apply the de
 
 ## 3. Establish and confirm the direction
 
-Produce a **Direction Summary** before writing any tokens. It starts with a **theme name**: a short, one-word name that fits the direction (e.g. `Ember`), or the name the user gave. The name becomes the output folder (§6). It then states, with concrete values: the color roles and brand hues (hex), neutral temperature, typeface choices, type scale ratio, spacing base and density, corner radius, elevation style, motion feel, and overall tone. Say why for each choice. Then **wait for the user to confirm or redirect.** The checkpoint applies to every mode. Skip the wait only if the user has said to proceed without confirming; in that case state the summary and continue.
+Produce a **Direction Summary** before writing any tokens. It starts with a **theme name**: a short, one-word name that fits the direction (e.g. `Harbor`), or the name the user gave. The name becomes the output folder (§6). It then states, with concrete values: the color roles and brand hues (hex), neutral temperature, typeface choices, type scale ratio, spacing base and density, corner radius, elevation style, motion feel, and overall tone. Say why for each choice. Then **wait for the user to confirm or redirect.** The checkpoint applies to every mode. Skip the wait only if the user has said to proceed without confirming; in that case state the summary and continue.
 
 Mode-specific rules:
 
@@ -128,7 +128,7 @@ Accessibility requirements that apply to every interactive component:
 
 ## 6. Deliverables and output format
 
-Write the design system to `<theme-name>/` (e.g. `Ember/`) in the working directory, unless the user names a location. Use the theme name from the Direction Summary, capitalized, with no spaces. Every design system folder has the same shape:
+Write the design system to `<theme-name>/` (e.g. `Harbor/`) in the working directory, unless the user names a location. Use the theme name from the Direction Summary, capitalized, with no spaces. Every design system folder has the same shape:
 
 | File | Contents |
 |---|---|

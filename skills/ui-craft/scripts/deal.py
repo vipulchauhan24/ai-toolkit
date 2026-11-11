@@ -9,10 +9,14 @@ Usage:
 experience, skills, quotes, form. A section or variant that needs something missing is
 never chosen. Choices are remembered in a history file so that projects differ.
 
+--colors FILE takes the user's own colours (format in references/system/color.md), kept exactly;
+--audience picks among combos made for that audience. Without either, a combo suits the kind.
+
 --concept FILE is a JSON file from the chosen idea (references/concept.md). Anything it
 names overrules the random pick; it still cannot use material the project does not have.
 
 Other options: --history FILE  --no-history  --seed N  --force
+Output lines start with OK, CHOICE, FAIL or RESULT. A CHOICE is a colour decision for the user.
 Output lines start with OK, FAIL or RESULT. Exit codes: 0 done, 1 failed, 2 usage error.
 """
 from __future__ import annotations
@@ -33,9 +37,16 @@ ASSETS = HERE.parent / "assets"
 RECENT = 3
 MATERIAL = {"numbers", "images", "portrait", "projects", "experience", "skills", "quotes", "form"}
 RADII = {"sharp": "0 / 2px / 4px", "tight": "4px / 6px / 8px", "soft": "6px / 8px / 12px", "round": "8px / 12px / 20px"}
-CONCEPT_KEYS = {"name", "hero", "palette", "fonts", "radius", "motion", "order", "sections", "type_contrast", "backgrounds", "headings", "images", "parallax", "signature"}
+CONCEPT_KEYS = {"name", "hero", "palette", "two_actions", "fonts", "radius", "motion", "order", "sections", "type_contrast", "backgrounds", "headings", "images", "parallax", "signature"}
 PICTURES = {"images", "portrait"}
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
+
+def module(name):
+    spec = importlib.util.spec_from_file_location(name, HERE / (name + ".py"))
+    loaded = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(loaded)
+    return loaded
 
 
 def contrast_module():
@@ -189,10 +200,16 @@ def choose_parallax(concept, hero, plan, has, motion, rng, problems):
     return wanted
 
 
+LABEL_CLASS = {"accent": ".btn--primary", "accent-2": ".btn--accent-2"}
+ACCEPTED = {"on-accent": ("on-accent", "accent"), "on-accent-2": ("on-accent-2", "accent-2"), "text": ("ink", "bg")}
+
+
 def design_css(direction, palette, fonts):
     def block(tokens):
         return "".join("  --%s: %s;\n" % item for item in tokens.items())
-    return ('/* Written by deal.py. Load after the kit\'s tokens.css. */\n'
+    notes = "".join("/* large labels: --%s */\n%s { font-size: var(--text-h3); font-weight: 700; }\n" % (n, LABEL_CLASS[n]) for n in palette.get("large", []))
+    notes += "".join("/* accepted: --%s on --%s */\n" % ACCEPTED[k] for k, v in palette.get("decisions", {}).items() if v == "keep")
+    return ('/* Written by deal.py. Load after the kit\'s tokens.css. */\n' + notes +
             ':root {\n  --font-display: "%s Variable", ui-sans-serif, system-ui, sans-serif;\n  --font-body: "%s Variable", ui-sans-serif, system-ui, sans-serif;\n%s}\n\n'
             '@media (prefers-color-scheme: dark) {\n  :root:not([data-theme="light"]) {\n%s  }\n}\n\n'
             ':root[data-theme="dark"] {\n%s}\n') % (
@@ -200,8 +217,37 @@ def design_css(direction, palette, fonts):
         "".join("  " + line + "\n" for line in block(palette["dark"]).splitlines()), block(palette["dark"]))
 
 
-def design_md(d, palette, fonts, kit):
-    rows = "".join("| `%s` | `%s` | `%s` |\n" % (k, palette["light"][k], palette["dark"][k]) for k in palette["light"])
+def colour_section(d, palette, used_for):
+    rows = "".join("| `--%s` | `%s` | `%s` | %s |\n" % (k, palette["light"][k], palette["dark"][k], used) for k, used in used_for.items() if k in palette["light"])
+    colours = ", ".join("%s `%s`" % kv for kv in palette["colors"].items())
+    roles = ", ".join("%s is %s" % (role, name) for role, name in palette["roles"].items())
+    source = ("Your own colours, kept exactly: %s." % colours) if palette["id"] == "own" else ("Combo `%s` (%s): %s." % (palette["id"], palette["name"], colours))
+    if "action-2" in palette["roles"] and d["two_actions"]:
+        second = "This page has two distinct actions of similar weight, so the second uses `.btn--accent-2`. Never use it for links or focus."
+    elif "action-2" in palette["roles"]:
+        second = "The combo has a second button colour, but this page has one main action, so a second button is an outline (`.btn--secondary`)."
+    else:
+        second = "A second button is an outline (`.btn--secondary`)."
+    extra = []
+    if palette.get("large"):
+        extra.append("Button labels on %s are large and bold, so they pass at 3:1." % ", ".join("`--%s`" % n for n in palette["large"]))
+    if palette.get("choices"):
+        extra.append("Open colour choices, to put to the user: " + " ".join(palette["choices"]))
+    return f"""{source} Roles: {roles}.
+
+Every colour is set here before any code. Use the tokens; never write a colour value in a component.
+
+| Token | Light | Dark | Used for |
+|---|---|---|---|
+{rows}
+- Text links: `--link`, underlined in `--link-line`. They use the action colour only when it reads as text.
+- {second}
+- A band (`data-bands="banded"`) switches text to the `--band-ink` set for that section.
+{''.join('- ' + e + chr(10) for e in extra)}
+Status colours use the kit's defaults."""
+
+
+def design_md(d, palette, fonts, kit, used_for):
     def notes(section_id, fallback=None):
         items = ["signature, fallback `%s`" % fallback] if fallback else []
         return ", ".join(items + (["parallax"] if d["parallax"] == section_id else []))
@@ -221,16 +267,13 @@ Written by `deal.py`. Later work reads this file and does not re-decide the look
 
 ## Theme and atmosphere
 
-Palette `{palette['id']}` ({palette['mood']}), type `{fonts['id']}` ({fonts['mood']}), radius family `{d['radius']}`, density `{d['density']}`.
+Palette `{palette['id']}` ({palette['name']}), type `{fonts['id']}` ({fonts['mood']}), radius family `{d['radius']}`, density `{d['density']}`.
 
 Add one or two sentences here on how this should feel, from the fact sheet and voice in `COPY.md`.
 
 ## Colour
 
-| Token | Light | Dark |
-|---|---|---|
-{rows}
-Status colours and the rest use the kit's defaults.
+{colour_section(d, palette, used_for)}
 
 ## Typography
 
@@ -283,6 +326,8 @@ def main(argv=None):
     ap.add_argument("--has", default="", help="comma-separated real material")
     ap.add_argument("--out", required=True, help="project root")
     ap.add_argument("--concept", help="JSON file from the chosen idea; it overrules any pick")
+    ap.add_argument("--colors", help="JSON file with the user's own colours, kept exactly")
+    ap.add_argument("--audience", help="prefer combos made for this audience")
     ap.add_argument("--history", default=os.path.expanduser("~/.ai-toolkit/ui-craft-history.json"))
     ap.add_argument("--no-history", action="store_true", help="for a preview: leave the history unchanged")
     ap.add_argument("--seed", type=int, default=None)
@@ -327,8 +372,29 @@ def main(argv=None):
 
     heroes = [h for h in spec["heroes"] if available(h, has)]
     hero = "custom" if concept.get("hero") == "custom" else choose("hero", heroes, concept, problems, rng, used("hero"), lambda h: h["id"])["id"]
-    palettes = [p for p in load("palettes.json")["palettes"] if args.kind in p["kinds"]]
-    palette = choose("palette", palettes, concept, problems, rng, used("palette"), lambda p: p["id"])
+    colors = module("colors")
+    if args.colors:
+        try:
+            own = json.loads(Path(args.colors).read_text(encoding="utf-8"))
+        except (OSError, ValueError) as error:
+            print("usage error: cannot read the colours file: %s" % error, file=sys.stderr)
+            return 2
+        bad = colors.validate(own) if isinstance(own, dict) else ["the colours file holds an object"]
+        if bad:
+            for line in bad:
+                print("usage error: colours file: " + line, file=sys.stderr)
+            return 2
+        if "palette" in concept:
+            problems.append("concept: names palette %s, but the user's own colours were given; drop one" % concept["palette"])
+        result = colors.derive(own)
+        problems += result["fails"]
+        palette = {"id": "own", "name": own.get("name", "Your colours"), "mood": own.get("mood", ""), "colors": own["colors"], "roles": own["roles"],
+                   "light": result["light"], "dark": result["dark"], "large": result["large"], "choices": result["choices"], "decisions": own.get("decisions", {})}
+    else:
+        palettes = [p for p in load("palettes.json")["palettes"] if args.kind in p["kinds"]]
+        if args.audience and "palette" not in concept:
+            palettes = [p for p in palettes if args.audience in p["audiences"]] or palettes
+        palette = choose("palette", palettes, concept, problems, rng, used("palette"), lambda p: p["id"])
     pairings = [f for f in load("fonts.json")["pairings"] if args.kind in f["kinds"]]
     matching = pairings if "fonts" in concept else [f for f in pairings if f["mood"] == palette["mood"]] or pairings
     fonts = choose("fonts", matching, concept, problems, rng, used("fonts"), lambda f: f["id"])
@@ -363,7 +429,8 @@ def main(argv=None):
         return 1
 
     contrast = contrast_module()
-    fails = contrast.check("light", palette["light"]) + contrast.check("dark", palette["dark"])
+    accepted = ["%s/%s" % ACCEPTED[k] for k, v in palette.get("decisions", {}).items() if v == "keep"]
+    fails = contrast.check("light", palette["light"], palette.get("large", []), accepted) + contrast.check("dark", palette["dark"])
     if fails:
         for line in fails:
             print("FAIL %s" % line)
@@ -371,11 +438,11 @@ def main(argv=None):
         return 1
 
     direction = {"kind": args.kind, "has": sorted(has), "hero": hero, "palette": palette["id"], "fonts": fonts["id"], "radius": radius,
-                 "density": spec["density"], "motion": motion, "type_contrast": type_contrast, "backgrounds": backgrounds, "headings": headings,
+                 "density": spec["density"], "motion": motion, "two_actions": bool(concept.get("two_actions")), "type_contrast": type_contrast, "backgrounds": backgrounds, "headings": headings,
                  "images": images, "parallax": parallax, "sections": sections, "concept": concept.get("name"), "run": uuid.uuid4().hex[:12]}
     kit = (ASSETS / "kit" / "VERSION").read_text(encoding="utf-8").strip()
     out.mkdir(parents=True, exist_ok=True)
-    target.write_text(design_md(direction, palette, fonts, kit), encoding="utf-8")
+    target.write_text(design_md(direction, palette, fonts, kit, colors.USED_FOR), encoding="utf-8")
     (out / "design.json").write_text(json.dumps(direction, indent=2) + "\n", encoding="utf-8")
     (out / "design.css").write_text(design_css(direction, palette, fonts), encoding="utf-8")
 
@@ -388,6 +455,8 @@ def main(argv=None):
         history_path.write_text(json.dumps(history[-20:] + [entry], indent=2) + "\n", encoding="utf-8")
 
     print("OK   hero %s, palette %s, fonts %s, radius %s, motion %s" % (hero, palette["id"], fonts["id"], radius, motion))
+    for line in palette.get("choices", []):
+        print("CHOICE " + line)
     print("OK   type %s, backgrounds %s, headings %s, images %s, parallax %s" % (type_contrast, backgrounds, headings, images, parallax or "none"))
     print("OK   sections: %s" % ", ".join("%s/%s" % (s["id"], s["variant"]) for s in direction["sections"]))
     print("OK   wrote DESIGN.md, design.json and design.css in %s" % out)

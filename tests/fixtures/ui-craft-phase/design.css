@@ -1,0 +1,82 @@
+/* Written by deal.py. Load after the kit's tokens.css. */
+:root {
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --bg: #F4F1E8;
+  --surface: oklch(98.3% 0.005 91.5);
+  --surface-2: oklch(92.3% 0.012 91.5);
+  --ink: #2A2B1E;
+  --ink-2: oklch(48.6% 0.019 107.7);
+  --ink-3: oklch(53.3% 0.019 106.6);
+  --line: oklch(86.4% 0.014 96.1);
+  --line-strong: oklch(62.8% 0.017 104.2);
+  --accent: #2A2B1E;
+  --on-accent: #F4F1E8;
+  --accent-soft: oklch(86.4% 0.014 96.1);
+  --link: #2A2B1E;
+  --link-line: #2A2B1E;
+  --focus: #2A2B1E;
+  --accent-2: #2A2B1E;
+  --on-accent-2: #F4F1E8;
+  --band: oklch(98.3% 0.005 91.5);
+  --band-ink: #2A2B1E;
+  --band-ink-2: oklch(48.6% 0.019 107.7);
+  --band-ink-3: oklch(53.3% 0.019 106.6);
+  --band-line: oklch(86.4% 0.014 96.1);
+  --highlight: #E3B23C;
+  --on-highlight: #2A2B1E;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: oklch(18.0% 0.023 111.4);
+    --surface: oklch(22.5% 0.023 111.4);
+    --surface-2: oklch(27.0% 0.023 111.4);
+    --ink: oklch(95.8% 0.012 91.5);
+    --ink-2: oklch(72.5% 0.015 100.3);
+    --ink-3: oklch(61.6% 0.017 103.3);
+    --line: oklch(28.9% 0.021 109.8);
+    --line-strong: oklch(52.2% 0.018 105.5);
+    --accent: oklch(95.8% 0.012 91.5);
+    --on-accent: oklch(18.0% 0.023 111.4);
+    --accent-soft: oklch(28.9% 0.021 109.8);
+    --link: oklch(95.8% 0.012 91.5);
+    --link-line: oklch(95.8% 0.012 91.5);
+    --focus: oklch(95.8% 0.012 91.5);
+    --accent-2: oklch(95.8% 0.012 91.5);
+    --on-accent-2: oklch(18.0% 0.023 111.4);
+    --band: oklch(22.5% 0.023 111.4);
+    --band-ink: oklch(95.8% 0.012 91.5);
+    --band-ink-2: oklch(72.5% 0.015 100.3);
+    --band-ink-3: oklch(61.6% 0.017 103.3);
+    --band-line: oklch(28.9% 0.021 109.8);
+    --highlight: oklch(36.0% 0.072 85.2);
+    --on-highlight: oklch(95.8% 0.012 91.5);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: oklch(18.0% 0.023 111.4);
+  --surface: oklch(22.5% 0.023 111.4);
+  --surface-2: oklch(27.0% 0.023 111.4);
+  --ink: oklch(95.8% 0.012 91.5);
+  --ink-2: oklch(72.5% 0.015 100.3);
+  --ink-3: oklch(61.6% 0.017 103.3);
+  --line: oklch(28.9% 0.021 109.8);
+  --line-strong: oklch(52.2% 0.018 105.5);
+  --accent: oklch(95.8% 0.012 91.5);
+  --on-accent: oklch(18.0% 0.023 111.4);
+  --accent-soft: oklch(28.9% 0.021 109.8);
+  --link: oklch(95.8% 0.012 91.5);
+  --link-line: oklch(95.8% 0.012 91.5);
+  --focus: oklch(95.8% 0.012 91.5);
+  --accent-2: oklch(95.8% 0.012 91.5);
+  --on-accent-2: oklch(18.0% 0.023 111.4);
+  --band: oklch(22.5% 0.023 111.4);
+  --band-ink: oklch(95.8% 0.012 91.5);
+  --band-ink-2: oklch(72.5% 0.015 100.3);
+  --band-ink-3: oklch(61.6% 0.017 103.3);
+  --band-line: oklch(28.9% 0.021 109.8);
+  --highlight: oklch(36.0% 0.072 85.2);
+  --on-highlight: oklch(95.8% 0.012 91.5);
+}

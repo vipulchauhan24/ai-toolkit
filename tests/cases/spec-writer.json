@@ -129,5 +129,37 @@
     "post": [
       "python3 -I {repo}/skills/spec-writer/scripts/check_spec.py spec.md"
     ]
+  },
+  {
+    "id": "spec-writer-reads-pdf",
+    "tier": "slow",
+    "fixture": "spec-writer-projects",
+    "covers": [
+      "skills/spec-writer"
+    ],
+    "source": "spec-writer.md: Functional / PDF brief",
+    "prompt": "Use the ai-toolkit:spec-writer skill to write a spec from brief.pdf. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(git:*),Bash(date:*)",
+    "skills": [
+      "spec-writer"
+    ],
+    "reads": [
+      "brief\\.pdf"
+    ],
+    "must_not": [
+      "(?i)pypdf|pip install|PyMuPDF|fitz"
+    ],
+    "files": [
+      {
+        "glob": "spec.md",
+        "must": [
+          "Hollow Oak",
+          "(?i)leeds"
+        ]
+      }
+    ],
+    "unchanged": [
+      "brief.pdf"
+    ]
   }
 ]

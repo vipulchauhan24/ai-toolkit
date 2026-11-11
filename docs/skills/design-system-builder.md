@@ -82,7 +82,7 @@ In screenshots and mixed modes, colors read from images are approximations. The 
 
 ### Step 4: Review the Output
 
-The skill names the theme in its direction summary (for example `Ember`) and writes to a folder of that name, `<theme-name>/`, in the working directory unless you name another location.
+The skill names the theme in its direction summary (for example `Harbor`) and writes to a folder of that name, `<theme-name>/`, in the working directory unless you name another location.
 
 | File                 | Contents                                                                                       |
 | -------------------- | ---------------------------------------------------------------------------------------------- |

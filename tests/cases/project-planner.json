@@ -122,5 +122,56 @@
         ]
       }
     ]
+  },
+  {
+    "id": "planner-portfolio-design-direction",
+    "tier": "slow",
+    "fixture": "project-planner-portfolio",
+    "covers": [
+      "skills/project-planner",
+      "skills/project-planner/references/project-planner-rules.md"
+    ],
+    "source": "project-planner.md: Functional / Portfolio with fixed colours",
+    "prompt": "Use the ai-toolkit:project-planner skill to plan spec-portfolio.md and write the phase files. Work non-interactively: take the spec's answers and the defaults, and do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit",
+    "skills": [
+      "project-planner"
+    ],
+    "reads": [
+      "project-planner-rules\\.md"
+    ],
+    "files": [
+      {
+        "glob": ".plans/phases/README.md",
+        "must": [
+          "(?i)design direction",
+          "ui-craft"
+        ]
+      },
+      {
+        "glob": ".plans/phases/phase-1-*.md",
+        "must": [
+          "ui-craft",
+          "DESIGN\\.md",
+          "colors\\.json"
+        ]
+      },
+      {
+        "glob": ".plans/phases/phase-[2-9]-*.md",
+        "each": true,
+        "must": [
+          "DESIGN\\.md"
+        ],
+        "must_not": [
+          "#[0-9A-Fa-f]{6}\\b",
+          "\\b(?:bg|max-w|px|py|mx|my)-[a-z0-9\\[]+",
+          "\\btext-(?:xs|sm|base|lg|[2-9]?xl)\\b",
+          "\\bclassName="
+        ]
+      }
+    ],
+    "unchanged": [
+      "spec-portfolio.md"
+    ]
   }
 ]

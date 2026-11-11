@@ -25,6 +25,12 @@ PAIRS = [
     ("on-accent", "accent", 4.5), ("ink", "accent-soft", 4.5),
     ("accent", "bg", 3.0), ("line-strong", "bg", 3.0), ("line-strong", "surface", 3.0),
 ]
+# Checked when present: palettes from colour combos define them, older ones may not.
+OPTIONAL = [
+    ("link", "bg", 4.5), ("focus", "bg", 3.0), ("on-accent-2", "accent-2", 4.5), ("accent-2", "bg", 3.0),
+    ("band-ink", "band", 4.5), ("band-ink-2", "band", 4.5), ("band-ink-3", "band", 4.5),
+    ("on-highlight", "highlight", 4.5),
+]
 
 
 def oklch_to_srgb(l, c, h):
@@ -62,9 +68,14 @@ def ratio(a, b):
     return (high + 0.05) / (low + 0.05)
 
 
-def check(name, tokens):
+def check(name, tokens, large=(), accepted=()):
+    """large: fills whose labels are large and bold, so 3:1. accepted: pairs the owner chose to keep, as 'fg/bg'."""
     fails = []
-    for fg, bg, minimum in PAIRS:
+    for fg, bg, minimum in PAIRS + [p for p in OPTIONAL if p[0] in tokens and p[1] in tokens]:
+        if fg.startswith("on-") and bg in large:
+            minimum = 3.0
+        if "%s/%s" % (fg, bg) in accepted:
+            continue
         if fg not in tokens or bg not in tokens:
             fails.append("%s: missing token --%s or --%s" % (name, fg, bg))
             continue
@@ -104,8 +115,11 @@ def main(argv=None):
             print("FAIL no colour tokens found in %s" % path)
             print("RESULT  FAIL")
             return 1
+        text = path.read_text(encoding="utf-8")
+        large = re.findall(r"/\* large labels: --([a-z0-9-]+) \*/", text)
+        accepted = re.findall(r"/\* accepted: --([a-z0-9-]+) on --([a-z0-9-]+) \*/", text)
         for mode, tokens in sets.items():
-            fails += check(mode, tokens)
+            fails += check(mode, tokens, large if mode == "light" else (), ["%s/%s" % a for a in accepted] if mode == "light" else ())
     for line in fails:
         print("FAIL " + line)
     print("RESULT  %s" % ("FAIL" if fails else "PASS"))

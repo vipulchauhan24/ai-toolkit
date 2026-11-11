@@ -28,7 +28,7 @@ The `claude -p` cases in `tests/cases/*.json` are derived from those files. Each
 python3 tests/run.py cases --list                 # list the cases
 python3 tests/run.py cases --tier fast            # fast only
 python3 tests/run.py cases --tier slow            # fast and slow (the default)
-python3 tests/run.py cases --tier network         # needs internet, for Ember
+python3 tests/run.py cases --tier network         # needs internet
 python3 tests/run.py cases --case doc-trimmer-id  # one case, no log written
 ```
 
@@ -73,12 +73,11 @@ Assert only what a skill's text requires: a required line, a file written, a fil
 ```text
 tests/fixtures/
   frontend-react/{base,next}/{clean,seeded}/ + expected.json
-  ui-developer/base/{clean,seeded}/          + expected.json
   design-system-builder/{clean/Mini, seeded/MiniLowContrast}/tokens.css
   ui-craft/base/{clean,seeded}/              + expected.json
   visual-qa/{capture,capture-injection,site}/ + fake_cli.py, grades-good.json
   doc-trimmer/  doc-reviewer/  project-planner-pattern/  project-planner-greenfield/
-  frontend-react-projects/  ui-developer-projects/  skill-runner/  empty/    (inputs for model cases)
+  frontend-react-projects/  skill-runner/  empty/    (inputs for model cases)
 ```
 
 `<skill>/<flag-set>/` holds the files for one way of running a check script: `base` is a plain run, and any other name is passed as a flag (`next` runs `--next`). `clean/` files must pass. Each `seeded/` file holds one violation and nothing else the script would fail on, and `expected.json` maps it to a regex its `FAIL` line must match (the same file also holds `clean_files`, the clean file count, and `xfail`, a map of seeded files whose rule is known not to fire yet, which must stay empty).

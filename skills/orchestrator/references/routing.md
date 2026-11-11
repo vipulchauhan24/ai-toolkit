@@ -6,7 +6,10 @@ Read each phase document, not its title. A phase can match more than one row. Us
 
 | The phase contains | Signals in the phase document | Skills, in this order |
 |---|---|---|
-| Screens, components or styling in React or Next.js | UX flow, screenshots or layout references; page and component files in the file table; React or Next.js pinned | `ai-toolkit:frontend-react`, then `ai-toolkit:ui-developer` |
+| Design direction | Writes `COPY.md`, concepts and `DESIGN.md`; the user chooses the look | Park with `main_session_skill` `ai-toolkit:ui-craft` |
+| Screens in React or Next.js, on a project with `DESIGN.md` | Says `Look: from DESIGN.md`, or depends on a Design direction phase; page and section files in the file table | `ai-toolkit:ui-craft`, then `ai-toolkit:frontend-react` |
+| Screens in plain HTML, CSS and JS, on a project with `DESIGN.md` | As above, with no framework pinned | `ai-toolkit:ui-craft` |
+| Screens, components or styling in React or Next.js, with no `DESIGN.md` | UX flow, screenshots or layout references; page and component files in the file table; React or Next.js pinned | `ai-toolkit:frontend-react`, following the design system the spec names or the project's existing styles |
 | Screens in another frontend stack | UI files, and a stack that is not React or Next.js | Park: no skill for that stack |
 | Server code in Node.js, Python or Julia | Services, entity classes, model structs, data processing; Node.js, Python (Django or FastAPI) or Julia pinned | `ai-toolkit:backend-node`, `ai-toolkit:backend-python` or `ai-toolkit:julia` |
 | Route handlers, controllers, auth, request validation | API contracts, endpoints, login, permissions | `ai-toolkit:api-builder` after the language skill; park if not installed |
@@ -18,6 +21,8 @@ Read each phase document, not its title. A phase can match more than one row. Us
 | Only documents or configuration | Docs, README rows, manifests, version bumps | Park unless a skill clearly fits: no skill writes these in this release |
 
 A phase with both server and screen work lists the server skill first and the screen skills after it, so one phase stays one pull request on one branch.
+
+When `ui-craft` builds a phase, tell it in the brief that this is a phase build: it reads the existing `COPY.md` and `DESIGN.md`, builds only the sections the phase names, and never chooses the look again. `frontend-react` follows it, so the code meets the React rules and the project's checks pass.
 
 Release, version and tag phases are parked: the user runs the release checklist.
 

@@ -18,7 +18,7 @@
 - "Poke holes in this spec." (doc-reviewer)
 - "Tighten the wording of this spec." (doc-trimmer)
 - "Write a spec for a URL shortener."
-- "Build the first screen from this phase." (ui-developer or frontend-react)
+- "Build the first screen from this phase." (ui-craft or frontend-react)
 - "Make me a sprint plan in Linear."
 - "Summarise this PRD."
 - "What database should I use?"
@@ -42,6 +42,11 @@
 - Given: a pasted spec and no request for files
 - When: the skill runs
 - Then: the overview and phase documents are printed inline, separated by `---`, and no file is written.
+
+**Portfolio with fixed colours**
+- Given: a portfolio spec in Next.js that fixes three colours, and a run that cannot ask questions
+- When: the planner writes phase files
+- Then: the first phase is Design direction, done with `ui-craft`, and passes the colours to `colors.json`; no later phase holds a colour value, a utility class or markup for the look, and each says the look comes from `DESIGN.md`.
 
 **No forward references**
 - Given: any generated plan

@@ -10,6 +10,8 @@ After dealing:
 2. Remove any section the facts cannot support.
 3. If the deal clashes with something the client already has, such as a logo colour, edit `DESIGN.md` and `design.css` together and run `contrast.py design.css`.
 
+The "Colour" section is the role map: every token, its light and dark value, and what it is for. Build only from it.
+
 Options set on `html`, from "Layout":
 
 | Attribute | Values |

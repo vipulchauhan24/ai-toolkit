@@ -1,0 +1,54 @@
+{
+  "kind": "portfolio",
+  "has": [
+    "experience",
+    "numbers",
+    "quotes"
+  ],
+  "hero": "name-led",
+  "palette": "olive-bone-mustard",
+  "fonts": "bricolage-dm",
+  "radius": "soft",
+  "density": "comfortable",
+  "motion": "standard",
+  "two_actions": false,
+  "type_contrast": "quiet",
+  "backgrounds": "plain",
+  "headings": "left",
+  "images": "none",
+  "parallax": null,
+  "sections": [
+    {
+      "id": "experience",
+      "variant": "timeline",
+      "shape": "rail"
+    },
+    {
+      "id": "about",
+      "variant": "text-only",
+      "shape": "text"
+    },
+    {
+      "id": "testimonials",
+      "variant": "two-column",
+      "shape": "columns"
+    },
+    {
+      "id": "proof-stats",
+      "variant": "row",
+      "shape": "stats"
+    },
+    {
+      "id": "contact",
+      "variant": "direct",
+      "shape": "statement"
+    },
+    {
+      "id": "footer",
+      "variant": "minimal",
+      "shape": "bar"
+    }
+  ],
+  "concept": null,
+  "run": "23fea02384c9"
+}

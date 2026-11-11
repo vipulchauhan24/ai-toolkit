@@ -3,9 +3,9 @@
 
 Usage:
   check_contrast.py <design-system-dir>       # reads <design-system-dir>/tokens.css
-  check_contrast.py Ember --pair --color-text-brand --color-surface 4.5
-  check_contrast.py Ember --hex               # print resolved hex per theme (for fallbacks)
-  check_contrast.py Ember --allow --color-primary --color-surface
+  check_contrast.py Harbor --pair --color-text-brand --color-surface 4.5
+  check_contrast.py Harbor --hex               # print resolved hex per theme (for fallbacks)
+  check_contrast.py Harbor --allow --color-primary --color-surface
                                               # known, documented exception: reported as KNOWN, not a failure
 
 Themes: "light" = :root declarations; "dark" = light merged with overrides found in

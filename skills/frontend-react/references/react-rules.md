@@ -1,6 +1,6 @@
 # React Rules
 
-Rules for React code, read by the frontend-react skill. For a Next.js project the skill also reads `nextjs-rules.md` in this folder. They cover how the code is written. Appearance, tokens and the component look belong to the design system and the ui-developer skill, not here.
+Rules for React code, read by the frontend-react skill. For a Next.js project the skill also reads `nextjs-rules.md` in this folder. They cover how the code is written. Appearance, tokens and the component look belong to the project's `DESIGN.md` (written by ui-craft) or the design system the spec names, not here.
 
 **Precedence:** a rule in the phase document wins over the existing codebase's conventions, and the conventions win over these rules. Two exceptions:
 
@@ -157,7 +157,7 @@ Work in this order, because the earlier items cost more than the later ones: wat
 
 ## 10. Accessibility in code
 
-The design system and the ui-developer skill own the visual and ARIA floor. In code:
+`DESIGN.md` and the ui-craft skill own the visual floor. In code:
 
 - Use the semantic element: `<button>` for actions, `<a>` for navigation, `<ul>` for lists, `<form>` for forms. Never put `onClick` on a `<div>` or `<span>`.
 - A control that is not a native element needs a role, a keyboard handler and a tab stop. Prefer a native element instead.

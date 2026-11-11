@@ -19,7 +19,7 @@
 - "Write a Svelte component."
 - "Build a React Native screen."
 - "Pick colors and spacing for my app." (design-system-builder)
-- "Make this screen look like my design system." (ui-developer, alone)
+- "Make this screen look like my design system." (ui-craft, alone)
 - "Build the REST API for orders."
 - "Write the SQL schema for users."
 - "Write plain HTML and CSS for a landing page."

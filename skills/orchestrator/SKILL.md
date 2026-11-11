@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: >
-  Takes a spec through to pushed branches, one per phase: it gets the spec written and approved, gets the project split into phases, then runs each phase through the right skills in separate git worktrees, in dependency order, stopping at the gates where you decide. Use for "build this project from the spec", "orchestrate this plan", "run the phases", "take this spec to a built app", "carry on with the next phase", or when the user has a spec or a phases folder and wants the whole thing built, not one piece. A small program, the engine, keeps the route and the ledger so no step is skipped. It commits and pushes each built phase's branch, never opens a pull request, never merges, and never writes code itself. Claude Code only. Not for building one screen or one service (use ui-developer, frontend-react, backend-node, backend-python or julia directly), not for planning alone (use project-planner), and not for writing a spec alone (use spec-writer).
+  Takes a spec through to pushed branches, one per phase: it gets the spec written and approved, gets the project split into phases, then runs each phase through the right skills in separate git worktrees, in dependency order, stopping at the gates where you decide. Use for "build this project from the spec", "orchestrate this plan", "run the phases", "take this spec to a built app", "carry on with the next phase", or when the user has a spec or a phases folder and wants the whole thing built, not one piece. A small program, the engine, keeps the route and the ledger so no step is skipped. It commits and pushes each built phase's branch, never opens a pull request, never merges, and never writes code itself. Claude Code only. Not for building one screen or one service (use ui-craft, frontend-react, backend-node, backend-python or julia directly), not for planning alone (use project-planner), and not for writing a spec alone (use spec-writer).
 license: MIT
 compatibility: Claude Code only. Needs the Agent and Skill tools, git with worktrees, the skill-runner agent from this plugin, and Python 3.9 or later to run scripts/engine.py. Pushing needs a git remote you can push to.
 model: sonnet
@@ -13,7 +13,7 @@ Runs a project from an approved spec to one pushed branch per phase, one phase a
 
 You are the conductor. You talk to the user, ask the questions, start the helpers and read what they report. You never write the project's code yourself. The engine (`scripts/engine.py`) is the route and the ledger: it knows which phases exist, what each depends on, and what has happened. It starts nothing and cannot be talked into anything. You start things, and only after the engine says you may.
 
-This is the one skill allowed to call other skills. Run the interactive ones (spec-writer, doc-trimmer, doc-reviewer, project-planner, design-system-builder) here, in the main session, with the Skill tool, because they ask the user questions. Run every build phase through the `ai-toolkit:skill-runner` agent with the Agent tool, because helpers cannot ask questions and should not fill this conversation. Skills never call each other. They exchange work through files.
+This is the one skill allowed to call other skills. Run the interactive ones (spec-writer, doc-trimmer, doc-reviewer, project-planner, design-system-builder, and ui-craft for a Design direction phase) here, in the main session, with the Skill tool, because they ask the user questions. Run every build phase through the `ai-toolkit:skill-runner` agent with the Agent tool, because helpers cannot ask questions and should not fill this conversation. Skills never call each other. They exchange work through files.
 
 **Hard rules**
 
@@ -36,7 +36,7 @@ This is the one skill allowed to call other skills. Run the interactive ones (sp
 | Repository | The current folder |
 | Base branch | The branch that is checked out now |
 | Phases folder | `.plans/phases/` at the project root, if it exists |
-| Design system | The one the spec names, else Ember (ui-developer's default) |
+| Design system | `DESIGN.md` from a Design direction phase, when the plan has one. Otherwise the one the spec names, else the project's existing styles |
 | Worker cap (helpers at once) | 3 |
 
 Tell the user to add `.orchestrator/` to `.gitignore` if it is not ignored. Do not edit `.gitignore` yourself.
@@ -54,7 +54,7 @@ Check that `git remote` lists a remote and that the base branch tracks it. If th
 - A phases folder with a `README.md` already exists: read it, and ask the user only about what is missing or contradicts the spec.
 - Otherwise run `ai-toolkit:project-planner` here on `spec.approved.md`, asking it to write the phase files to `.plans/phases/`.
 - `.plans/` is git-ignored, so worktrees do not contain it. Helpers always get the phase document and the spec by absolute path into this checkout; the engine's runner calls already give absolute paths. It asks the user the stack, data and auth questions itself.
-- A phase that creates a new design system is done by `ai-toolkit:design-system-builder` in this session, not by a helper, because it needs the user's direction. Route it as described in `references/routing.md`.
+- A phase that creates a new design system is done by `ai-toolkit:design-system-builder` in this session, not by a helper, because it needs the user's direction. A Design direction phase is done the same way by `ai-toolkit:ui-craft`, asking it for the direction only: copy, concepts and `DESIGN.md`, with no build. Commit those files on the phase's branch. Route both as described in `references/routing.md`.
 
 ## 3. Route
 
