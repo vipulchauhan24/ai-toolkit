@@ -23,7 +23,7 @@ The engine (`skills/orchestrator/scripts/engine.py`) is tested offline by `pytho
 - "Plan this project using docs/spec.md." (project-planner)
 - "Write a spec for this brief." (spec-writer)
 - "Poke holes in this plan." (doc-reviewer)
-- "Create a design system." (design-system-builder)
+- "Create a design system."
 - "Explain what a DAG is."
 - "Merge my open pull requests."
 - "Schedule a nightly build."

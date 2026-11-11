@@ -151,7 +151,7 @@
       {
         "glob": ".plans/phases/phase-1-*.md",
         "must": [
-          "ui-craft",
+          "design-md",
           "DESIGN\\.md",
           "colors\\.json"
         ]

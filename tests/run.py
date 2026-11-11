@@ -13,8 +13,7 @@ Layers
   static   Structure of manifests, skills, agents, rules files, cross-references,
            skill folder shape, SKILL.md length, front matter, contents lists and
            shared files. Offline, no model, a few seconds.
-  scripts  Check scripts run against clean and seeded fixtures, and the
-           design-system-builder scripts. Offline, no model.
+  scripts  Check scripts run against clean and seeded fixtures. Offline, no model.
   cases    Skills and agents run through `claude -p` with the plugin loaded from
            this checkout, then asserted. Needs the `claude` CLI and uses tokens.
 
@@ -74,22 +73,22 @@ DEFAULT_PATTERNS = {
 # Every script under skills/*/scripts needs a test. Later skill phases add their own entry.
 SCRIPT_COVERAGE = {
     "skills/frontend-react/scripts/check_react.py": "tests/fixtures/frontend-react",
-    "skills/design-system-builder/scripts/check_contrast.py": "tests/fixtures/design-system-builder",
-    "skills/design-system-builder/scripts/check_contrast.sh": "tests/fixtures/design-system-builder",
-    "skills/design-system-builder/scripts/build_tokens_json.py": "tests/fixtures/design-system-builder",
     "skills/backend-node/scripts/check_node.py": "tests/fixtures/backend-node",
     "skills/backend-python/scripts/check_python.py": "tests/fixtures/backend-python",
     "skills/julia/scripts/check_julia.py": "tests/fixtures/julia",
     "skills/orchestrator/scripts/engine.py": "tests/fixtures/orchestrator",
     "skills/spec-writer/scripts/check_spec.py": "tests/fixtures/spec-writer",
+    "skills/copy-writer/scripts/check_copy.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/check_copy.py": "tests/fixtures/ui-craft",
-    "skills/ui-craft/scripts/deal.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/contrast.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/icons.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/audit.py": "tests/fixtures/ui-craft",
-    "skills/ui-craft/scripts/sameness.py": "tests/fixtures/ui-craft",
-    "skills/ui-craft/scripts/preview.py": "tests/fixtures/ui-craft",
-    "skills/ui-craft/scripts/colors.py": "tests/fixtures/ui-craft",
+    "skills/design-md/scripts/deal.py": "tests/fixtures/ui-craft",
+    "skills/design-md/scripts/contrast.py": "tests/fixtures/ui-craft",
+    "skills/design-md/scripts/audit.py": "tests/fixtures/ui-craft",
+    "skills/design-md/scripts/sameness.py": "tests/fixtures/ui-craft",
+    "skills/design-md/scripts/preview.py": "tests/fixtures/ui-craft",
+    "skills/design-md/scripts/colors.py": "tests/fixtures/ui-craft",
     "skills/visual-qa/scripts/capture.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/report.py": "tests/fixtures/visual-qa",
     "skills/visual-qa/scripts/page_checks.js": "tests/fixtures/visual-qa",
@@ -110,6 +109,7 @@ REQUIRED_FIXTURES = [
     "spec-writer-projects",
     "ui-craft",
     "ui-craft-projects",
+    "design-md-projects",
     "visual-qa",
     "visual-qa/capture",
     "visual-qa/capture-injection",
@@ -541,38 +541,6 @@ def cmd_scripts(_args):
         rc, out = run_py(script, args)
         r.check("usage error: %s exits 2" % label, rc == 2, "exit %d" % rc)
 
-    # design-system-builder scripts
-    dsb = ROOT / "skills" / "design-system-builder" / "scripts"
-    mini = FIXTURES / "design-system-builder" / "clean" / "Mini"
-    low = FIXTURES / "design-system-builder" / "seeded" / "MiniLowContrast"
-    rc, out = run_py(dsb / "check_contrast.py", [rel(mini)])
-    r.check("check_contrast.py: clean Mini passes", rc == 0, "exit %d: %s" % (rc, out.strip()[-200:]))
-    rc, out = run_py(dsb / "check_contrast.py", [rel(low)])
-    hit = re.search(r"^\s*FAIL\s+--color-text-muted on --color-surface", out, re.M)
-    r.check("check_contrast.py: MiniLowContrast fails on text-muted", rc == 1 and bool(hit), "exit %d: %s" % (rc, out.strip()[-200:]))
-    tmp = Path(tempfile.mkdtemp(prefix="tokens-"))
-    try:
-        work = tmp / "Mini"
-        shutil.copytree(mini, work)
-        rc, out = run_py(dsb / "build_tokens_json.py", [work])
-        ok = rc == 0 and (work / "tokens.json").is_file()
-        detail = "exit %d: %s" % (rc, out.strip()[-200:])
-        if ok:
-            try:
-                data = json.loads(read(work / "tokens.json"))
-                blue = data["primitive"]["blue"]["600"]
-                ok = str(blue.get("$value", "")).lower() == "#2563eb" and "$extensions" in read(work / "tokens.json")
-                detail = "tokens.json content differs from the Mini fixture: %s" % blue
-            except (ValueError, KeyError, TypeError) as e:
-                ok, detail = False, "tokens.json: %r" % (e,)
-        r.check("build_tokens_json.py: writes tokens.json with primitives and dark overrides", ok, detail)
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    p = subprocess.run(["bash", str(dsb / "check_contrast.sh")], capture_output=True, text=True)
-    r.check("usage error: check_contrast.sh with no argument exits 2", p.returncode == 2, "exit %d" % p.returncode)
-    rc, out = run_py(dsb / "build_tokens_json.py", [])
-    r.check("usage error: build_tokens_json.py with no argument prints usage", rc != 0 and "usage" in out, "exit %d" % rc)
-
     engine_tests(r)
     visual_qa_tests(r)
     copy_check_tests(r)
@@ -641,7 +609,7 @@ def ui_craft_reference_checks(r):
                 missing_links.append("%s -> %s" % (f.name, ref))
     r.check("ui-craft: every file a kit sample loads exists", not missing_links, "; ".join(missing_links)[:300])
     r.check("ui-craft: every kit sample has sample markers", not no_markers, ", ".join(no_markers)[:300])
-    kinds = json.loads(read(ROOT / "skills" / "ui-craft" / "assets" / "data" / "site-kinds.json"))
+    kinds = json.loads(read(ROOT / "skills" / "design-md" / "assets" / "data" / "site-kinds.json"))
     absent = []
     for kind in kinds.values():
         absent += ["hero/" + h["id"] for h in kind["heroes"] if not (kit / "sections" / "hero" / (h["id"] + ".html")).is_file()]
@@ -656,7 +624,7 @@ def ui_craft_reference_checks(r):
     r.check("ui-craft: parallax sets its transform only from the script", "transform" not in re.sub(r"prefers-reduced-motion.*", "", "".join(ln for ln in read(kit / "motion" / "motion.css").splitlines() if "data-parallax" in ln)))
     rc, out = run_py(ROOT / "skills" / "ui-craft" / "scripts" / "audit.py", [kit])
     r.check("ui-craft: the kit passes its own audit", rc == 0, out[-300:])
-    rc, out = run_py(ROOT / "skills" / "ui-craft" / "scripts" / "contrast.py", [ROOT / "skills" / "ui-craft" / "assets" / "data" / "palettes.json"])
+    rc, out = run_py(ROOT / "skills" / "ui-craft" / "scripts" / "contrast.py", [ROOT / "skills" / "design-md" / "assets" / "data" / "palettes.json"])
     r.check("ui-craft: every palette passes the contrast check", rc == 0, out[-300:])
 
     links = [rel(f) for f in sorted(base.rglob("*.md")) if f.name not in ("NOTICE.md", "review.md") and "http" in read(f)]
@@ -665,7 +633,7 @@ def ui_craft_reference_checks(r):
 
 def copy_check_tests(r):
     """check_copy.py behaviour that the clean and seeded fixture sets cannot express."""
-    script = ROOT / "skills" / "ui-craft" / "scripts" / "check_copy.py"
+    script = ROOT / "skills" / "copy-writer" / "scripts" / "check_copy.py"
     clean = FIXTURES / "ui-craft" / "base" / "clean" / "COPY-portfolio.md"
     page = FIXTURES / "ui-craft" / "base" / "clean" / "index.html"
     text = read(clean)
@@ -732,8 +700,8 @@ def showcase_tests(r):
 
 def ui_craft_script_tests(r):
     """deal.py, sameness.py, preview.py, contrast.py, icons.py and audit.py."""
-    scripts = ROOT / "skills" / "ui-craft" / "scripts"
-    deal, contrast, icons, audit = scripts / "deal.py", scripts / "contrast.py", scripts / "icons.py", scripts / "audit.py"
+    scripts = ROOT / "skills" / "design-md" / "scripts"
+    deal, contrast, icons, audit = scripts / "deal.py", scripts / "contrast.py", ROOT / "skills" / "ui-craft" / "scripts" / "icons.py", scripts / "audit.py"
     sameness, preview = scripts / "sameness.py", scripts / "preview.py"
     tmp = Path(tempfile.mkdtemp(prefix="craft-"))
     try:
@@ -835,7 +803,7 @@ def ui_craft_script_tests(r):
         colors = scripts / "colors.py"
         rc, out = run_py(colors, ["check"])
         r.check("colors.py: every combo derives a passing palette, and palettes.json is current", rc == 0, out[-300:])
-        combos = json.loads(read(ROOT / "skills" / "ui-craft" / "assets" / "data" / "combos.json"))["combos"]
+        combos = json.loads(read(ROOT / "skills" / "design-md" / "assets" / "data" / "combos.json"))["combos"]
         sizes = {len(c["colors"]) for c in combos}
         audiences = {a for c in combos for a in c["audiences"]}
         r.check("colors.py: combos of 2 to 5 colours, for several audiences", sizes == {2, 3, 4, 5} and len(audiences) >= 5, str((sizes, audiences)))

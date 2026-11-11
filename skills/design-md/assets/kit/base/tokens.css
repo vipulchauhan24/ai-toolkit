@@ -1,0 +1,138 @@
+/* Design tokens. The full list and its rules are in references/system/system.md.
+   A project's design.css overrides the colour and font values, nothing else. */
+:root {
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px;
+  --gutter: clamp(24px, 4.5vw, 64px);
+  --section: clamp(64px, 8.5vw, 120px);
+  --grid-gap: clamp(16px, 2vw, 24px);
+  --container: 1200px;
+  --container-wide: 1440px;
+  --container-narrow: 880px;
+  --prose: 68ch;
+  --nav-height: 64px;
+
+  --font-display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lead: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --text-h3: clamp(1.25rem, 1.1rem + 0.4vw, 1.5rem);
+  --text-h2: clamp(1.75rem, 1.379rem + 1.524vw, 2.75rem);
+  --text-h1: clamp(2.25rem, 1.6rem + 2.667vw, 4rem);
+  --text-display: clamp(2.75rem, 1.543rem + 4.952vw, 6rem);
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-normal: 1.6;
+  --tracking-display: -0.03em;
+  --tracking-tight: -0.02em;
+
+  --control-sm: 32px;
+  --control-md: 40px;
+  --control-lg: 48px;
+  --touch: 44px;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  --shadow-1: 0 1px 2px oklch(0% 0 0 / 0.05), 0 1px 3px oklch(0% 0 0 / 0.04);
+  --shadow-2: 0 2px 4px oklch(0% 0 0 / 0.06), 0 8px 24px oklch(0% 0 0 / 0.1);
+  --shadow-3: 0 4px 8px oklch(0% 0 0 / 0.08), 0 24px 56px oklch(0% 0 0 / 0.18);
+  --z-nav: 100; --z-dropdown: 200; --z-modal: 300; --z-toast: 400; --z-tooltip: 500;
+
+  --duration-press: 100ms;
+  --duration-hover: 150ms;
+  --duration-enter: 250ms;
+  --duration-exit: 180ms;
+  --duration-reveal: 400ms;
+  --ease-out: cubic-bezier(0.22, 0.8, 0.3, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.9, 0.4);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.2, 1);
+
+  color-scheme: light;
+  --bg: oklch(98.4% 0.004 85);
+  --surface: oklch(100% 0 0);
+  --surface-2: oklch(95.2% 0.006 85);
+  --ink: oklch(23% 0.012 85);
+  --ink-2: oklch(42% 0.012 85);
+  --ink-3: oklch(48% 0.012 85);
+  --line: oklch(90% 0.008 85);
+  --line-strong: oklch(62% 0.012 85);
+  --accent: oklch(46% 0.1 175);
+  --on-accent: oklch(99% 0.005 175);
+  --accent-soft: oklch(93% 0.035 175);
+  --positive: oklch(44% 0.12 150);
+  --positive-soft: oklch(94% 0.04 150);
+  --negative: oklch(50% 0.18 28);
+  --negative-soft: oklch(94% 0.03 28);
+  --warning: oklch(48% 0.1 75);
+  --warning-soft: oklch(94% 0.05 85);
+  --focus: oklch(55% 0.14 240);
+
+  /* Roles a colour combo can fill. Each defaults to an existing role, so a palette without them looks the same. */
+  --link: var(--ink);
+  --link-line: var(--accent);
+  --accent-2: var(--accent);
+  --on-accent-2: var(--on-accent);
+  --band: var(--surface);
+  --band-ink: var(--ink);
+  --band-ink-2: var(--ink-2);
+  --band-ink-3: var(--ink-3);
+  --band-line: var(--line);
+  --highlight: var(--accent-soft);
+  --on-highlight: var(--ink);
+}
+
+:root[data-theme="dark"] { color-scheme: dark; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: oklch(17.5% 0.008 85);
+    --surface: oklch(21.5% 0.009 85);
+    --surface-2: oklch(26% 0.01 85);
+    --ink: oklch(94% 0.006 85);
+    --ink-2: oklch(77% 0.01 85);
+    --ink-3: oklch(70% 0.01 85);
+    --line: oklch(31% 0.01 85);
+    --line-strong: oklch(58% 0.01 85);
+    --accent: oklch(78% 0.11 175);
+    --on-accent: oklch(20% 0.03 175);
+    --accent-soft: oklch(30% 0.05 175);
+    --positive: oklch(78% 0.13 150);
+    --positive-soft: oklch(29% 0.05 150);
+    --negative: oklch(76% 0.13 28);
+    --negative-soft: oklch(30% 0.06 28);
+    --warning: oklch(82% 0.11 85);
+    --warning-soft: oklch(31% 0.05 85);
+    --focus: oklch(76% 0.12 240);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: oklch(17.5% 0.008 85);
+  --surface: oklch(21.5% 0.009 85);
+  --surface-2: oklch(26% 0.01 85);
+  --ink: oklch(94% 0.006 85);
+  --ink-2: oklch(77% 0.01 85);
+  --ink-3: oklch(70% 0.01 85);
+  --line: oklch(31% 0.01 85);
+  --line-strong: oklch(58% 0.01 85);
+  --accent: oklch(78% 0.11 175);
+  --on-accent: oklch(20% 0.03 175);
+  --accent-soft: oklch(30% 0.05 175);
+  --positive: oklch(78% 0.13 150);
+  --positive-soft: oklch(29% 0.05 150);
+  --negative: oklch(76% 0.13 28);
+  --negative-soft: oklch(30% 0.06 28);
+  --warning: oklch(82% 0.11 85);
+  --warning-soft: oklch(31% 0.05 85);
+  --focus: oklch(76% 0.12 240);
+}
+
+[data-radius="sharp"] { --radius-sm: 0; --radius-md: 2px; --radius-lg: 4px; }
+[data-radius="tight"] { --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; }
+[data-radius="round"] { --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px; }
+[data-density="compact"] { --section: clamp(48px, 6vw, 88px); --grid-gap: clamp(12px, 1.5vw, 16px); }

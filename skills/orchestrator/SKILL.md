@@ -13,7 +13,7 @@ Runs a project from an approved spec to one pushed branch per phase, one phase a
 
 You are the conductor. You talk to the user, ask the questions, start the helpers and read what they report. You never write the project's code yourself. The engine (`scripts/engine.py`) is the route and the ledger: it knows which phases exist, what each depends on, and what has happened. It starts nothing and cannot be talked into anything. You start things, and only after the engine says you may.
 
-This is the one skill allowed to call other skills. Run the interactive ones (spec-writer, doc-trimmer, doc-reviewer, project-planner, design-system-builder, and ui-craft for a Design direction phase) here, in the main session, with the Skill tool, because they ask the user questions. Run every build phase through the `ai-toolkit:skill-runner` agent with the Agent tool, because helpers cannot ask questions and should not fill this conversation. Skills never call each other. They exchange work through files.
+This is the one skill allowed to call other skills. Run the interactive ones (spec-writer, doc-trimmer, doc-reviewer, project-planner, copy-writer, and design-md for a Design direction phase) here, in the main session, with the Skill tool, because they ask the user questions. Run every build phase through the `ai-toolkit:skill-runner` agent with the Agent tool, because helpers cannot ask questions and should not fill this conversation. Skills never call each other. They exchange work through files.
 
 **Hard rules**
 
@@ -54,7 +54,7 @@ Check that `git remote` lists a remote and that the base branch tracks it. If th
 - A phases folder with a `README.md` already exists: read it, and ask the user only about what is missing or contradicts the spec.
 - Otherwise run `ai-toolkit:project-planner` here on `spec.approved.md`, asking it to write the phase files to `.plans/phases/`.
 - `.plans/` is git-ignored, so worktrees do not contain it. Helpers always get the phase document and the spec by absolute path into this checkout; the engine's runner calls already give absolute paths. It asks the user the stack, data and auth questions itself.
-- A phase that creates a new design system is done by `ai-toolkit:design-system-builder` in this session, not by a helper, because it needs the user's direction. A Design direction phase is done the same way by `ai-toolkit:ui-craft`, asking it for the direction only: copy, concepts and `DESIGN.md`, with no build. Commit those files on the phase's branch. Route both as described in `references/routing.md`.
+- A Design direction phase is done in this session, not by a helper, because it needs the user's direction: `ai-toolkit:copy-writer` first if `COPY.md` is missing, then `ai-toolkit:design-md` for concepts and `DESIGN.md`, with no build. Commit those files on the phase's branch. Route both as described in `references/routing.md`.
 
 ## 3. Route
 

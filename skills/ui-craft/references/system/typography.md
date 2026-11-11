@@ -41,4 +41,4 @@ Aim for 60 to 75 characters. Under 45 feels choppy and over 90 is hard to follow
 - `text-wrap: balance` on headings, `text-wrap: pretty` on paragraphs.
 - `font-variant-numeric: tabular-nums` for numbers in columns or that update.
 - No text in images, unless it is a logo.
-- The written-text rules, such as quotes and dashes, are in `../copy/copy.md`.
+- The written-text rules, such as quotes and dashes, come from `COPY.md`.

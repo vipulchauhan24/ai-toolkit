@@ -11,7 +11,7 @@ An agent, not a skill: Claude Code starts it with the Agent tool. These checks u
 - "Run these three skills in parallel, each with its own run directory."
 - "Have a subagent run project-planner on spec.md and write a report file."
 - "Run frontend-react on phase 4 without asking me questions."
-- "Run the design-system-builder skill in the background."
+- "Run the design-md skill in the background."
 - "Use a skill runner so the long review stays out of this chat."
 - "Run the reviewer skill on both documents and give me report paths."
 

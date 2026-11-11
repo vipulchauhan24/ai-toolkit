@@ -70,7 +70,7 @@
       ],
       "model": "sonnet",
       "isolation": "required",
-      "main_session_skill": "ai-toolkit:design-system-builder"
+      "main_session_skill": "ai-toolkit:design-md"
     },
     {
       "id": "p5",

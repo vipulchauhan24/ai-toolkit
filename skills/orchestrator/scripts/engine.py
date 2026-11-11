@@ -178,7 +178,7 @@ def validate_route(route, root, check_docs=True):
                 fails.append("%s: a parked phase needs a park_reason" % pid)
             ms = p.get("main_session_skill")
             if ms is not None and (not isinstance(ms, str) or not SKILL_RE.match(ms)):
-                fails.append("%s: main_session_skill must be a skill name such as ai-toolkit:design-system-builder" % pid)
+                fails.append("%s: main_session_skill must be a skill name such as ai-toolkit:design-md" % pid)
         else:
             if p.get("main_session_skill") is not None:
                 fails.append("%s: main_session_skill only belongs on a parked phase" % pid)

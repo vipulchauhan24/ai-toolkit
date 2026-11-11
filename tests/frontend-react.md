@@ -18,7 +18,7 @@
 - "Build this in Vue." (not React)
 - "Write a Svelte component."
 - "Build a React Native screen."
-- "Pick colors and spacing for my app." (design-system-builder)
+- "Pick colors and spacing for my app." (design-md)
 - "Make this screen look like my design system." (ui-craft, alone)
 - "Build the REST API for orders."
 - "Write the SQL schema for users."

@@ -27,6 +27,6 @@ Keep its files together, for example `signature.css`, and pass `audit.py` like t
 
 ## Recording it
 
-`deal.py` lists it in `DESIGN.md` with `signature` and its fallback.
+`DESIGN.md` lists it with `signature` and its fallback.
 
 If two `visual-qa` rounds in a row leave a failure in this section, replace it with the fallback named in `DESIGN.md`, update `DESIGN.md` and say so in the report. A fallback of `none` means the section is removed.

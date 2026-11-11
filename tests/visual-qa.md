@@ -21,7 +21,7 @@
 - "Run the unit tests."
 - "Review this React code against the rules." (frontend-react)
 - "Review my diff for bugs." (code-review)
-- "Create a design system." (design-system-builder)
+- "Create a design system."
 - "Plan this project." (project-planner)
 - "Take a screenshot of this error for my bug report."
 - "Why is my page slow on the server?"

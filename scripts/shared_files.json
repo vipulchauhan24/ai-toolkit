@@ -103,6 +103,196 @@
         "skills/project-planner/assets/spec-template.md",
         "skills/spec-writer/assets/spec-template.md"
       ]
+    },
+    {
+      "name": "check_copy.py",
+      "copies": [
+        "skills/copy-writer/scripts/check_copy.py",
+        "skills/ui-craft/scripts/check_copy.py"
+      ]
+    },
+    {
+      "name": "contrast.py",
+      "copies": [
+        "skills/ui-craft/scripts/contrast.py",
+        "skills/design-md/scripts/contrast.py"
+      ]
+    },
+    {
+      "name": "audit.py",
+      "copies": [
+        "skills/ui-craft/scripts/audit.py",
+        "skills/design-md/scripts/audit.py"
+      ]
+    },
+    {
+      "name": "NOTICE.md",
+      "copies": [
+        "skills/ui-craft/references/NOTICE.md",
+        "skills/copy-writer/references/NOTICE.md",
+        "skills/design-md/references/NOTICE.md"
+      ]
+    },
+    {
+      "name": "kit/VERSION",
+      "copies": [
+        "skills/ui-craft/assets/kit/VERSION",
+        "skills/design-md/assets/kit/VERSION"
+      ]
+    },
+    {
+      "name": "kit/base/base.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/base/base.css",
+        "skills/design-md/assets/kit/base/base.css"
+      ]
+    },
+    {
+      "name": "kit/base/direction.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/base/direction.css",
+        "skills/design-md/assets/kit/base/direction.css"
+      ]
+    },
+    {
+      "name": "kit/base/reset.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/base/reset.css",
+        "skills/design-md/assets/kit/base/reset.css"
+      ]
+    },
+    {
+      "name": "kit/base/tokens.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/base/tokens.css",
+        "skills/design-md/assets/kit/base/tokens.css"
+      ]
+    },
+    {
+      "name": "kit/base/utilities.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/base/utilities.css",
+        "skills/design-md/assets/kit/base/utilities.css"
+      ]
+    },
+    {
+      "name": "kit/effects/effects.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/effects/effects.css",
+        "skills/design-md/assets/kit/effects/effects.css"
+      ]
+    },
+    {
+      "name": "kit/effects/parallax.html",
+      "copies": [
+        "skills/ui-craft/assets/kit/effects/parallax.html",
+        "skills/design-md/assets/kit/effects/parallax.html"
+      ]
+    },
+    {
+      "name": "kit/media/portrait.svg",
+      "copies": [
+        "skills/ui-craft/assets/kit/media/portrait.svg",
+        "skills/design-md/assets/kit/media/portrait.svg"
+      ]
+    },
+    {
+      "name": "kit/media/screen-1.svg",
+      "copies": [
+        "skills/ui-craft/assets/kit/media/screen-1.svg",
+        "skills/design-md/assets/kit/media/screen-1.svg"
+      ]
+    },
+    {
+      "name": "kit/media/screen-2.svg",
+      "copies": [
+        "skills/ui-craft/assets/kit/media/screen-2.svg",
+        "skills/design-md/assets/kit/media/screen-2.svg"
+      ]
+    },
+    {
+      "name": "kit/media/screen-3.svg",
+      "copies": [
+        "skills/ui-craft/assets/kit/media/screen-3.svg",
+        "skills/design-md/assets/kit/media/screen-3.svg"
+      ]
+    },
+    {
+      "name": "kit/motion/motion.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/motion/motion.css",
+        "skills/design-md/assets/kit/motion/motion.css"
+      ]
+    },
+    {
+      "name": "kit/motion/motion.js",
+      "copies": [
+        "skills/ui-craft/assets/kit/motion/motion.js",
+        "skills/design-md/assets/kit/motion/motion.js"
+      ]
+    },
+    {
+      "name": "kit/motion/theme.js",
+      "copies": [
+        "skills/ui-craft/assets/kit/motion/theme.js",
+        "skills/design-md/assets/kit/motion/theme.js"
+      ]
+    },
+    {
+      "name": "kit/sections/hero/centered.html",
+      "copies": [
+        "skills/ui-craft/assets/kit/sections/hero/centered.html",
+        "skills/design-md/assets/kit/sections/hero/centered.html"
+      ]
+    },
+    {
+      "name": "kit/sections/hero/name-led.html",
+      "copies": [
+        "skills/ui-craft/assets/kit/sections/hero/name-led.html",
+        "skills/design-md/assets/kit/sections/hero/name-led.html"
+      ]
+    },
+    {
+      "name": "kit/sections/hero/proof-panel.html",
+      "copies": [
+        "skills/ui-craft/assets/kit/sections/hero/proof-panel.html",
+        "skills/design-md/assets/kit/sections/hero/proof-panel.html"
+      ]
+    },
+    {
+      "name": "kit/sections/hero/section.css",
+      "copies": [
+        "skills/ui-craft/assets/kit/sections/hero/section.css",
+        "skills/design-md/assets/kit/sections/hero/section.css"
+      ]
+    },
+    {
+      "name": "kit/sections/hero/split.html",
+      "copies": [
+        "skills/ui-craft/assets/kit/sections/hero/split.html",
+        "skills/design-md/assets/kit/sections/hero/split.html"
+      ]
+    },
+    {
+      "name": "kit/sections/hero/statement.html",
+      "copies": [
+        "skills/ui-craft/assets/kit/sections/hero/statement.html",
+        "skills/design-md/assets/kit/sections/hero/statement.html"
+      ]
+    },
+    {
+      "name": "kit/vendor/motion.LICENSE.md",
+      "copies": [
+        "skills/ui-craft/assets/kit/vendor/motion.LICENSE.md",
+        "skills/design-md/assets/kit/vendor/motion.LICENSE.md"
+      ]
+    },
+    {
+      "name": "kit/vendor/motion.js",
+      "copies": [
+        "skills/ui-craft/assets/kit/vendor/motion.js",
+        "skills/design-md/assets/kit/vendor/motion.js"
+      ]
     }
   ]
 }

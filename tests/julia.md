@@ -21,7 +21,7 @@
 - "Solve this mixed-integer problem with HiGHS.jl." (out of scope)
 - "Train a neural network with Flux.jl." (out of scope)
 - "Build a React dashboard for the results."
-- "Pick colors and spacing for my app." (design-system-builder)
+- "Pick colors and spacing for my app." (design-md)
 - "Explain what multiple dispatch is."
 - "Build a Node.js service for orders." (backend-node)
 - "Write the migration that adds an orders table." (database skills)

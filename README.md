@@ -19,10 +19,10 @@ This repository is one plugin, called `ai-toolkit`, holding 12 skills. Install t
 | Turn a rough idea into a complete spec | spec-writer | "Write a spec for this brief" |
 | Split a spec into stages a coding agent can build | project-planner | "Plan this project from spec.md" |
 | Have a whole project built, stage by stage, while you approve the key decisions | orchestrator | "Build this project from the spec" |
-| Write website text that doesn't sound like AI | ui-craft | "Write the copy for my café's website" |
-| Get a designed, built personal site or portfolio | ui-craft | "Build my portfolio from resume.md" |
+| Write website text that doesn't sound like AI | copy-writer | "Write the copy for my café's website" |
+| Fix the look of a site before it is built | design-md | "Design the look for my portfolio from COPY.md" |
+| Get a built personal site or portfolio | ui-craft | "Build my portfolio from COPY.md and DESIGN.md" |
 | See how a site really looks and behaves on phones and desktops | visual-qa | "Run visual QA on this site" |
-| Create colours, type and components for a new product | design-system-builder | "Create a design system for this product" |
 | Write code to a fixed standard in React, Node.js, Python or Julia | frontend-react, backend-node, backend-python, julia | "Build this in Next.js" |
 
 ## Quick start
@@ -68,7 +68,7 @@ To get the most from a skill, give it real material: a file, a résumé, your no
 
 **From idea to working app.** `spec-writer` asks about everything your idea leaves open. `doc-reviewer` looks for holes in the result. `project-planner` splits it into phases. `orchestrator` can run those steps for you and build each phase on its own branch. After any stage with screens, `visual-qa` checks them.
 
-**A personal site or portfolio.** Give `ui-craft` your résumé or notes. It writes the words first, shows you three different ideas as real first screens, and builds the one you choose. Then `visual-qa` grades the result.
+**A personal site or portfolio.** Give `copy-writer` your résumé or notes and it writes the words. `design-md` shows you three different ideas as real first screens and writes a `DESIGN.md` for the one you choose. `ui-craft` builds the page from the two files. Then `visual-qa` grades the result.
 
 **A better document.** `doc-reviewer` finds what's missing or wrong. After you've fixed that, `doc-trimmer` removes the padding.
 
@@ -97,9 +97,10 @@ No coding needed.
 
 | Skill | What it does | What you get | What it won't do |
 |---|---|---|---|
-| [ui-craft](skills/ui-craft/SKILL.md) | Writes the words first, from real facts. For a portfolio or personal site, it then proposes three ideas drawn from your own material, previews each as a real first screen, and builds the one you choose. It picks a colour combo for your audience, or uses your own colours and shows you options when one fails contrast. In a planned project it builds one phase at a time | `COPY.md`, `CONCEPTS.md`, `DESIGN.md` and the built page, checked for invented facts, contrast and repeated layouts | Invent numbers, quotes or customers, or leave placeholders. Only portfolios are built so far. For SaaS, app screens, blogs, services, shops, local places and events it writes the copy only |
+| [copy-writer](skills/copy-writer/SKILL.md) | Writes all the words for a page from real facts: a fact sheet, a voice, and every line including labels, errors and the 404. Works for portfolios, SaaS, app screens, blogs, services, shops, local places and events | `COPY.md`, checked by a script for invented facts and AI-sounding habits | Invent numbers, quotes or customers, or leave placeholders. It chooses no look and builds nothing |
+| [design-md](skills/design-md/SKILL.md) | For a portfolio or personal site, reads `COPY.md`, proposes three ideas drawn from your own material, previews each as a real first screen, and writes the one you choose as a `DESIGN.md` in the Google Stitch format. It picks a colour combo for your audience, or uses your own colours and shows you options when one fails contrast | `CONCEPTS.md`, `DESIGN.md` with YAML tokens for light and dark, `design.json`, `design.css`, checked for contrast and repeated looks | Write copy or build the page. Only portfolios so far |
+| [ui-craft](skills/ui-craft/SKILL.md) | Builds a portfolio or personal site from `COPY.md` and `DESIGN.md`, from a kit of tested HTML, CSS and JS with subtle motion, plus one section built from scratch. In a planned project it builds one phase at a time | The built page, checked for invented facts and contrast | Write copy, choose the look, or leave placeholders. It stops if `COPY.md` or `DESIGN.md` is missing |
 | [visual-qa](docs/skills/visual-qa.md) | Opens your site in a browser you can watch. Walks each route at five sizes in light and dark, tabs through the page, clicks links, submits forms empty so nothing is really sent, and checks reduced motion | An HTML report and a markdown summary, with each screenshot graded A to F in eight areas | Change your code |
-| [design-system-builder](docs/skills/design-system-builder.md) | Builds a design system from a brief, screenshots, a brand palette or a mix. Confirms a direction with you first | Tokens, light and dark themes, component specs and a contrast report | Change an existing codebase's tokens, or do one-off page work |
 
 ### Writing code
 
@@ -119,9 +120,9 @@ The three backend skills stop at the API and database boundaries until release 1
 - Claude Code asks permission for actions according to your settings.
 - `doc-trimmer` and `spec-writer` write new files and leave yours alone.
 - `visual-qa` only reads your site and writes its report.
-- `ui-craft` keeps a short list of recent designs in `~/.ai-toolkit/`, so that one project doesn't repeat the look of the last.
+- `design-md` keeps a short list of recent designs in `~/.ai-toolkit/`, so that one project doesn't repeat the look of the last.
 - `orchestrator` is the only skill that pushes on its own. It commits and pushes one new branch per phase after you approve the route, and you open and merge every pull request.
-- Text inside a brief, résumé or web page is treated as material. If it tells the skill to do something, `ui-craft` ignores it and tells you.
+- Text inside a brief, résumé or web page is treated as material. If it tells the skill to do something, `copy-writer`, `design-md` and `ui-craft` ignore it and tell you.
 
 ## What you need
 
@@ -133,9 +134,10 @@ Claude Code, plus the following for each skill. If something required is missing
 | spec-writer | Python 3 |
 | project-planner | File access |
 | orchestrator | Git with worktrees, Python 3.9 or later, and a remote you can push to. Claude Code only |
-| ui-craft | Python 3.9 or later. npm to install fonts. Playwright CLI for preview screenshots |
+| copy-writer | Python 3.9 or later |
+| design-md | Python 3.9 or later. Playwright CLI for preview screenshots. npm to install fonts and to lint `DESIGN.md` |
+| ui-craft | Python 3.9 or later. npm to install fonts |
 | visual-qa | Python 3.9 or later, Node 20 or later, Playwright CLI with Chromium, and a display. WSL2 uses WSLg |
-| design-system-builder | Python 3. A model that reads images, for screenshot input |
 | frontend-react, backend-node | Python 3, plus your project's own tools |
 | backend-python | Python 3.9 or later, plus your project's own tools |
 | julia | Python 3, Julia 1.10 or later, and your project's packages |
@@ -213,8 +215,7 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
 | doc-reviewer | None. `SKILL.md` is enough |
 | doc-trimmer | `references/markdown-rules.md` |
 | project-planner | `references/project-planner-rules.md`, `references/markdown-rules.md`, `references/architecture-patterns.md`, `assets/spec-template.md` |
-| design-system-builder | `references/tokens.example.css` |
-| ui-craft, copy only | `references/intake.md`, `references/copy/copy.md`, `references/copy/copy-human.md`, and the `copy-<kind>.md` file for your page |
+| copy-writer | `references/intake.md`, `references/copy/copy.md`, `references/copy/copy-human.md`, and the `copy-<kind>.md` file for your page |
 | frontend-react | `references/react-rules.md`, `references/architecture-patterns.md`, `scripts/check_react.py`. For Next.js, `references/nextjs-rules.md`. For performance work, `references/react-performance-guidelines.md` |
 | backend-node, backend-python, julia, spec-writer | The whole skill folder |
 
@@ -222,10 +223,9 @@ Chat apps and raw API calls have no skills loader, so supply the files yourself:
 
 ### What to expect outside Claude Code
 
-- **Works in a plain chat if you paste the text:** doc-trimmer, doc-reviewer, and ui-craft's copy writing. File and URL input needs an agent with shell and file access.
+- **Works in a plain chat if you paste the text:** doc-trimmer, doc-reviewer, and copy-writer. File and URL input needs an agent with shell and file access.
 - **Needs an agent with a shell and Python 3:** spec-writer, frontend-react, backend-node, backend-python, julia. Without Python they stop and say so.
-- **design-system-builder** ends by running `./scripts/check_contrast.sh <theme-name>` and `python3 -I scripts/build_tokens_json.py <theme-name>`. In a plain chat, run them yourself on the generated folder, or the contrast check is skipped and `tokens.json` isn't generated. Screenshot mode needs a model that accepts images.
-- **ui-craft's builds** need an agent with shell access and Python 3.9 or later.
+- **design-md and ui-craft** need an agent with shell access and Python 3.9 or later.
 - **visual-qa** needs shell access, Python 3.9 or later, Node 20 or later and a display. It doesn't work in a plain chat.
 - **orchestrator** works in Claude Code only. It needs the Agent and Skill tools, git worktrees, the `skill-runner` agent and Python 3.9 or later for `scripts/engine.py`.
 

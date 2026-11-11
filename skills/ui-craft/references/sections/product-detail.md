@@ -10,4 +10,4 @@ Variant choices change the image. Images use one aspect ratio, and a real view o
 
 The button stays reachable on phones: a sticky bar is fine if it covers nothing.
 
-Words: `../copy/copy-ecommerce.md`.
+Words come from `COPY.md`.

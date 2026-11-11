@@ -2,7 +2,7 @@
 
 The orchestrator takes a spec through to one pushed branch per phase. It gets the spec written and approved, gets the project split into phases, then runs each phase through the right skills in a separate git worktree, in dependency order. It stops at the points where you decide. It commits and pushes each built phase's branch, but it never opens a pull request and never merges: you do both.
 
-It works in Claude Code only. It is the one skill that calls other skills: spec-writer, doc-trimmer, doc-reviewer, project-planner and design-system-builder run in your conversation, because they ask you questions. Each build phase runs in the `skill-runner` agent in its own worktree, in the background, because a build does not need to ask anything.
+It works in Claude Code only. It is the one skill that calls other skills: spec-writer, doc-trimmer, doc-reviewer, project-planner, copy-writer and design-md run in your conversation, because they ask you questions. Each build phase runs in the `skill-runner` agent in its own worktree, in the background, because a build does not need to ask anything.
 
 ## The conductor and the engine
 

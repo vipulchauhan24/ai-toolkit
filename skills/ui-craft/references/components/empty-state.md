@@ -7,7 +7,7 @@ Shown when there is nothing to show. Keeps the frame of the block it replaces.
 - One clear action.
 - A small icon is optional. No big illustration in dense apps.
 
-Words: see `../copy/copy.md` section 10. Say why it's empty, what appears here and how.
+Words come from `COPY.md`: say why it's empty, what appears here and how.
 
 Inside a table or list, span the full width.
 

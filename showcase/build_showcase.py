@@ -30,7 +30,7 @@ from urllib.parse import urlencode
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 KIT = ROOT / "skills" / "ui-craft" / "assets" / "kit"
-DATA = ROOT / "skills" / "ui-craft" / "assets" / "data"
+DATA = ROOT / "skills" / "design-md" / "assets" / "data"
 SHEETS = KIT / "sheets"
 PAGE_CHECKS = ROOT / "skills" / "visual-qa" / "scripts" / "page_checks.js"
 WIDTHS = {390: 844, 768: 1024, 1024: 768, 1440: 900, 1920: 1080}

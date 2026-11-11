@@ -1,6 +1,6 @@
-# ui-craft: sources and decisions
+# ui-craft, copy-writer and design-md: sources and decisions
 
-For whoever maintains `ui-craft`. The skill never reads this file, and agents do not need these links while working.
+For whoever maintains these three skills. `ui-craft` was split in November 2026: `copy-writer` owns `COPY.md` and the copy rules, `design-md` owns the direction and `DESIGN.md`, and `ui-craft` builds the page. The tables below keep their old headings, and each source belongs to the skill named in its row's section. The skill never reads this file, and agents do not need these links while working.
 
 **How each source was read**
 
@@ -130,3 +130,18 @@ These are judgement calls, with no research behind them. Change them freely:
 - **Sentence case, against Vercel.** Vercel's guidelines ask for Title Case on headings and buttons. This skill uses sentence case, because Linear and Stripe do, and Wikipedia lists title case among signs of AI writing. The live Vercel review step must skip that one rule.
 - **Curly quotes, despite Wikipedia.** Wikipedia lists them as a sign of AI writing in its plain-text articles. On a web page they are correct.
 - **Sources stay out of the skill.** Working files hold rules only, because they load on every run and links invite agents to fetch outside content.
+
+## DESIGN.md format (design-md)
+
+| Source | Used for | Read | Strength |
+|---|---|---|---|
+| [google-labs-code/design.md, docs/spec.md](https://github.com/google-labs-code/design.md/blob/main/docs/spec.md) | The format `deal.py` writes: YAML front matter tokens (`colors`, `typography`, `rounded`, `spacing`, `components`), section order, reference syntax, consumer behaviour for unknown content. Version `alpha`, Apache-2.0 | Direct, full text | Primary, alpha: expect changes |
+| [Stitch DESIGN.md overview](https://stitch.google.com/docs/design-md/overview/) | The page the owner pointed to. It renders only a script shell, so nothing was read from it | Not read | n/a |
+| Search results on the `@google/design.md` CLI (lint, diff, export to Tailwind and DTCG) | The optional lint step. The CLI was not run during the split, because running a downloaded package was refused | Snippet | Check before relying on it |
+
+Decisions:
+
+- Dark values are `colors` entries ending in `-dark`, because the format has no mode concept. Our extra sections (Sections, Motion, Responsive) follow Do's and Don'ts, because the format keeps unknown sections.
+- The kit's base, motion, vendor, media, effects and hero files exist in both `ui-craft` and `design-md` (previews need them). `scripts/shared_files.json` keeps the copies identical. `check_copy.py`, `contrast.py` and `audit.py` are shared the same way.
+- Ideas taken from the earlier `design-system-builder` skill, since removed: screenshots, logos and unopenable links as inputs, never changing a brand colour silently, and deriving missing neutrals and status colours and saying so. Its three-layer CSS tokens, Tailwind preset and `tokens.json` export were not carried over: the format's own CLI exports to Tailwind and DTCG.
+

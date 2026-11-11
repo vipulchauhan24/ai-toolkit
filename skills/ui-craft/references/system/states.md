@@ -1,6 +1,6 @@
 # States
 
-A screen that only works with perfect data is half built. Write the words for each state in `COPY.md`, using `../copy/copy.md` section 10.
+A screen that only works with perfect data is half built. Take the words for each state from `COPY.md`. If one is missing, list it as missing.
 
 ## Interactive states
 

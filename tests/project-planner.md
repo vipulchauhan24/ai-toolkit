@@ -22,7 +22,7 @@
 - "Make me a sprint plan in Linear."
 - "Summarise this PRD."
 - "What database should I use?"
-- "Create a design system." (design-system-builder)
+- "Create a design system."
 - "Fix this failing test."
 - "Plan my weekend."
 
@@ -46,7 +46,7 @@
 **Portfolio with fixed colours**
 - Given: a portfolio spec in Next.js that fixes three colours, and a run that cannot ask questions
 - When: the planner writes phase files
-- Then: the first phase is Design direction, done with `ui-craft`, and passes the colours to `colors.json`; no later phase holds a colour value, a utility class or markup for the look, and each says the look comes from `DESIGN.md`.
+- Then: the first phase is Design direction, done with `design-md` (after `copy-writer`), and passes the colours to `colors.json`; no later phase holds a colour value, a utility class or markup for the look, and each says the look comes from `DESIGN.md`.
 
 **No forward references**
 - Given: any generated plan

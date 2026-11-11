@@ -1,0 +1,80 @@
+[
+  {
+    "id": "design-md-direction",
+    "tier": "slow",
+    "fixture": "design-md-projects",
+    "covers": [
+      "skills/design-md",
+      "skills/design-md/references/intake.md",
+      "skills/design-md/references/design-md.md",
+      "skills/design-md/references/concept.md",
+      "skills/design-md/references/signature.md"
+    ],
+    "source": "design-md.md: Functional / Direction from COPY.md",
+    "prompt": "Use the ai-toolkit:design-md skill to design the look for this portfolio from COPY.md. Pass --history .history.json to deal.py. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(cp:*),Bash(mkdir:*),Bash(ls:*)",
+    "skills": [
+      "design-md"
+    ],
+    "reads": [
+      "concept\\.md",
+      "signature\\.md",
+      "design-md\\.md",
+      "python3 -I \\S*deal\\.py .*--concept",
+      "python3 -I \\S*contrast\\.py",
+      "python3 -I \\S*sameness\\.py"
+    ],
+    "files": [
+      {
+        "glob": "**/CONCEPTS.md",
+        "must": [
+          "(?m)^## A",
+          "(?m)^## B",
+          "(?m)^## C",
+          "(?m)^fails on someone else because:",
+          "(?m)^## chosen"
+        ]
+      },
+      {
+        "glob": "**/concept.json",
+        "must": [
+          "\"name\""
+        ]
+      },
+      {
+        "glob": "**/DESIGN.md",
+        "must": [
+          "\\A---\\nversion: alpha",
+          "(?m)^colors:",
+          "(?m)^## Colors",
+          "(?m)^## Sections",
+          "(?m)^- Concept: (?!none)"
+        ]
+      }
+    ],
+    "unchanged": [
+      "COPY.md"
+    ],
+    "timeout": 1200
+  },
+  {
+    "id": "design-md-needs-copy",
+    "tier": "fast",
+    "fixture": "empty",
+    "covers": [
+      "skills/design-md"
+    ],
+    "source": "design-md.md: Functional / No COPY.md",
+    "prompt": "Use the ai-toolkit:design-md skill to design the look for my portfolio. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "design-md"
+    ],
+    "must": [
+      "(?i)copy-writer"
+    ],
+    "no_files": [
+      "DESIGN.md"
+    ]
+  }
+]

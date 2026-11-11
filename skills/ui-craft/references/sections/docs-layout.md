@@ -10,4 +10,4 @@
 
 **Phone:** the sidebar opens from a menu button, and contents collapse at the top.
 
-Writing is covered in `../copy/copy-blog.md`.
+Words come from `COPY.md`.

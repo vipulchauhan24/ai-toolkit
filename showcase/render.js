@@ -1,7 +1,7 @@
 // Renders one manifest item from the address alone, so a view can be shared or opened by a test.
 // Query: item, theme, mode, density, type, bands, heads, images, reduced=1, content=long, spacers=0.
 const q = new URLSearchParams(location.search);
-const DATA = "/skills/ui-craft/assets/data/";
+const DATA = "/skills/design-md/assets/data/";
 const KIT = "/skills/ui-craft/assets/kit/";
 const json = async (url) => (await fetch(url)).json();
 

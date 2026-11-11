@@ -73,7 +73,6 @@ Assert only what a skill's text requires: a required line, a file written, a fil
 ```text
 tests/fixtures/
   frontend-react/{base,next}/{clean,seeded}/ + expected.json
-  design-system-builder/{clean/Mini, seeded/MiniLowContrast}/tokens.css
   ui-craft/base/{clean,seeded}/              + expected.json
   visual-qa/{capture,capture-injection,site}/ + fake_cli.py, grades-good.json
   doc-trimmer/  doc-reviewer/  project-planner-pattern/  project-planner-greenfield/

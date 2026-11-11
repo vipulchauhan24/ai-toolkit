@@ -1,0 +1,9 @@
+.icon { width: 20px; height: 20px; flex: none; }
+.icon--sm { width: 16px; height: 16px; }
+.icon--lg { width: 24px; height: 24px; }
+.frame { border-radius: var(--radius-lg); overflow: hidden; background: var(--surface-2); }
+.frame img { width: 100%; height: 100%; object-fit: cover; }
+.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+/* Only in kit samples, so that scrolling can be seen. Not for real pages. */
+.sample-spacer { height: 120vh; }
+.sample-spacer--short { height: 40vh; }
