@@ -46,7 +46,12 @@
 **Portfolio with fixed colours**
 - Given: a portfolio spec in Next.js that fixes three colours, and a run that cannot ask questions
 - When: the planner writes phase files
-- Then: the first phase is Design direction, done with `design-md` (after `copy-writer`), and passes the colours to `colors.json`; no later phase holds a colour value, a utility class or markup for the look, and each says the look comes from `DESIGN.md`.
+- Then: the first phase is Design direction, done with `design-md` (after `copy-writer`), and passes the colours to `colors.json`; no later phase holds a colour value, a utility class or markup for the look, and each says the look comes from `DESIGN.md` and lists its `Copy used:` entries.
+
+**Non-portfolio site**
+- Given: a spec whose `Page kind` is saas, and a run that cannot ask questions
+- When: the planner writes phase files
+- Then: the first phase is Copy, done with `copy-writer` only and ending at Gate C; no phase runs `design-md`; later phases are built with `frontend-react` and list `Copy used:`.
 
 **No forward references**
 - Given: any generated plan

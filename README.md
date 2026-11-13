@@ -90,7 +90,7 @@ No coding needed.
 | Skill | What it does | What you get | What it won't do |
 |---|---|---|---|
 | [spec-writer](docs/skills/spec-writer.md) | Lists every line of the spec template your brief doesn't answer, and asks about all of them in one batch | A new `spec.md`, confirmed complete by a check script. Anything you leave open is marked `Undecided` with an open question | Guess a gap, choose your stack, or change your file |
-| [project-planner](docs/skills/project-planner.md) | Splits a spec into working slices, in dependency order. Asks about high-stakes decisions such as stack, data model and auth. For a portfolio, the first phase is a Design direction phase done with `ui-craft` | An overview and one design document per phase, in `.plans/phases/`, kept out of git | Add a delivery or testing phase, or build anything |
+| [project-planner](docs/skills/project-planner.md) | Splits a spec into working slices, in dependency order. Asks about high-stakes decisions such as stack, data model and auth. For a portfolio, the first phase is a Design direction phase done with `copy-writer` then `design-md` (other page kinds start with a Copy phase) | An overview and one design document per phase, in `.plans/phases/`, kept out of git | Add a delivery or testing phase, or build anything |
 | [orchestrator](docs/skills/orchestrator.md) | Gets the spec written and approved, gets it planned, then runs each phase through the right skills in its own git worktree. A small script keeps the order, so no step is skipped | One committed and pushed branch per phase. You approve the spec and the route, and phases only you can do are parked | Write code itself, open or merge pull requests, or force-push. Claude Code only |
 
 ### Design and web pages

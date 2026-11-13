@@ -160,7 +160,8 @@
         "glob": ".plans/phases/phase-[2-9]-*.md",
         "each": true,
         "must": [
-          "DESIGN\\.md"
+          "DESIGN\\.md",
+          "Copy used"
         ],
         "must_not": [
           "#[0-9A-Fa-f]{6}\\b",
