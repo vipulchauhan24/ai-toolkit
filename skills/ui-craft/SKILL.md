@@ -26,7 +26,7 @@ Needs three things from earlier skills, in the project: `COPY.md`, `DESIGN.md`, 
 
 ## 0. Preflight
 
-Check that these exist in this skill's folder: `references/system/system.md`, `references/system/layout.md`, `references/system/accessibility.md`, `references/signature.md`, `references/review.md`, `references/motion/motion.md`, `assets/kit/`, `scripts/audit.py`, `scripts/contrast.py`, `scripts/check_copy.py`, `scripts/icons.py`, and that `python3` runs and is 3.9 or later. If one is missing, say so and stop.
+Check that these exist in this skill's folder: `references/system/system.md`, `references/system/layout.md`, `references/system/accessibility.md`, `references/signature.md`, `references/review.md`, `references/motion/motion.md`, `assets/kit/`, `scripts/audit.py`, `scripts/contrast.py`, `scripts/check_copy.py`, `scripts/icons.py`, `scripts/next_overlay.py`, and that `python3` runs and is 3.9 or later. If one is missing, say so and stop.
 
 If the kit version in `DESIGN.md` differs from `assets/kit/VERSION`, say so in the report: the variants it lists may have changed.
 
@@ -47,7 +47,7 @@ The kit in `assets/kit/` is a vocabulary. It is not a page to fill in. Filling i
 1. **Compose for the concept.** The hero is the chosen preview: `CONCEPTS.md` names it under `## chosen`, and its markup is in `previews/`. If `DESIGN.md` names a kit hero instead, use that variant. For each other section, read the variant's sample in `assets/kit/sections/<id>/` to see how it solves its problem, then write the section this page needs. Change its markup, proportions and structure freely, with custom CSS that uses tokens. Token values and the rules in `references/system/` do not change.
 2. **Signature.** Build the section marked `signature` in `DESIGN.md`, following `references/signature.md`.
 3. **Static site** (the default for a new project, or when the project has no framework): copy `base/`, `motion/`, `vendor/` and each `components/<name>/component.css` and `sections/<id>/section.css` you use into the project. Load `design.css` after `tokens.css`, and `direction.css` after `base.css`. Set the attributes listed under "Layout" in `DESIGN.md` on `html`. The `<head>` of `assets/kit/layouts/portfolio/index.html` shows the wiring. Its body is not a model for a page.
-4. **React or Next.js** (when the project already uses it or the phase document pins it): follow `assets/kit/examples/react/how-to-port.md` and `references/motion/motion-react.md`.
+4. **React or Next.js** (when the project already uses it or the phase document pins it): for a new Next.js app made with create-next-app (App Router), run `python3 -I <this-skill-folder>/scripts/next_overlay.py <app> --design design.css --components <list> --sections <list> --fonts <Fontsource packages from DESIGN.md>` first. It copies the kit CSS, wires `kit.css`, the motion helpers and the theme script, and with `--replace-layout` writes the layout. Then follow `assets/kit/examples/react/how-to-port.md` for the markup and `references/motion/motion-react.md`.
 5. Replace **all** sample text, links and images with content from `COPY.md`. Nothing from the sample's fictional person may remain.
 6. Use real images only.
 7. Motion: follow `DESIGN.md`'s level, and the budget in `references/motion/motion.md`. `quiet` removes `data-reveal`, `data-reveal-group` and `data-timeline`. Use `data-parallax` only where `DESIGN.md` notes it, as in `references/motion/motion-sections.md`.
@@ -95,6 +95,7 @@ After a build, ask whether to run `visual-qa`. Under the orchestrator, or in a n
 | The kit version in `DESIGN.md` differs from `assets/kit/VERSION` | The look was fixed with an older kit | Say so in the report: the variants it lists may have changed |
 | `audit.py`, `contrast.py` or `check_copy.py` FAILs after 3 rounds | The build breaks a rule | List the FAIL in the report and do not call the build done |
 | `audit.py` cannot read a React or Next.js build | It reads only built `.css` and `.html` | Run it on the built or exported output. If none can be produced, say it was not run |
+| `next_overlay.py` prints FAIL | The folder is not a create-next-app project, has no `app/` folder, or `design.css` is missing | Say which. For a Pages Router app or another stack, follow `how-to-port.md` by hand. If `design.css` is missing, `design-md` has not run |
 | A phase document gives colours or classes that differ from `DESIGN.md` | The phase document drifted | Follow `DESIGN.md` and list each difference |
 
 ## Examples

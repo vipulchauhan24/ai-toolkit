@@ -82,6 +82,7 @@ SCRIPT_COVERAGE = {
     "skills/ui-craft/scripts/check_copy.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/contrast.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/icons.py": "tests/fixtures/ui-craft",
+    "skills/ui-craft/scripts/next_overlay.py": "tests/fixtures/ui-craft",
     "skills/ui-craft/scripts/audit.py": "tests/fixtures/ui-craft",
     "skills/design-md/scripts/deal.py": "tests/fixtures/ui-craft",
     "skills/design-md/scripts/contrast.py": "tests/fixtures/ui-craft",
@@ -587,6 +588,7 @@ def cmd_scripts(_args):
     visual_qa_tests(r)
     copy_check_tests(r)
     ui_craft_script_tests(r)
+    next_overlay_tests(r)
     showcase_tests(r)
 
     return r.finish()
@@ -709,6 +711,39 @@ def copy_check_tests(r):
         r.check("check_copy.py: a vague button warns but passes", rc == 0 and "WARN" in out and "button" in out, out[-200:])
         rc, out = run_py(script, ["--facts", tmp / "absent.md", page])
         r.check("usage error: check_copy.py with a missing --facts file exits 2", rc == 2, "exit %d" % rc)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def next_overlay_tests(r):
+    script = ROOT / "skills" / "ui-craft" / "scripts" / "next_overlay.py"
+    tmp = Path(tempfile.mkdtemp(prefix="overlay-"))
+    try:
+        design = tmp / "design.css"
+        design.write_text(":root { --bg: #fff; }\n", encoding="utf-8")
+        app = tmp / "app1"
+        (app / "app").mkdir(parents=True)
+        (app / "package.json").write_text(json.dumps({"dependencies": {"next": "15.0.0"}}), encoding="utf-8")
+        (app / "app" / "layout.tsx").write_text("// original\n", encoding="utf-8")
+        rc, out = run_py(script, [app, "--design", design, "--components", "button,nav", "--sections", "hero", "--fonts", "@fontsource-variable/inter"])
+        css = read(app / "app" / "kit.css") if (app / "app" / "kit.css").is_file() else ""
+        r.check("next_overlay.py: copies the kit and writes kit.css in order",
+                rc == 0 and css.index("tokens.css") < css.index("design.css") < css.index("motion.css") and "component-button.css" in css and "section-hero.css" in css, out[-300:])
+        r.check("next_overlay.py: writes the motion and theme components",
+                (app / "components" / "kit" / "Motion.tsx").is_file() and "dangerouslySetInnerHTML" in read(app / "components" / "kit" / "ThemeScript.tsx"))
+        r.check("next_overlay.py: leaves an existing layout alone without --replace-layout", read(app / "app" / "layout.tsx") == "// original\n")
+        rc, out = run_py(script, [app, "--design", design, "--fonts", "@fontsource-variable/inter", "--html-attr", "data-density=compact", "--replace-layout"])
+        lay = read(app / "app" / "layout.tsx")
+        r.check("next_overlay.py: --replace-layout writes the wired layout",
+                rc == 0 and 'import "@fontsource-variable/inter";' in lay and "<ThemeScript />" in lay and 'data-density="compact"' in lay, out[-300:])
+        bare = tmp / "bare"
+        bare.mkdir()
+        rc, out = run_py(script, [bare, "--design", design])
+        r.check("next_overlay.py: refuses a folder that is not a Next.js app", rc == 1 and "not a Next.js app" in out, out[-200:])
+        rc, out = run_py(script, [app, "--design", tmp / "none.css"])
+        r.check("next_overlay.py: refuses a missing design.css", rc == 1 and "design-md first" in out, out[-200:])
+        rc, out = run_py(script, [app, "--design", design, "--sections", "ghost"])
+        r.check("next_overlay.py: refuses a section that is not in the kit", rc == 1 and "ghost" in out, out[-200:])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

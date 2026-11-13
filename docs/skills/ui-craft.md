@@ -9,7 +9,7 @@ The ui-craft skill builds a web page from a finished `COPY.md` and `DESIGN.md`. 
 
 ## Using the Skill
 
-Ask for example `build my portfolio from COPY.md and DESIGN.md`. The output can be static HTML, React or Next.js.
+Ask for example `build my portfolio from COPY.md and DESIGN.md`. The output can be static HTML, React or Next.js. For a new Next.js app, a script applies the kit on top of `create-next-app`: it copies the CSS, wires the theme, motion helpers and fonts, and can write the layout.
 
 In a planned project the orchestrator runs it as a phase build: it builds only the sections the phase names and never chooses the look again. If it finds a difference between the phase document and `DESIGN.md`, `DESIGN.md` wins and the difference is listed.
 
