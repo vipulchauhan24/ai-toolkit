@@ -17,7 +17,7 @@
 
 - "Write the copy for my site." (copy-writer)
 - "Build my portfolio from COPY.md and DESIGN.md." (ui-craft)
-- "Build this screen." (ui-developer)
+- "Build this screen." (frontend-react)
 - "Run visual QA." (visual-qa)
 - "Trim this blog post." (doc-trimmer)
 - "Write a spec for this brief." (spec-writer)

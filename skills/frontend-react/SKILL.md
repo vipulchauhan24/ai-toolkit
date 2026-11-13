@@ -1,7 +1,7 @@
 ---
 name: frontend-react
 description: >
-  Writes or changes React and Next.js code (components, hooks, state, effects, forms, data boundaries, performance, server and client components, tests) to a fixed set of rules, then runs the project's typecheck, lint, tests and build plus a React check script. Use for "build this in React", "build this in Next.js", "write this React component", "add a hook", "fix this React code", "review this React code against the rules", or when a phase document pins React or Next.js as the frontend. Covers how React code is written only: it does not choose colors, tokens, spacing or component looks (the look comes from ui-craft's DESIGN.md, or from the design system the spec names; name ui-craft too when you want both), and it does not build APIs, databases or auth. Not for Vue, Svelte, Angular or plain HTML.
+  Writes or changes React and Next.js code (components, hooks, state, effects, forms, data boundaries, performance, server and client components, tests) to a fixed set of rules, then runs the project's typecheck, lint, tests and build plus a React check script. Use for "build this in React", "build this in Next.js", "write this React component", "add a hook", "fix this React code", "review this React code against the rules", or when a phase document pins React or Next.js as the frontend. Covers how React code is written only: it does not choose colors, tokens, spacing or component looks (the look comes from the project's DESIGN.md, written by design-md, or from the design system the spec names; name ui-craft too when you want both), and it does not build APIs, databases or auth. Not for Vue, Svelte, Angular or plain HTML.
 license: MIT
 compatibility: Needs a shell with Python 3 to run scripts/check_react.py and the project's own typecheck, lint, tests and build. For React and Next.js projects only.
 model: sonnet
@@ -11,7 +11,7 @@ model: sonnet
 
 Writes React code, and Next.js code when the project uses it, the way the rules say, and proves it with checks. **Preflight → read the project → build → verify → report.**
 
-This skill is independent. It does not call other skills. Appearance belongs to the project's `DESIGN.md`, written by ui-craft, which the caller (you, or the orchestrator) runs before this skill on a UI phase. Without `DESIGN.md`, appearance follows the design system the spec names, else the project's existing styles. Appearance means class names, style props, CSS, tokens and which visual component to use. Structure means everything else: component and hook structure, state, effects, data, tests. Never change appearance that `DESIGN.md` or ui-craft set; if a rule here seems to need it, list it in the report.
+This skill is independent. It does not call other skills. Appearance belongs to the project's `DESIGN.md`, written by design-md. The caller (you, or the orchestrator) runs ui-craft or design-md before this skill on a UI phase. Without `DESIGN.md`, appearance follows the design system the spec names, else the project's existing styles. Appearance means class names, style props, CSS, tokens and which visual component to use. Structure means everything else: component and hook structure, state, effects, data, tests. Never change appearance that `DESIGN.md` set; if a rule here seems to need it, list it in the report.
 
 **Interactive** means you can ask the user a question and wait for the answer (a question tool is available, or the user is replying live). Otherwise the run is **non-interactive**. When unsure, treat it as non-interactive.
 

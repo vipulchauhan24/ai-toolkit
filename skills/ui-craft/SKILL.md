@@ -1,7 +1,7 @@
 ---
 name: ui-craft
 description: >
-  Builds a web page that looks designed and moves subtly, from a finished COPY.md and DESIGN.md: plans each section, composes the page from a kit of tested HTML, CSS and JS (static, React or Next.js), builds the section marked signature from scratch, checks the result with scripts and a live guidelines review, and reports. Full build for portfolios and personal sites. Use for "build my portfolio", "build the site from COPY.md and DESIGN.md", "make this page pop", "build this phase" when a phase document names sections. Needs COPY.md (use copy-writer) and DESIGN.md (use design-md) first. Not for writing copy, not for choosing the look, not for app screens or product UI (use ui-developer), not for grading a finished site in a browser (use visual-qa).
+  Builds a web page that looks designed and moves subtly, from a finished COPY.md and DESIGN.md: plans each section, composes the page from a kit of tested HTML, CSS and JS (static, React or Next.js), builds the section marked signature from scratch, checks the result with scripts and a live guidelines review, and reports. Full build for portfolios and personal sites. Use for "build my portfolio", "build the site from COPY.md and DESIGN.md", "make this page pop", "build this phase" when a phase document names sections. Needs COPY.md (use copy-writer) and DESIGN.md (use design-md) first. Not for writing copy, not for choosing the look, not for app screens or product UI (use frontend-react), not for grading a finished site in a browser (use visual-qa).
 license: MIT
 compatibility: Needs file access and Python 3.9 or later. Installing fonts in a project needs npm. The live guidelines review needs network access.
 model: sonnet
