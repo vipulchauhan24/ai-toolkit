@@ -11,6 +11,7 @@ Usage (from the project root):
     python3 -I engine.py init                         create state.json from route.json
     python3 -I engine.py approve gate-a [--file F]    record the approved spec
     python3 -I engine.py approve gate-b               record the approved route
+    python3 -I engine.py approve gate-c [--file F]    record the approved copy (default COPY.md)
     python3 -I engine.py next                         JSON: what may start now
     python3 -I engine.py start ID [ID ...]            mark phases running, JSON: runner calls
     python3 -I engine.py record ID RUN_DIR [--tokens N]
@@ -66,6 +67,21 @@ def now():
 
 def sha256_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def session_skills(p):
+    """Skills a parked phase runs in the main session, in order. Accepts the old single-skill key."""
+    many = p.get("main_session_skills")
+    if many is not None:
+        return many
+    one = p.get("main_session_skill")
+    return [one] if one is not None else None
+
+
+def needs_copy_gate(p):
+    """A parked phase that runs design-md after copy-writer must wait for Gate C."""
+    sk = session_skills(p) or []
+    return isinstance(sk, list) and any(isinstance(x, str) and x.split(":")[-1] == "design-md" for x in sk)
 
 
 def overlap(a_files, b_files):
@@ -176,12 +192,19 @@ def validate_route(route, root, check_docs=True):
         if parked:
             if not isinstance(p.get("park_reason"), str) or not p["park_reason"].strip():
                 fails.append("%s: a parked phase needs a park_reason" % pid)
-            ms = p.get("main_session_skill")
-            if ms is not None and (not isinstance(ms, str) or not SKILL_RE.match(ms)):
+            if p.get("main_session_skill") is not None and p.get("main_session_skills") is not None:
+                fails.append("%s: set main_session_skills or the old main_session_skill, not both" % pid)
+            elif p.get("main_session_skill") is not None and (not isinstance(p["main_session_skill"], str) or not SKILL_RE.match(p["main_session_skill"])):
                 fails.append("%s: main_session_skill must be a skill name such as ai-toolkit:design-md" % pid)
+            elif p.get("main_session_skills") is not None:
+                ms = p["main_session_skills"]
+                if not isinstance(ms, list) or not ms or not all(isinstance(x, str) and SKILL_RE.match(x) for x in ms):
+                    fails.append("%s: main_session_skills must be a non-empty list of skill names such as ai-toolkit:copy-writer" % pid)
         else:
             if p.get("main_session_skill") is not None:
                 fails.append("%s: main_session_skill only belongs on a parked phase" % pid)
+            if p.get("main_session_skills") is not None:
+                fails.append("%s: main_session_skills only belongs on a parked phase" % pid)
             skills = p.get("skills")
             if not isinstance(skills, list) or not skills:
                 fails.append("%s: skills must be a non-empty list (or set parked)" % pid)
@@ -193,6 +216,8 @@ def validate_route(route, root, check_docs=True):
                 fails.append("%s: model must be a model name such as sonnet" % pid)
             if p.get("isolation") not in ISOLATION:
                 fails.append("%s: isolation must be 'required' or 'not required'" % pid)
+        if p.get("look") is not None and p.get("look") != "from DESIGN.md":
+            fails.append("%s: look must be 'from DESIGN.md' (got %r)" % (pid, p.get("look")))
         files = p.get("files", [])
         if not isinstance(files, list) or not all(isinstance(f, str) and f.strip() for f in files):
             fails.append("%s: files must be a list of paths" % pid)
@@ -234,6 +259,11 @@ def validate_route(route, root, check_docs=True):
             if both:
                 fails.append("%s and %s can run together but both change %s: add a dependency between them or remove the file from one" % (a, b, both))
 
+    anc = ancestors(phases)
+    makers = {p["id"] for p in phases if p.get("parked") and needs_copy_gate(p)}
+    for p in phases:
+        if p.get("look") == "from DESIGN.md" and not (anc[p["id"]] & makers):
+            fails.append("%s: its look is from DESIGN.md, so it must depend on the Design direction phase (a parked phase that runs design-md)" % p["id"])
     edges = sum(len(p.get("depends_on", [])) for p in phases)
     info = "%d phases, %d dependencies, longest chain %d" % (len(ids), edges, longest_chain(phases))
     return fails, warns, info
@@ -309,6 +339,19 @@ def gate_problems(proj, route, state):
     return out
 
 
+def copy_gate_problem(proj, route, state):
+    """Why design-md may not start: Gate C is missing, or COPY.md changed since it. None when it holds."""
+    c = state.get("gates", {}).get("c")
+    if not c:
+        return "Gate C is not approved: show COPY.md to the user, then run `approve gate-c`"
+    f = Path(proj.abs(c.get("file", "COPY.md")))
+    if not f.is_file():
+        return "the approved copy %s is missing" % c.get("file", "COPY.md")
+    if sha256_file(f) != c["hash"]:
+        return "COPY.md changed since Gate C: approve it again"
+    return None
+
+
 def plan(route, state, proj):
     """Work out what may start. Returns a dict of lists plus `done`."""
     phases = route["phases"]
@@ -337,8 +380,16 @@ def plan(route, state, proj):
             held.append({"id": i, "why": "waiting for %s" % ", ".join(waiting)})
             continue
         if p.get("parked"):
-            parked.append({"id": i, "title": p["title"], "reason": p["park_reason"],
-                           "main_session_skill": p.get("main_session_skill")})
+            skills_here = session_skills(p)
+            entry = {"id": i, "title": p["title"], "reason": p["park_reason"],
+                     "main_session_skills": skills_here,
+                     "main_session_skill": skills_here[0] if skills_here else None}
+            if needs_copy_gate(p):
+                problem = copy_gate_problem(proj, route, state)
+                if problem:
+                    entry["blocked_by"] = "gate-c"
+                    entry["blocked_why"] = problem
+            parked.append(entry)
             continue
         mine = p.get("files", [])
         clash = next(((j, hit) for j, f in taken for hit in [overlap(mine, f)] if hit), None)
@@ -425,10 +476,22 @@ def cmd_approve(proj, args):
         spec = Path(proj.abs(args.file or route["spec"]))
         if not spec.is_file():
             return out_result(["the spec %s does not exist" % spec])
+        keep_c = state.get("gates", {}).get("c")
         state["gates"] = {"a": {"hash": sha256_file(spec), "at": now(), "file": args.file or route["spec"]}}
+        if keep_c:
+            state["gates"]["c"] = keep_c
         log(state, "approve gate-a")
         proj.save(state)
         print("OK  Gate A recorded; Gate B must be approved again")
+        return out_result([])
+    if args.gate == "gate-c":
+        copy = Path(proj.abs(args.file or "COPY.md"))
+        if not copy.is_file():
+            return out_result(["the copy file %s does not exist: run copy-writer first" % copy])
+        state.setdefault("gates", {})["c"] = {"hash": sha256_file(copy), "at": now(), "file": args.file or "COPY.md"}
+        log(state, "approve gate-c")
+        proj.save(state)
+        print("OK  Gate C recorded for %s" % copy.name)
         return out_result([])
     # gate-b
     a = state.get("gates", {}).get("a")
@@ -548,6 +611,10 @@ def cmd_merge(proj, args):
                     and all(state["phases"][d]["status"] == "merged" for d in byid[args.id].get("depends_on", [])))
     if ps["status"] != "built" and not parked_ready:
         return out_result(["%s is %s: only a built phase, or a parked phase whose dependencies are merged, can be marked merged" % (args.id, ps["status"])])
+    if byid[args.id].get("parked") and needs_copy_gate(byid[args.id]):
+        problem = copy_gate_problem(proj, route, state)
+        if problem:
+            return out_result(["%s cannot be merged: %s" % (args.id, problem)])
     ps.update({"status": "merged", "ended": now()})
     log(state, "merge", args.id)
     proj.save(state)
@@ -610,7 +677,9 @@ def cmd_status(proj, args):
         label = "halted" if i in halted else s["status"]
         print("%-14s %-9s %-24s %s" % (i, label, ",".join(ph.get("depends_on", [])) or "-", s["note"] or (("pushed: " + s["branch"]) if s.get("branch") else "")))
     gates = state.get("gates", {})
-    print("Gate A: %s   Gate B: %s" % ("approved" if "a" in gates else "not approved", "approved" if "b" in gates else "not approved"))
+    needs_c = any(ph.get("parked") and needs_copy_gate(ph) for ph in route["phases"])
+    gate_c = ("approved" if "c" in gates else "not approved") if needs_c else "not needed"
+    print("Gate A: %s   Gate B: %s   Gate C: %s" % ("approved" if "a" in gates else "not approved", "approved" if "b" in gates else "not approved", gate_c))
     merged = sum(1 for i in state["phases"] if state["phases"][i]["status"] == "merged")
     print("%d of %d merged" % (merged, len(state["phases"])))
     return 0
@@ -633,8 +702,8 @@ def build_parser():
     v.add_argument("--no-docs", action="store_true", help="do not check that phase documents exist")
     sub.add_parser("init", parents=[common])
     a = sub.add_parser("approve", parents=[common])
-    a.add_argument("gate", choices=["gate-a", "gate-b"])
-    a.add_argument("--file", default=None, help="gate-a only: the spec to hash (default: the route's spec)")
+    a.add_argument("gate", choices=["gate-a", "gate-b", "gate-c"])
+    a.add_argument("--file", default=None, help="gate-a: the spec to hash (default: the route's spec). gate-c: the copy file (default: COPY.md)")
     sub.add_parser("next", parents=[common])
     s = sub.add_parser("start", parents=[common])
     s.add_argument("ids", nargs="+")

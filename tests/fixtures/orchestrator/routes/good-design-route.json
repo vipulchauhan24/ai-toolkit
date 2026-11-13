@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "project": "sample-site",
+  "spec": "spec.approved.md",
+  "max_parallel": 2,
+  "phases": [
+    {
+      "id": "p1",
+      "title": "Design direction",
+      "doc": "phases/phase-1.md",
+      "depends_on": [],
+      "files": [],
+      "parked": true,
+      "park_reason": "Run copy-writer and design-md with the user",
+      "main_session_skills": [
+        "ai-toolkit:copy-writer",
+        "ai-toolkit:design-md"
+      ]
+    },
+    {
+      "id": "p2",
+      "title": "Portfolio page",
+      "doc": "phases/phase-2.md",
+      "depends_on": [
+        "p1"
+      ],
+      "files": [
+        "index.html"
+      ],
+      "skills": [
+        "ai-toolkit:ui-craft"
+      ],
+      "model": "sonnet",
+      "isolation": "required",
+      "look": "from DESIGN.md"
+    }
+  ]
+}

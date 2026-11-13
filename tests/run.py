@@ -565,6 +565,9 @@ ENGINE_BAD_ROUTES = {
     "bad-pattern-file": r"p4: files must be paths or directories ending in /, not patterns",
     "bad-prefix-clash": r"p4 and p5 can run together but both change skills/py/SKILL\.md",
     "bad-main-session-not-parked": r"p4: main_session_skill only belongs on a parked phase",
+    "bad-both-session-keys": r"p1: set main_session_skills or the old main_session_skill, not both",
+    "bad-look-no-dependency": r"p2: its look is from DESIGN\.md, so it must depend on the Design direction phase",
+    "bad-look-after-copy-only": r"p2: its look is from DESIGN\.md, so it must depend on the Design direction phase",
 }
 
 
@@ -1083,6 +1086,40 @@ def engine_tests(r):
         shutil.copy(fx / "routes" / "good-route.json", d / ".orchestrator" / "route.json")
         rc, out = eng(d, "validate", "--no-docs")
         r.check("engine validate accepts good-route", rc == 0 and "RESULT  PASS" in out, out.strip()[-200:])
+        d = tmp / "good-design-route"
+        (d / ".orchestrator").mkdir(parents=True)
+        shutil.copy(fx / "routes" / "good-design-route.json", d / ".orchestrator" / "route.json")
+        rc, out = eng(d, "validate", "--no-docs")
+        r.check("engine validate accepts a two-skill design phase", rc == 0 and "RESULT  PASS" in out, out.strip()[-200:])
+        # Gate C: design-md may not start, or be merged, before COPY.md is approved
+        (d / "spec.approved.md").write_text("spec\n")
+        (d / "phases").mkdir()
+        for n in ("1", "2"):
+            (d / "phases" / ("phase-%s.md" % n)).write_text("phase\n")
+        eng(d, "init")
+        eng(d, "approve", "gate-a")
+        eng(d, "approve", "gate-b")
+        rc, out = eng(d, "next")
+        parked = as_json(out).get("parked", [{}])
+        r.check("engine gate C: the design phase is blocked before approval",
+                rc == 0 and parked[0].get("blocked_by") == "gate-c"
+                and parked[0].get("main_session_skills") == ["ai-toolkit:copy-writer", "ai-toolkit:design-md"], out[:300])
+        rc, out = eng(d, "approve", "gate-c")
+        r.check("engine gate C: approving without COPY.md is refused", rc == 1 and "copy-writer" in out, out.strip()[-200:])
+        (d / "COPY.md").write_text("kind: portfolio\n")
+        rc, out = eng(d, "approve", "gate-c")
+        r.check("engine gate C: approval of COPY.md is recorded", rc == 0, out.strip()[-200:])
+        rc, out = eng(d, "next")
+        r.check("engine gate C: the design phase is open after approval",
+                "blocked_by" not in as_json(out).get("parked", [{}])[0], out[:300])
+        (d / "COPY.md").write_text("kind: portfolio\nedited\n")
+        rc, out = eng(d, "merge", "p1")
+        r.check("engine gate C: merge is refused after COPY.md changed", rc == 1 and "Gate C" in out, out.strip()[-200:])
+        eng(d, "approve", "gate-c")
+        rc, out = eng(d, "merge", "p1")
+        r.check("engine gate C: merge works once approved again", rc == 0, out.strip()[-200:])
+        rc, out = eng(d, "status")
+        r.check("engine gate C: status shows it", "Gate C: approved" in out, out[-200:])
 
         # A whole project
         w = tmp / "project"

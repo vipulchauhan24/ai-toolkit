@@ -29,7 +29,8 @@ Each phase:
 | `isolation` | `required` when the phase changes code (it runs in a git worktree), else `not required`. Not for parked phases. |
 | `parked` | `true` when only the user can do the phase. |
 | `park_reason` | Required when parked: what the user must do. |
-| `main_session_skill` | Optional, parked phases only: a skill to run in this conversation with the user instead of a helper. |
+| `main_session_skills` | Optional, parked phases only: an ordered list of skills to run in this conversation with the user instead of a helper, for example `["ai-toolkit:copy-writer", "ai-toolkit:design-md"]`. The older single `main_session_skill` is still read; setting both is an error. A list that ends in `design-md` makes the phase the Design direction phase: it waits for Gate C. |
+| `look` | Optional: `from DESIGN.md` on a phase that builds screens in the look the Design direction phase fixed. `validate` fails unless the phase depends, directly or not, on a phase that runs `design-md`. |
 
 ## Example
 

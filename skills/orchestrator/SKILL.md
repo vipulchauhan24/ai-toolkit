@@ -13,7 +13,7 @@ Runs a project from an approved spec to one pushed branch per phase, one phase a
 
 You are the conductor. You talk to the user, ask the questions, start the helpers and read what they report. You never write the project's code yourself. The engine (`scripts/engine.py`) is the route and the ledger: it knows which phases exist, what each depends on, and what has happened. It starts nothing and cannot be talked into anything. You start things, and only after the engine says you may.
 
-This is the one skill allowed to call other skills. Run the interactive ones (spec-writer, doc-trimmer, doc-reviewer, project-planner, copy-writer, and design-md for a Design direction phase) here, in the main session, with the Skill tool, because they ask the user questions. Run every build phase through the `ai-toolkit:skill-runner` agent with the Agent tool, because helpers cannot ask questions and should not fill this conversation. Skills never call each other. They exchange work through files.
+This is the one skill allowed to call other skills. Run the interactive ones (spec-writer, doc-trimmer, doc-reviewer, project-planner, and copy-writer then design-md for a Design direction phase) here, in the main session, with the Skill tool, because they ask the user questions. Run every build phase through the `ai-toolkit:skill-runner` agent with the Agent tool, because helpers cannot ask questions and should not fill this conversation. Skills never call each other. They exchange work through files.
 
 **Hard rules**
 
@@ -32,6 +32,7 @@ This is the one skill allowed to call other skills. Run the interactive ones (sp
 | Input | Default |
 |---|---|
 | Spec file, or a short brief, or nothing | Ask which |
+| Page kind | The spec's `Page kind` line. Ask only if it is missing or says `Not required` for a project that has pages |
 | Project name | From the spec title |
 | Repository | The current folder |
 | Base branch | The branch that is checked out now |
@@ -54,7 +55,10 @@ Check that `git remote` lists a remote and that the base branch tracks it. If th
 - A phases folder with a `README.md` already exists: read it, and ask the user only about what is missing or contradicts the spec.
 - Otherwise run `ai-toolkit:project-planner` here on `spec.approved.md`, asking it to write the phase files to `.plans/phases/`.
 - `.plans/` is git-ignored, so worktrees do not contain it. Helpers always get the phase document and the spec by absolute path into this checkout; the engine's runner calls already give absolute paths. It asks the user the stack, data and auth questions itself.
-- A Design direction phase is done in this session, not by a helper, because it needs the user's direction: `ai-toolkit:copy-writer` first if `COPY.md` is missing, then `ai-toolkit:design-md` for concepts and `DESIGN.md`, with no build. Commit those files on the phase's branch. Route both as described in `references/routing.md`.
+- A Design direction phase is done in this session, not by a helper, because it needs the user's direction. It runs `ai-toolkit:copy-writer` (skipped when `COPY.md` is already approved), then **Gate C**, then `ai-toolkit:design-md` for concepts and `DESIGN.md`, with no build. Commit those files on the phase's branch. For any other page kind the first phase is a Copy phase with copy-writer only. Route both as described in `references/routing.md`.
+- **Gate C (copy).** After copy-writer, show the user `COPY.md` and its `## missing`. The user approves it or edits it (then show it again). Run `engine.py approve gate-c`. `next` marks the design phase `blocked_by: gate-c` until then, and `merge` refuses it. In a non-interactive run, accept the copy, say so in the report, and run `approve gate-c`.
+- A phase that adds pages or sections `COPY.md` does not cover goes back to copy-writer first (see `references/routing.md`).
+- A phase that builds screens in the chosen look sets `look: "from DESIGN.md"` in the route and depends on the Design direction phase. That phase must be merged first, because `DESIGN.md` reaches later worktrees only from the base branch.
 
 ## 3. Route
 
@@ -69,7 +73,7 @@ Repeat until `next` reports `"done": true`, or nothing can move.
 
 1. **Ask.** Run `engine.py next`. Read the JSON.
    - `ready`: phases that may start now, already limited to the worker cap.
-   - `parked`: phases only the user can do (a manual step, a launch, a skill that is not installed). Tell the user what each needs. When a parked entry has a `main_session_skill`, run that skill here with the user instead. When the user says the step is done, run `merge <id>`.
+   - `parked`: phases only the user can do (a manual step, a launch, a skill that is not installed). Tell the user what each needs. When a parked entry has `main_session_skills`, run those skills here with the user, in order. If it says `blocked_by: gate-c`, show `COPY.md` and get Gate C before running design-md. When the user says the step is done, run `merge <id>`.
    - `held`, `halted`, `failed`, `in_progress`: report them briefly when they change.
 2. **Start.** Run `engine.py start <ids>` for the ready phases. It prints one runner call per phase.
 3. **Launch.** For each runner call, call the Agent tool with `subagent_type` `ai-toolkit:skill-runner`, the call's `model`, `isolation: "worktree"` when its `isolation` is `required`, and `run_in_background: true` so the phases run side by side. The prompt gives the runner exactly what the call lists, in the runner's own terms:
@@ -85,7 +89,7 @@ Repeat until `next` reports `"done": true`, or nothing can move.
    Give nothing else, and do not paste the phase document into the prompt.
 4. **Wait.** Do other work or wait. When a runner finishes, run `engine.py record <id> <run_dir>`. Pass `--tokens <n>` when the Agent result states a token total. The engine reads `report.md` and accepts it only if every skill has a `done` status and evidence. If it prints FAIL, the phase is failed: read that report, tell the user what failed and why in a few lines, and ask whether to retry (`retry <id>`, then start again), fix the phase document, or stop.
 5. **Commit and push.** As soon as `record` builds a phase, without asking, in that helper's worktree: check that the branch is not the base branch, commit all changes with the message `<phase id>: <phase title>`, and push with `git push -u origin <branch>`. Then run `engine.py pushed <id> <branch>`. Never run `gh pr create`. If the commit or push fails (no remote, no access, a hook rejects it), do not retry with force or skip hooks: tell the user the error and the worktree path, and leave the phase built but not pushed. Tell the user which branches were pushed, so they can open the pull requests.
-6. **Visual QA.** If the phase changed screens, components or styling, and `ai-toolkit:visual-qa` is available in this session, ask once: "Run visual-qa on <phase>?" On yes, run it here in the main session on that worktree, and tell the user where its report is. Its grades never change the engine's state. If the skill is not installed, skip this step silently.
+6. **Visual QA.** If the phase changed screens, components or styling, and `ai-toolkit:visual-qa` is available in this session, ask once: "Run visual-qa on <phase>?" On yes, run it here in the main session on that worktree, and tell the user where its report is. Its grades never change the engine's state. If the skill is not installed, skip this step silently. If any area grades D or F, or a measured check fails, ask whether to run one fix round: run `ai-toolkit:ui-craft` as a phase build in the same worktree with the visual-qa report's fix list, then run visual-qa again. At most two rounds; then list what remains for the user.
 7. **Merge.** The user opens a pull request from the pushed branch, merges it and tells you which phase. Ask them to update the base branch locally (`git pull --ff-only`) so later worktrees start from it. Then run `engine.py merge <id>` and go back to step 1.
 
 Never run the same phase twice at once. Never start a phase because it "looks ready"; ask `next`.

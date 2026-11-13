@@ -41,12 +41,12 @@ Add `.orchestrator/` to the project's `.gitignore`. The route, the ledger and th
 5. **Gate B.** You see one table: each phase, its skills, what it waits for, what runs side by side, and what is parked for you. You confirm or edit.
 6. **Build loop.** The engine says which phases may start. The orchestrator starts them in worktrees, up to the helper cap. When one finishes, the engine reads its report and accepts it only if every skill is `done` and shows evidence.
 7. **Commit and push.** Each built phase is committed on its own branch and pushed, without asking. No pull request is opened. It never pushes to the base branch and never force-pushes. If a push fails, you get the error and the worktree path.
-8. **Visual QA.** If the phase changed the UI and the `visual-qa` skill is installed, you are asked whether to run it on that phase.
+8. **Visual QA.** If the phase changed the UI and the `visual-qa` skill is installed, you are asked whether to run it on that phase. If any area grades D or F, or a measured check fails, you are asked whether to run a fix round with `ui-craft` and grade again, at most twice.
 9. **Merge.** You open a pull request from the pushed branch, merge it, and tell the orchestrator. It asks you to update the base branch, marks the phase merged, and the phases that waited for it can start.
 
 ### Design direction and screens
 
-When the plan starts with a Design direction phase, the orchestrator runs `ui-craft` in your conversation, because you choose the concept, and commits `COPY.md`, `DESIGN.md` and the rest on that phase's branch. Later screen phases run `ui-craft` as a phase build, which builds only that phase's sections from `DESIGN.md`, followed by `frontend-react` for React and Next.js code. Projects without `DESIGN.md` use `frontend-react` alone, following the design system the spec names or the project's existing styles.
+When the plan starts with a Design direction phase, the orchestrator runs `copy-writer` in your conversation, then asks you to approve `COPY.md` (**Gate C**), then runs `design-md`, because you choose the concept. It commits `COPY.md`, `DESIGN.md` and the rest on that phase's branch. `design-md` does not start before Gate C, and the engine refuses to mark the phase merged without it. For other page kinds the first phase is a Copy phase with `copy-writer` only. A phase that adds pages `COPY.md` does not cover goes back to `copy-writer` first. Later screen phases set `look: from DESIGN.md`, must depend on the Design direction phase being merged (the engine checks), and run `ui-craft` as a phase build, which builds only that phase's sections from `DESIGN.md`, followed by `frontend-react` for React and Next.js code. Projects without `DESIGN.md` use `frontend-react` alone, following the design system the spec names or the project's existing styles.
 
 ### What it parks
 
@@ -68,7 +68,7 @@ The ledger is a file, so a new session can resume. Ask `carry on` and the orches
 | `.orchestrator/state.json` | The ledger: the status of each phase, the approved spec and route hashes, a log of every command. |
 | `.orchestrator/runs/<phase>-<n>/report.md` | The runner's report for one attempt. |
 
-The engine records a hash of the approved spec at Gate A and of the route at Gate B. If either changes afterwards, it refuses to continue until you approve again.
+The engine records a hash of the approved spec at Gate A, of the route at Gate B and of `COPY.md` at Gate C. If any changes afterwards, it refuses to continue until you approve again.
 
 ## The engine commands
 
