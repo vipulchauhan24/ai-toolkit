@@ -1,8 +1,0 @@
-{
-  "_about": "Seeded file -> regex that its FAIL line must match. xfail: seeded file -> reason, for a rule that is known not to fire yet (must stay empty).",
-  "clean_files": 2,
-  "seeded": {
-    "E1-route-handler.ts": "route handler"
-  },
-  "xfail": {}
-}

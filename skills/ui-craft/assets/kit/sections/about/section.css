@@ -1,5 +1,0 @@
-.about-split { display: grid; gap: var(--space-10); align-items: start; }
-.about-split .frame { aspect-ratio: 4 / 5; max-width: 420px; }
-.about-text p + p { margin-top: var(--space-4); }
-.about-text p { color: var(--ink-2); max-width: var(--prose); }
-@media (min-width: 1024px) { .about-split { grid-template-columns: 7fr 5fr; gap: var(--space-16); } .about-split .frame { margin-left: auto; width: 100%; } }

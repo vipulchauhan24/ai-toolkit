@@ -1,7 +1,0 @@
-.skills-groups { display: grid; gap: var(--space-6); }
-.skills-groups div { display: grid; gap: var(--space-1); padding-bottom: var(--space-6); border-bottom: 1px solid var(--line); }
-.skills-groups dt { font-weight: 500; }
-.skills-groups dd { color: var(--ink-2); }
-@media (min-width: 768px) { .skills-groups div { grid-template-columns: minmax(0, 3fr) minmax(0, 8fr); gap: var(--space-8); } }
-.skills-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-3); }
-.skills-icons li { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 500; }

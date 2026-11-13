@@ -1,7 +1,0 @@
-{
-  "levels": {
-    "quiet": { "hero_entrance": true, "section_reveal": false, "scroll_linked": false, "effect": false },
-    "standard": { "hero_entrance": true, "section_reveal": true, "scroll_linked": true, "effect": false },
-    "expressive": { "hero_entrance": true, "section_reveal": true, "scroll_linked": true, "effect": true }
-  }
-}

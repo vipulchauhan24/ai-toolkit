@@ -1,8 +1,0 @@
-{
-  "_about": "Run with --fastapi. Seeded file (path under seeded/) -> regex that its FAIL line must match.",
-  "clean_files": 2,
-  "seeded": {
-    "F1-route-handler.py": "route handler"
-  },
-  "xfail": {}
-}
