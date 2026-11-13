@@ -1,6 +1,6 @@
 ---
 name: doc-reviewer
-description: Adversarial review of design docs, specs, plans, proposals, blog posts, and technical writeups. Finds failure modes, unstated assumptions, scale cliffs, and gaps in understanding -- the questions a reader is left holding, the steps that were hand-waved, the claims that were never earned. No praise, no solutions, only holes. Trigger on "poke holes in this", "what could go wrong with this design", "what is missing from this spec", "attack this doc", "find the gaps", or any request for adversarial review of a design or an explanation. Not for code or diffs (use code-review) and not for tightening prose (use doc-trimmer); see Scope and Exclusions.
+description: Adversarial review of design docs, specs, plans, proposals, blog posts, and technical writeups. Finds failure modes, unstated assumptions, scale cliffs, and gaps in understanding -- the questions a reader is left holding, the steps that were hand-waved, the claims that were never earned. No praise, no solutions, only holes. Use for "poke holes in this", "what could go wrong with this design", "what is missing from this spec", "attack this doc", "find the gaps", or any request for adversarial review of a design or an explanation. Not for code or diffs (use code-review) and not for tightening prose (use doc-trimmer); see Scope and Exclusions.
 license: MIT
 compatibility: Pasted text works anywhere. File and URL input need file and shell access (curl).
 model: opus
@@ -205,6 +205,14 @@ The default is a full adversarial review. An explicit user request wins over the
 - **Scope**: "only security", "just section 3", "only understanding gaps". Review only that lens or section, and say in one line what was left out.
 - **Fixes after the review**: if the user asks how to fix a hole once the findings are delivered, answer. Keep fixes out of the findings themselves and out of the first pass.
 - **Balance**: if the user asks what is strong, give it in a separate note after the findings, never mixed into them.
+
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| The input is code or a diff | Outside the skill's scope | Say so and point to `code-review` |
+| A URL or file cannot be read | No network, or a missing path | Say so and ask for the text pasted |
+| The document has no holes | It is complete for its purpose | Say so plainly. Do not invent findings |
 
 ## Example Findings
 

@@ -111,6 +111,15 @@ Keep it short:
 
 In a non-interactive run, or when something blocks the run, reply with a **Blocked report**: what is blocked, why, and exactly what is needed.
 
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| `playwright-cli`, Node or Python is missing | Not installed | Say what is missing and give the install commands. Run the `npm` lines only if the user says yes. Never run the `sudo` line |
+| No display on Linux | `DISPLAY` and `WAYLAND_DISPLAY` are not set | Say a visible browser cannot open, and stop |
+| The site does not load | The server is not running or the URL is wrong | Ask for the start command or URL. Do not guess a port |
+| A page needs a login | Routes behind auth | Ask the user for a way in, or list those routes as not covered |
+
 ## Examples
 
 **After a phase.** The orchestrator asks and the user says yes, on a worktree running a Next.js app. Start its `dev` script, capture, grade, report into the main checkout's `.qa/`, stop the server, reply with the grade and the top three fixes.

@@ -87,6 +87,16 @@ Keep it short:
 
 After a build, ask whether to run `visual-qa`. Under the orchestrator, or in a non-interactive run, do not ask.
 
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| `COPY.md` or `DESIGN.md` is missing | `copy-writer` or `design-md` has not run | Stop and name which skill writes the missing file |
+| The kit version in `DESIGN.md` differs from `assets/kit/VERSION` | The look was fixed with an older kit | Say so in the report: the variants it lists may have changed |
+| `audit.py`, `contrast.py` or `check_copy.py` FAILs after 3 rounds | The build breaks a rule | List the FAIL in the report and do not call the build done |
+| `audit.py` cannot read a React or Next.js build | It reads only built `.css` and `.html` | Run it on the built or exported output. If none can be produced, say it was not run |
+| A phase document gives colours or classes that differ from `DESIGN.md` | The phase document drifted | Follow `DESIGN.md` and list each difference |
+
 ## Examples
 
 **Portfolio build.** `COPY.md`, `DESIGN.md`, `design.json` and `design.css` exist and `design.json` has no projects section. Plan each listed section, build the chosen hero and the signature section, compose the rest from the kit, then run the three checks and the live review.

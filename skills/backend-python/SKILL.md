@@ -91,6 +91,15 @@ Run what the project provides. Don't claim a check you didn't run.
    Add `--django` when the project depends on `django` and `--fastapi` when it depends on `fastapi`. Fix every FAIL; after 3 fix cycles, report what remains. Don't explain one away, except a FAIL that only a project convention requires: keep the convention and list the FAIL in the report. Put the REPORT lines in the report.
 6. Don't run end-to-end tests, migrations or anything that touches a real service unless asked. List what you skipped. If the project has no script for a check, write "none available".
 
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| The preflight says Python or the check script is missing | `python3` is not installed, or `scripts/check_python.py` was deleted | Stop with a Blocked report that names it. Install Python 3.9 or later, or reinstall the plugin. Do not check by hand instead |
+| A rules file is missing | The skill folder is incomplete | Interactive: ask whether to continue on the project's conventions. Non-interactive: continue and list the file in the report |
+| The check script keeps printing the same FAIL | The code breaks a rule, or the project's convention requires it | Fix it. After 3 fix cycles, report the remaining FAILs. Keep a convention only when the project requires it, and list the FAIL |
+| A typecheck, lint, test or build command does not exist or would reach a real service | The project has no script for it | Write "none available" or "skipped" with the reason. Never claim a check you did not run |
+
 ## Examples
 
 See `references/examples.md` for typical runs, including a blocked one.

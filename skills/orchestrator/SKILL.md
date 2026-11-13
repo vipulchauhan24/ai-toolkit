@@ -98,6 +98,16 @@ Never run the same phase twice at once. Never start a phase because it "looks re
 
 When `next` says `done`, or nothing can move, run `engine.py status` and tell the user in a few lines: phases merged, parked and still waiting on them, failed and why, and not built and why (for example a skill that is not installed). The ledger and the runner reports stay in `.orchestrator/`; tell the user where. Do not paste reports.
 
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| Preflight says Python, Agent or Skill tools, or the engine is missing | Not installed or not Claude Code | Say what is missing and how to fix it, and stop. Do not run phases without the engine |
+| The engine prints FAIL on `validate` | A cycle, a missing dependency, two parallel phases changing one file, or a `look` phase with no Design direction dependency | Fix the route, or tell the user the plan is wrong. Never work around a FAIL |
+| `next` says Gate A, B or C is not approved, or that a file changed | The spec, route or `COPY.md` changed after approval | Show the change, get approval again and run the matching `approve` command |
+| `record` prints FAIL | The runner's report has no `done` status or no evidence | Read the report, tell the user in a few lines, and ask whether to retry, fix the phase document or stop |
+| A commit or push fails | No remote, no access or a hook rejected it | Do not force or skip hooks. Tell the user the error and the worktree path, and leave the phase built but not pushed |
+
 ## Examples
 
 **Resume.** The user says "carry on". `.orchestrator/state.json` exists. Run `status`, say "5 of 8 merged, phase 6 is pushed on its branch and waiting for your pull request and merge", then go to section 4. Do not re-plan.

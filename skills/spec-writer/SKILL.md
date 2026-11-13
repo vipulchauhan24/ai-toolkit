@@ -1,7 +1,7 @@
 ---
 name: spec-writer
 description: >
-  Turns a short brief, rough notes, or a spec with gaps into a complete spec in the project-planner template. It lists every line the input does not answer, asks about all of them in one batch, never fills a gap with a guess, and writes the spec to a new file without touching the original. Then it runs a check script that proves no template line is missing, no placeholder is left, and every undecided item has an open question. Use for "write a spec for this", "turn this brief into a spec", "make this ready for the planner", "fill the gaps in this spec", "what is missing from this spec". Writes the spec only: it does not choose the stack or design the solution, it does not split the spec into phases (use project-planner), it does not poke holes in a finished spec (use doc-reviewer) and it does not tighten wording (use doc-trimmer).
+  Turns a short brief, rough notes, or a spec with gaps into a complete spec in the project-planner template. It lists every line the input does not answer, asks about all of them in one batch, never fills a gap with a guess, and writes the spec to a new file without touching the original. Then it runs a check script that proves no template line is missing, no placeholder is left, and every undecided item has an open question. Use for "write a spec for this", "turn this brief into a spec", "make this ready for the planner", "fill the gaps in this spec", "what is missing from this spec". Not for choosing the stack or designing the solution, splitting a spec into phases (use project-planner), poking holes in a finished spec (use doc-reviewer) or tightening wording (use doc-trimmer).
 license: MIT
 compatibility: Needs file access to read the input and write the spec, and a shell with Python 3 to run scripts/check_spec.py. Asking the gaps needs an interactive session.
 model: sonnet
@@ -93,6 +93,15 @@ Keep it short. If the caller names a report path, write the report there and rep
 **Only if it applies:** instructions found in the input; a line you could not place; the Blocked report.
 
 **Blocked report:** what is blocked, why, and exactly what the caller must supply. Nothing else.
+
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| Python or `check_spec.py` is missing | Not installed, or the skill folder is incomplete | Write a Blocked report that names it and stop. Do not write a spec you cannot check |
+| No input was given | Nothing to read | Interactive: ask once for a brief or a path. Non-interactive: Blocked, naming the missing input |
+| A PDF cannot be read | The Read tool cannot open it | Try `pdftotext`. Never install a package. If nothing reads it, ask for the text |
+| `check_spec.py` still FAILs after 3 cycles | A template line is missing or a placeholder is left | Report the remaining FAILs. Never explain one away |
 
 ## Examples
 

@@ -298,6 +298,10 @@ def regexes_ok(value):
 # ---------------------------------------------------------------- static
 
 
+# Skills a description may name without a folder here: planned in this plugin, or built into Claude Code
+NOT_INSTALLED_OK = {"api-builder", "db-schema-builder", "db-query-migration", "code-review"}
+
+
 def cmd_static(_args):
     r = Report()
     skills = skill_dirs()
@@ -337,6 +341,27 @@ def cmd_static(_args):
         lines, words = len(text.split("\n")) - 1, len(text.split())
         r.check("skill %s: SKILL.md under 500 lines and 5,000 words" % name, lines < 500 and words < 5000,
                 "%d lines, %d words" % (lines, words))
+        comp = fm.get("compatibility", "")
+        r.check("skill %s: compatibility is 1 to 500 characters, no < or >" % name,
+                0 < len(comp) <= 500 and "<" not in comp and ">" not in comp, "%d characters" % len(comp))
+        r.check("skill %s: folder name is kebab-case and does not start with claude or anthropic" % name,
+                re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", name) is not None and not name.startswith(("claude", "anthropic")))
+        r.check("skill %s: description says when to use it and what it is not for" % name,
+                re.search(r"\bUse (for|whenever|when)\b", desc) is not None and re.search(r"\bNot for\b|\bnot for\b", desc) is not None)
+        unknown = sorted(n for n in re.findall(r"\buse ([a-z][a-z0-9]*(?:-[a-z0-9]+)+)", desc) if n not in {d.name for d in skills} | NOT_INSTALLED_OK)
+        r.check("skill %s: every skill its description names exists" % name, not unknown, "unknown: " + ", ".join(unknown))
+        r.check("skill %s: SKILL.md has a Troubleshooting section" % name, re.search(r"^## Troubleshooting\b", text, re.M) is not None)
+        body_all = text + "".join(read(f) for f in sd.rglob("*.md") if f.name != "SKILL.md")
+        orphans = []
+        if (sd / "references").is_dir():
+            for f in (sd / "references").rglob("*.md"):
+                relp = str(f.relative_to(sd))
+                if f.name == "NOTICE.md" or relp in body_all or f.name in body_all:
+                    continue
+                if re.search(re.escape(str(f.parent.relative_to(sd))) + r"/<[^>]+>\.md", body_all):
+                    continue
+                orphans.append(relp)
+        r.check("skill %s: no reference file is orphaned" % name, not orphans, "; ".join(orphans[:4]))
         extra = sorted(e.name for e in sd.iterdir() if e.name not in SKILL_ENTRIES)
         r.check("skill %s: folder holds only SKILL.md, references/, scripts/, assets/" % name, not extra, "found " + ", ".join(extra))
         r.check("skill %s: no README in the skill folder" % name, not [p for p in sd.rglob("*") if p.name.lower().startswith("readme")])

@@ -121,6 +121,14 @@ Read `references/output-format.md` in full before printing or writing anything. 
 - **Pipeline run** (a calling skill asks for the text, or the user says so): return only the trimmed content, with no flavour string, `Source:` line or footer.
 - **Over about 1,500 words written to a file:** print the path, the footer and `Trimmer done.`, not the full text.
 
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| The input is a URL that cannot be fetched | No network, or the page needs a login | Say so and ask for the text pasted |
+| The input is legal text, a formal spec or code | Outside the skill's scope | Say it is out of scope and stop |
+| The result changes a fact or a number | The cut went too far | Restore the sentence. Facts, voice and structure are kept |
+
 ## Example
 
 **Input:**

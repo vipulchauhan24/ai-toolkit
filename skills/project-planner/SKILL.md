@@ -161,6 +161,15 @@ When the user asks for files (or the input itself was a file path), write them t
 
 Follow `references/markdown-rules.md` for all Markdown in the output.
 
+## Troubleshooting
+
+| Problem | Cause | What to do |
+|---|---|---|
+| The spec has gaps in stack, data model or auth | The input leaves a high-stakes decision open | Ask before writing the affected phase. Mark the rest as assumptions with a default |
+| The spec is a rough note, not a spec | No template structure | Plan from it if it is clear enough, otherwise suggest `spec-writer` first |
+| The codebase cannot be read | Greenfield, or no access | Say so and plan from the spec alone. Cite `path:line` only for code you read |
+| A PDF cannot be read | The Read tool cannot open it | Try `pdftotext`. Never install a package. If nothing reads it, ask for the text |
+
 ## Examples
 
 See `references/examples.md` for typical runs, including a blocked one where it applies.
