@@ -12,6 +12,7 @@ A small service that stores orders and reports counts, used by the checkout page
 
 - Primary users or consumers: Not required: fixture
 - Observable outcome that makes launch a success: Not required: fixture
+- Figures that are results, not targets: Not required: fixture
 - Non-goals: Not required: fixture
 
 ## Requirements
@@ -35,8 +36,11 @@ A small service that stores orders and reports counts, used by the checkout page
 Describe every surface the project exposes.
 
 - User interface: Not required: fixture
-  - Design system or visual standard: Not required: fixture
-  - Themes, platforms, and screen sizes: Not required: fixture
+  - Page kind: Not required: fixture
+  - The one action each page leads to: Not required: fixture
+  - Audience: Not required: fixture
+  - Look inputs: Not required: fixture
+  - Platforms and screen sizes: Not required: fixture
 - Programmatic interface: Not required: fixture
   - Versioning and compatibility promise: Not required: fixture
 - Integrations with other systems: Not required: fixture
@@ -62,7 +66,7 @@ Describe every surface the project exposes.
 - Volume at launch and expected growth:
 - Does the real data or content exist today? no
   - If not, does launch wait for it? no
-  - Placeholder data:
+  - Content that does not exist yet:
   - Owner and date for replacing it:
 - Migration from an existing system:
 

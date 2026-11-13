@@ -82,5 +82,50 @@
     "post": [
       "python3 -I {repo}/skills/copy-writer/scripts/check_copy.py COPY.md"
     ]
+  },
+  {
+    "id": "copy-writer-reads-spec",
+    "tier": "slow",
+    "fixture": "copy-writer-projects",
+    "covers": [
+      "skills/copy-writer",
+      "skills/copy-writer/references/intake.md"
+    ],
+    "source": "copy-writer.md: Functional / Spec supplies the answers",
+    "prompt": "Use the ai-toolkit:copy-writer skill to write the copy for the site that spec.approved.md describes, using resume.md for the facts. Work non-interactively: do not ask questions.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*)",
+    "skills": [
+      "copy-writer"
+    ],
+    "reads": [
+      "spec\\.approved\\.md",
+      "copy-portfolio\\.md",
+      "python3 -I \\S*check_copy\\.py \\S*COPY\\.md"
+    ],
+    "files": [
+      {
+        "glob": "COPY.md",
+        "must": [
+          "(?m)^kind: portfolio",
+          "(?m)^## facts",
+          "(?m)^## missing",
+          "(?i)9 seconds",
+          "(?is)## missing.*(portrait|projects)"
+        ],
+        "must_not": [
+          "(?i)under 1 second",
+          "(?i)95",
+          "(?i)10 recruiter",
+          "(?i)coming soon"
+        ]
+      }
+    ],
+    "unchanged": [
+      "resume.md",
+      "spec.approved.md"
+    ],
+    "post": [
+      "python3 -I {repo}/skills/copy-writer/scripts/check_copy.py COPY.md"
+    ]
   }
 ]

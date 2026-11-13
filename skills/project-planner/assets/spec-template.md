@@ -15,6 +15,8 @@ How to use
 3. Small project (script, one-off tool, small library)? Fill Overview, Scope and features, Technology and constraints, and Delivery and operations. Answer each remaining section with a single "Not required: <reason>".
 4. Replace every <placeholder> with a concrete answer. Prefer numbers, names, and links over adjectives. Link to references (screenshots, docs, repos) instead of describing them.
 5. Add sections the project needs. The last section lists prompts by project type to copy from.
+6. Figures in Success criteria and the quality bar are targets. A page may show a figure only if it is listed as a result, with its source, under "Figures that are results".
+7. Never write page text here: headlines, error messages, button labels, titles, descriptions, voice. The copy-writer skill writes them from the facts. Never choose a palette, fonts or mood here: the design-md skill proposes them from "Look inputs".
 -->
 
 ## Overview
@@ -25,6 +27,7 @@ How to use
 
 - Primary users or consumers: <the people, teams, or systems the project must serve first; if there are several, rank them>
 - Observable outcome that makes launch a success: <a measurable result, with a number, a timeframe, and the baseline it is measured against; if there is no baseline, say how it will be measured>
+- Figures that are results, not targets: <each real figure with what it measures and its source, such as "page load cut from 4 s to 1 s, measured in Lighthouse, March 2026"; or "None">
 - Non-goals: <what is explicitly out of scope; the only list of exclusions>
 
 ## Requirements
@@ -50,8 +53,11 @@ How to use
 Describe every surface the project exposes.
 
 - User interface: <screens, pages, or views in order>
-  - Design system or visual standard: <name and link, version to pin, or "none">
-  - Themes, platforms, and screen sizes: <what must be supported>
+  - Page kind: <for each group of pages: portfolio / saas / app / blog / service / ecommerce / place / event; or "Not required: no web pages">
+  - The one action each page leads to: <for example "email me", "start a trial", "book a table"; or "Not required: no web pages">
+  - Audience: <who reads the pages, what they already know, and how they arrive; or "Not required: no web pages">
+  - Look inputs: <design system name and link, brand colours, logo, reference screenshots, and light, dark or both; or "none: the design-md skill proposes the look">
+  - Platforms and screen sizes: <what must be supported>
 - Programmatic interface: <API, SDK, CLI commands, events, or file formats, with a link to the contract or "to be designed">
   - Versioning and compatibility promise: <approach>
 - Integrations with other systems: <each system, the direction of data, and who owns it>
@@ -78,7 +84,7 @@ Describe every surface the project exposes.
 - Volume at launch and expected growth: <numbers>
 - Does the real data or content exist today? <yes / no>
   - If not, does launch wait for it? <yes / no>
-  - Placeholder data: <what is used instead, and what stops it from shipping>
+  - Content that does not exist yet: <each missing item, such as projects, photos, testimonials or prices. The copy-writer lists them under "missing" and no placeholder ships; or "None">
   - Owner and date for replacing it: <name and date>
 - Migration from an existing system: <what moves, how it is verified, and how it is reversed>
 
@@ -134,13 +140,13 @@ Copy the lines that apply into the sections above, or into a new section. Delete
 - Content source and schema: <files in the repo / CMS / database / API, and required fields>
 - URL structure or routes: <each route pattern>
 - Rendering model: <SSG / SSR / SPA>
-- Themes: <default theme, what a first-time and a returning visitor see, where the choice persists, and how a flash of the wrong theme on first load is avoided>
+- Theme switching: <where the visitor's choice persists, and how a flash of the wrong theme on first load is avoided. Which themes exist is set under Look inputs>
 - Responsive targets: <breakpoints or devices that must work>
-- Discoverability: <metadata / Open Graph / sitemap / canonical URLs / structured data>
+- Discoverability: <sitemap / canonical URLs / structured data. Page titles, descriptions and share text are written by the copy-writer skill>
 - Performance: <Lighthouse score or Core Web Vitals targets>
 - Domain, DNS, and canonical host: <domain, and www or apex>
-- Contact or support form: <where submissions go, and spam handling>
-- Error and empty states: <404 page, offline state, and failure messages, with a link to a design>
+- Contact or support form: <where submissions go, and spam handling. The labels and messages are written by the copy-writer skill>
+- Error pages and offline behaviour: <which exist (404, offline, server error) and what each must do, such as links offered or a retry. Their words are written by the copy-writer skill>
 
 ### Mobile app
 

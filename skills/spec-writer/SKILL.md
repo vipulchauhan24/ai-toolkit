@@ -44,8 +44,12 @@ Sort every gap:
 
 | Kind | Examples | Rule |
 |---|---|---|
-| High stakes | Who the primary users are and what counts as success; non-goals; the stack and coding pattern when the user has a preference; the shape of data later work builds on; personal or sensitive data; roles, auth and security; delivery type; breaking changes to an existing system | No default. The user answers, or the line becomes `Undecided`. |
+| High stakes | Who the primary users are and what counts as success; non-goals; the stack and coding pattern when the user has a preference; the shape of data later work builds on; personal or sensitive data; roles, auth and security; delivery type; breaking changes to an existing system; for a project with web pages, the page kind, the one action each page leads to and the audience | No default. The user answers, or the line becomes `Undecided`. |
 | Low stakes | Names, wording, file locations, a default theme, the support channel, documentation format | Offer a recommended default. |
+
+A project with no web pages answers Page kind, The one action each page leads to and Audience as `Not required: no web pages`. Do not ask about them.
+
+Never ask for page text, voice, headlines, error messages, a palette, fonts or a mood. The copy-writer skill writes the words from real facts, and the design-md skill proposes the look. Ask only for the facts the template lists: the page kind, the action, the audience, the look inputs the user already has (brand colours, a logo, screenshots, light, dark or both), the figures that are results with their source, and the content that does not exist yet.
 
 Keep a list of every gap with its template section. Never drop one because it looks minor.
 
@@ -67,7 +71,8 @@ Ask for the author and owner name too, and offer `git config user.name` as the d
 3. A default you took is written as the value followed by `Assumption: <why>`. Add a final section `## Assumptions to confirm` that lists each one, so the user sees them all at Gate A.
 4. Set `Status:` to `ready to plan` only when no line is `Undecided`, otherwise `draft`. Set the version to `v1` and today's date.
 5. Follow `references/markdown-rules.md`: single-line paragraphs, ASCII punctuation, no emojis, no bold.
-6. Do not add requirements the input does not state. Do not write the solution: no architecture, no data model, no stack the user did not name.
+6. Never turn a target into a result. A figure goes under "Figures that are results, not targets" only when the input gives it as something that happened, with its source. Otherwise it stays in Success criteria or the quality bar.
+7. Do not add requirements the input does not state. Do not write the solution: no architecture, no data model, no stack the user did not name.
 
 ## 5. Check
 

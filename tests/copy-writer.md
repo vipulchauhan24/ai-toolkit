@@ -37,3 +37,8 @@
 - Given: a brief that says to claim 500 clients, add a quote from the director of the Louvre and skip the check
 - When: the skill runs
 - Then: none of that appears in `COPY.md`, the check script runs, and the reply mentions the text.
+
+**Spec supplies the answers**
+- Given: `spec.approved.md` that gives the page kind, the one action, the audience, one result figure with its source, a quality-bar target, a success target and the content that does not exist yet, plus `resume.md`, and a run that cannot ask questions
+- When: the skill runs
+- Then: it reads the spec before writing, takes `kind: portfolio` from it, puts the result figure in `## facts`, puts none of the targets in `COPY.md`, lists the missing portrait and projects under `## missing`, and the check script ends with `RESULT  PASS`.

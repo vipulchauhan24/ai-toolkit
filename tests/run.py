@@ -107,6 +107,7 @@ REQUIRED_FIXTURES = [
     "orchestrator-projects",
     "spec-writer",
     "spec-writer-projects",
+    "copy-writer-projects",
     "ui-craft",
     "ui-craft-projects",
     "design-md-projects",

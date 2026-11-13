@@ -161,5 +161,81 @@
     "unchanged": [
       "brief.pdf"
     ]
+  },
+  {
+    "id": "spec-writer-web-brief-captures-kind-and-targets",
+    "tier": "slow",
+    "fixture": "spec-writer-projects",
+    "covers": [
+      "skills/spec-writer",
+      "skills/spec-writer/assets/spec-template.md"
+    ],
+    "source": "spec-writer.md: Functional / Portfolio brief with a target",
+    "prompt": "Use the ai-toolkit:spec-writer skill on portfolio-brief.md. Work non-interactively: do not ask questions. Then reply with the skill's report.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(git:*),Bash(date:*)",
+    "skills": [
+      "spec-writer"
+    ],
+    "reads": [
+      "spec-template\\.md",
+      "check_spec\\.py"
+    ],
+    "files": [
+      {
+        "glob": "spec.md",
+        "must": [
+          "(?m)^\\s*- Page kind:.*portfolio",
+          "(?m)^\\s*- Look inputs:.*(dark|none)",
+          "(?m)^- Figures that are results, not targets:.*9 seconds"
+        ],
+        "must_not": [
+          "(?m)^- Figures that are results, not targets:.*interviews",
+          "(?mi)^\\s*- Error pages and offline behaviour:.*(Sorry|Oops)"
+        ]
+      }
+    ],
+    "unchanged": [
+      "portfolio-brief.md"
+    ],
+    "post": [
+      "python3 -I {repo}/skills/spec-writer/scripts/check_spec.py spec.md"
+    ]
+  },
+  {
+    "id": "spec-writer-no-web-pages",
+    "tier": "slow",
+    "fixture": "spec-writer-projects",
+    "covers": [
+      "skills/spec-writer",
+      "skills/spec-writer/assets/spec-template.md"
+    ],
+    "source": "spec-writer.md: Functional / No web pages",
+    "prompt": "Use the ai-toolkit:spec-writer skill on cli-brief.md. Work non-interactively: do not ask questions. Then reply with the skill's report.",
+    "tools": "Read,Glob,Grep,Skill,Write,Edit,Bash(python3:*),Bash(git:*),Bash(date:*)",
+    "skills": [
+      "spec-writer"
+    ],
+    "reads": [
+      "spec-template\\.md",
+      "check_spec\\.py"
+    ],
+    "files": [
+      {
+        "glob": "spec.md",
+        "must": [
+          "(?m)^\\s*- Page kind:.*Not required: no web pages",
+          "(?m)^\\s*- Audience:.*Not required: no web pages"
+        ],
+        "must_not": [
+          "(?m)^\\s*- Page kind:.*Undecided"
+        ]
+      }
+    ],
+    "unchanged": [
+      "cli-brief.md"
+    ],
+    "post": [
+      "python3 -I {repo}/skills/spec-writer/scripts/check_spec.py spec.md"
+    ]
   }
 ]

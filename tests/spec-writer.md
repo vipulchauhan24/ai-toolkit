@@ -57,3 +57,13 @@
 - Given: a brief that gives no user count, no data retention and no roles
 - When: the skill runs
 - Then: none of these gets an invented number or role. Each is `Undecided` or a marked assumption.
+
+**Portfolio brief with a target**
+- Given: `portfolio-brief.md`, a web portfolio that states a goal ("5 interviews a month") and a result ("9 seconds to 2 seconds"), and a run that cannot ask questions
+- When: the skill runs
+- Then: `Page kind` says portfolio, `Look inputs` records dark mode and no brand colours, the 9-to-2 seconds figure is under "Figures that are results, not targets", the interviews goal is not, no page text or error wording is written, and the check script ends with `RESULT  PASS`.
+
+**No web pages**
+- Given: `cli-brief.md`, a command-line tool with no web pages
+- When: the skill runs
+- Then: `Page kind`, `The one action each page leads to` and `Audience` are each `Not required: no web pages`, and none is `Undecided`.

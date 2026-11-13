@@ -1,6 +1,8 @@
 # Intake
 
-Ask once, in one batch, and skip what you already know. Read `COPY.md` first: its `kind:` and `## facts` answer most of this.
+Ask once, in one batch, and skip what you already know. Read `COPY.md` first: its `kind:` and `## facts` answer most of this. If the project has a spec (`spec.approved.md`, else `spec.md`), read its `Look inputs` and `Audience` lines too: they answer questions 1 to 3 and the audience word below, so ask only about what they leave out. `Look inputs` that says `none` means the look is open, and you propose it.
+
+Read a `.pdf` (a brand guide, a screenshot export) with the Read tool, which extracts its text or shows its pages. Use `pdftotext` only if the Read tool cannot open it. Never install a package (pip, npm, apt or any other) to read a document: if nothing can read it, ask for the text.
 
 1. Light, dark or both? The default is both.
 2. Are there colours to use? If so, should the page use only those, or may it suggest close combos?

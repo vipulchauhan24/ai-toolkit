@@ -40,7 +40,7 @@ Read `references/intake.md` and `references/copy/copy.md` in full. Work out the 
 | Place people visit | `place` | `references/copy/copy-place.md` |
 | Event, launch, waitlist | `event` | `references/copy/copy-event.md` |
 
-Gather everything you already have: the brief, a résumé, an existing site, the codebase. Then ask for what is missing **in one batch**, most useful first and at most eight questions. If you cannot ask (a non-interactive run), work from what you have and list what was missing.
+Gather everything you already have: `spec.approved.md` (else `spec.md`) if the project has one, the brief, a résumé, an existing site, the codebase. A spec answers the page kind, the one action, the audience and the stack, so ask about none of them. Its figures are facts only when listed under "Figures that are results, not targets", with a source; every other figure in it is a target and never goes in `## facts`. Then ask for what is missing **in one batch**, most useful first and at most eight questions. If you cannot ask (a non-interactive run), work from what you have and list what was missing.
 
 If nothing usable was supplied at all, reply with a **Blocked report**: what is blocked, why, and exactly what is needed.
 
