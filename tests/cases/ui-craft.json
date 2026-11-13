@@ -5,7 +5,7 @@
     "fixture": "ui-craft-phase",
     "covers": [
       "skills/ui-craft",
-      "skills/ui-craft/references/system/color.md"
+      "skills/ui-craft/references/system/palette.md"
     ],
     "source": "ui-craft.md: Functional / Phase build",
     "prompt": "Use the ai-toolkit:ui-craft skill to build phase-3-experience.md in this project. This is a phase build. Work non-interactively: do not ask questions.",

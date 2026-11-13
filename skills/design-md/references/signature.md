@@ -14,7 +14,7 @@ It takes something true about this person and shows it in a form only they could
 ## Rules
 
 1. Every value on it comes from `## facts` in `COPY.md`. A chart with invented data, or a mock dashboard, is a placeholder and is not allowed.
-2. Use only tokens from `assets/kit/base/tokens.css`. Custom CSS is expected.
+2. Use only the kit's tokens (`tokens.css`). Custom CSS is expected.
 3. It works at 390, 768, 1024, 1440 and 1920. Rearrange it at small widths instead of shrinking it.
 4. It is readable with JavaScript off.
 5. Anything interactive works by keyboard, with a visible focus ring and 44px touch targets.
@@ -27,6 +27,6 @@ Keep its files together, for example `signature.css`, and pass `audit.py` like t
 
 ## Recording it
 
-`deal.py` lists it in `DESIGN.md` with `signature` and its fallback.
+`DESIGN.md` lists it with `signature` and its fallback.
 
 If two `visual-qa` rounds in a row leave a failure in this section, replace it with the fallback named in `DESIGN.md`, update `DESIGN.md` and say so in the report. A fallback of `none` means the section is removed.

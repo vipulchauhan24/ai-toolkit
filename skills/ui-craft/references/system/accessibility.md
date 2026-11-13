@@ -28,7 +28,7 @@ Every build meets this. It is the minimum.
 ## Targets and text
 
 - Tap targets are at least 24px everywhere, and `--touch` on touch screens.
-- Contrast follows `color.md`.
+- Contrast follows `palette.md`.
 - Text can be enlarged to 200% without breaking.
 - Never disable zoom.
 

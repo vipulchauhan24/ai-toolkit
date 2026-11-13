@@ -14,7 +14,7 @@ It takes something true about this person and shows it in a form only they could
 ## Rules
 
 1. Every value on it comes from `## facts` in `COPY.md`. A chart with invented data, or a mock dashboard, is a placeholder and is not allowed.
-2. Use only tokens from `system/system.md`. Custom CSS is expected.
+2. Use only the kit's tokens (`tokens.css`). Custom CSS is expected.
 3. It works at 390, 768, 1024, 1440 and 1920. Rearrange it at small widths instead of shrinking it.
 4. It is readable with JavaScript off.
 5. Anything interactive works by keyboard, with a visible focus ring and 44px touch targets.

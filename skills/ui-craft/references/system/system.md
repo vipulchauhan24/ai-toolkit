@@ -8,7 +8,7 @@ Read this file for every build. Then read only the files you need.
 |---|---|
 | Margins, padding, gaps, widths | `spacing.md` |
 | Font sizes, line height, font loading | `typography.md` |
-| Colour, themes, contrast | `color.md` |
+| Colour, themes, contrast | `palette.md` |
 | Page structure, alignment, empty space | `layout.md` |
 | Behaviour at each screen size | `responsive.md` |
 | Radius, borders, shadows, layering | `elevation.md` |

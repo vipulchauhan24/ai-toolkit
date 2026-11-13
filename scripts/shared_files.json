@@ -293,6 +293,21 @@
         "skills/ui-craft/assets/kit/vendor/motion.js",
         "skills/design-md/assets/kit/vendor/motion.js"
       ]
+    },
+    {
+      "name": "signature.md",
+      "copies": [
+        "skills/design-md/references/signature.md",
+        "skills/ui-craft/references/signature.md"
+      ]
     }
-  ]
+  ],
+  "_distinct_names": [
+    "SKILL.md",
+    "NOTICE.md",
+    "VERSION",
+    "examples.md",
+    "intake.md"
+  ],
+  "_distinct_about": "File names that exist in several skills on purpose, with different content in each. Any other name that two skills both carry with different content must be listed in files."
 }

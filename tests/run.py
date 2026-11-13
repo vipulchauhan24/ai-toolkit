@@ -404,6 +404,22 @@ def cmd_static(_args):
     bad = [ln for ln in out.splitlines() if ln.startswith(("MISSING", "DIFFERS"))]
     r.check("shared files match scripts/shared_files.json", rc == 0 and not bad, "; ".join(bad) or out.strip()[-200:])
 
+    # A file name two skills both carry, with different content, must be shared or listed as distinct
+    cfg = json.loads(read(ROOT / "scripts" / "shared_files.json"))
+    listed = {c for f in cfg["files"] for c in f["copies"]}
+    distinct = set(cfg.get("_distinct_names", []))
+    seen = {}
+    for f in sorted((ROOT / "skills").rglob("*")):
+        if f.is_file() and "__pycache__" not in f.parts and f.name not in distinct:
+            under = f.relative_to(ROOT / "skills")
+            seen.setdefault(under.parts[1:], []).append((under.parts[0], f))
+    drift = []
+    for parts, items in seen.items():
+        if len(items) > 1 and len({hashlib.sha256(p.read_bytes()).hexdigest() for _, p in items}) > 1:
+            if not all(str(p.relative_to(ROOT)) in listed for _, p in items):
+                drift.append("/".join(parts))
+    r.check("no file is duplicated across skills with different content", not drift, "; ".join(sorted(drift)[:5]))
+
     ui_craft_reference_checks(r)
 
     # Readme and ignore file

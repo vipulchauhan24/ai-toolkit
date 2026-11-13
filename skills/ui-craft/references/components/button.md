@@ -15,7 +15,7 @@ On touch screens every button is at least `--touch` tall. Icon gap is `--space-2
 | Primary | `--accent` with `--on-accent` | The one main action per screen |
 | Secondary | `--surface` or transparent, `--line-strong` border | Other actions |
 | Ghost | Text only, `--surface-2` on hover | Low emphasis, toolbars |
-| Second action | `--accent-2` with `--on-accent-2` (`.btn--accent-2`) | Only when `DESIGN.md` says the page has two distinct actions. See `../system/color.md` |
+| Second action | `--accent-2` with `--on-accent-2` (`.btn--accent-2`) | Only when `DESIGN.md` says the page has two distinct actions. See `../system/palette.md` |
 | Danger | `--negative` | Destructive actions |
 
 Radius is `--radius-md`, or `--radius-full` if `DESIGN.md` says so. Weight 500.
